@@ -1,0 +1,160 @@
+@charset "UTF-8";
+
+.msgbox {
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 200%;
+  display: none;
+  background-color: transparent;
+  word-break: break-all;
+  &.show {
+    display: -webkit-box;
+    > .box-mask {
+      -webkit-animation-name: MicroMask;
+      @include animated-1s;
+      -webkit-animation-timing-function: linear;
+      -webkit-animation-duration: 250ms;
+    }
+  }
+  > .box-mask, > .msgbox-ct {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+  > .box-mask {
+    position: absolute;
+    background-color: #000;
+    opacity: 0;
+  }
+  > .msgbox-ct {
+    position: relative;
+    -webkit-transform: translateZ(0);
+    background-color: transparent;
+    display: -webkit-box;
+    -webkit-box-pack: center;
+    > .msgbox-bd {
+      width: $layout-with;
+      height: 100%;
+      position: relative;
+      > .box-ct {
+        display: -webkit-box;
+        font-size: 40px;
+        color: #f6f6f6;
+        position: absolute;
+        -webkit-animation-name: MicroPopUp;
+        @include animated-1s;
+        -webkit-animation-duration: 250ms;
+        > .box-bd {
+          -webkit-transform: translateZ(0);
+          > div {
+            width: 100%;
+            height: 100%;
+          }
+        }
+      }
+      > .box-ct.dialog{
+        $dialog-w: 534px;
+        left: ($layout-with - $dialog-w)/2;
+        top: 195px;
+        color: #000;
+        > .box-bd {
+          width: $dialog-w;
+          overflow: hidden;
+          -webkit-border-radius: 10px;
+          > div {
+            @include box-v;
+          }
+          .content{
+            padding-top: 30px;
+            background-color: rgba(225, 225, 225, .9);
+            -webkit-border-radius: 10px 10px 0 0;
+          }
+          .title {
+            @include box-h-c-c;
+            font-size: 36px;
+          }
+          .msg {
+            font-size: 28px;
+            padding: 0 30px 30px 30px;
+            line-height: 36px;
+            @include box-v-c-c;
+            .simley {
+              margin-left: 40px;
+              -webkit-animation-name: bounceIn;
+              @include animated-1s;
+              -webkit-animation-duration: .6s;
+            }
+            > p {
+              width: 100%;
+              @include box-h-t-l;
+              &.c {
+                text-align: center;
+                @include box-h-c-c;
+              }
+            }
+          }
+          .bbts {
+            @include box-h-c-c;
+            > div {
+              &:active {
+                background-color: #d0d0d0;
+              }
+              @include box-h-c-c;
+              -webkit-box-flex: 1;
+              font-size: 34px;
+              color: #007aff;
+              /*
+              border-top: solid 1px #b2b2b2;
+              */
+              margin-top: 1px;
+              padding: 20px 0;
+              height: 81px;
+              background-color: rgba(225, 225, 225, .9);
+              &:first-child{
+                -webkit-border-radius: 0 0 0 10px;
+              }
+              &:last-child{
+                -webkit-border-radius: 0 0 10px 0;
+              }
+              &.no {
+                /*
+                border-right: solid 1px #b2b2b2;
+                */
+                margin-right: 1px;
+              }
+              &.yes {
+                font-weight: bold;
+              }
+            }
+          }
+        }
+      }
+      > .box-ct.loading {
+        $dialog-w: 240px;
+        left: ($layout-with - $dialog-w)/2;
+        top: 300px;
+        > .box-bd {
+          padding-top: 50px;
+          width: $dialog-w;
+          height: 240px;
+          background-color: rgba(225, 225, 225, .9);
+          -webkit-border-radius: 10px;
+          > div {
+            @include box-v-c-c;
+          }
+          .msg {
+            font-size: 34px;
+            color: #000;
+            margin-top: 40px;
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "name": "rsvpmobile",
+  "version": "0.0.0",
+  "description": "DEJA – Xclusive Fashion Party.",
+  "project": {
+    "invalidNames": "products|account|config|feed|vote|share|favorite|creation|feedback|dilog|invite|vote|event|share",
+    "title": "DEJA – Xclusive Fashion Party",
+    "viewport": 720,
+    "sourceImg": "../../../../../Mozat/Deja/rsvp/UI/build/img/**/*.{png,jpg}",
+    "sourceSprites": "../../../../../Mozat/Deja/rsvp/UI/build/assets/*.png",
+    "watchJshint": true,
+    "watchScsslint": false,
+    "browserSync": {
+      "proxy": "http://ilabs.mozat.com/webprojects/Deja/rsvp/",
+      "reloadDelay": 350
+    },
+    "pagespeed": {
+      "url": "http://m.deja.me/rsvpmobile/",
+      "options": {
+        "strategy": "mobile"
+      }
+    }
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "amdclean": "^2.4.0",
+    "browser-sync": "^2.2.4",
+    "css-sprite": "^0.9.8",
+    "date-utils": "^1.2.16",
+    "del": "^1.1.1",
+    "gulp": "^3.8.11",
+    "gulp-amdclean": "^1.0.1",
+    "gulp-autoprefixer": "^2.1.0",
+    "gulp-cachebust": "0.0.5",
+    "gulp-cached": "^1.0.4",
+    "gulp-csso": "^1.0.0",
+    "gulp-file-include": "^0.8.0",
+    "gulp-if": "^1.2.5",
+    "gulp-imagemin": "^2.2.1",
+    "gulp-jshint": "^1.9.2",
+    "gulp-load-plugins": "^0.8.1",
+    "gulp-minify-html": "^1.0.1",
+    "gulp-replace": "^0.5.3",
+    "gulp-requirejs": "^0.1.3",
+    "gulp-sass": "^1.3.3",
+    "gulp-scsslint": "0.0.5",
+    "gulp-sftp": "^0.1.4",
+    "gulp-size": "^1.2.1",
+    "gulp-sourcemaps": "^1.5.1",
+    "gulp-uglify": "^1.1.0",
+    "gulp-util": "^3.0.4",
+    "imagemin-pngquant": "^4.0.0",
+    "jshint-stylish": "^1.0.1",
+    "pem": "^1.7.1",
+    "psi": "^1.0.6",
+    "q": "^1.2.0",
+    "rsync": "^0.4.0",
+    "run-sequence": "^1.0.2",
+    "through2": "^0.6.3",
+    "vinyl-source-stream": "^1.1.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "web app","mozat"
+  ],
+  "author": "unbug",
+  "license": "MIT"
+}

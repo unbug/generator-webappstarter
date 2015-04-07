@@ -1,0 +1,19 @@
+@charset "UTF-8";
+.btn{
+  display: inline-block;
+  text-align: center;
+  @include active-default;
+  -webkit-user-select: none;
+}
+.bt-a,.bt-b{
+  width: 433px;
+  height: 98px;
+  line-height: 98px;
+  font-size: 43px;
+  color: #fff;
+  background-color: #f39531;
+  -webkit-border-radius: 8px;
+}
+.bt-b{
+  background-color: #f15638;
+}

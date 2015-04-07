@@ -1,0 +1,13 @@
+@charset "UTF-8";
+.view-home {
+  width: 100%;
+  min-height: 100%;
+  background-color: #35161f;
+  font-size: 38px;
+
+  .main{
+    @include box-h-c-c;
+    padding: 200px 30px;
+  }
+}
+

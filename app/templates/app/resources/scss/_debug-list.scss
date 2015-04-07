@@ -1,0 +1,12 @@
+@charset "UTF-8";
+.user-item-default{
+  @include box-v;
+  width: 100%;
+  font-size: 38px;
+  >.item{
+    @include box-h;
+    width: 100%;
+    padding: 30px;
+    text-align: center;
+  }
+}

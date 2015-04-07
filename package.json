@@ -1,0 +1,30 @@
+{
+  "name": "generator-webappstarter",
+  "version": "0.0.1",
+  "description": "Quick start a web app for mobile",
+  "license": "MIT",
+  "main": "app/index.js",
+  "repository": "unbug/generator-webappstarter",
+  "author": {
+    "name": "unbug",
+    "email": "tidelgl@gmail.com",
+    "url": "https://github.com/unbug"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "files": [
+    "app"
+  ],
+  "keywords": [
+    "yeoman-generator"
+  ],
+  "dependencies": {
+    "yeoman-generator": "^0.19.0",
+    "chalk": "^1.0.0",
+    "yosay": "^1.0.2"
+  },
+  "devDependencies": {
+    "mocha": "*"
+  }
+}
