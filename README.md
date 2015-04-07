@@ -3,7 +3,7 @@ Readme
 This project require [node](https://nodejs.org/).
 Run `npm link` to develope the generator locally before get started.
 
-1. generate a new project,run
+1.generate a new project,run
 
 ```shell
 yo webappstarter
