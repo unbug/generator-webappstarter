@@ -1,4 +1,18 @@
-@charset "UTF-8";
+body>.view {
+  width: 100%;
+  visibility: hidden;
+  display: none;
+  &.animated {
+    @include animated-1s;
+    -webkit-animation-fill-mode: none;/*transform的动效会使当前view里fixed的元素将无效*/
+    -webkit-animation-name: MicroBounceOut;
+    -webkit-animation-duration: 350ms;
+  }
+  &.show{
+    visibility: visible !important;
+    display: block !important;
+  }
+}
 
 /*debug-home.scss*/
 @import "debug-home.scss";
@@ -7,21 +21,3 @@
 /*debug-user.scss*/
 @import "debug-user.scss";
 /*end debug-user.scss*/
-
-body {
-  > .view {
-    width: 100%;
-    visibility: hidden;
-    display: none;
-    &.animated {
-      @include animated-1s;
-      -webkit-animation-fill-mode: none;/*transform的动效会使当前view里fixed的元素将无效*/
-      -webkit-animation-name: MicroBounceOut;
-      -webkit-animation-duration: 350ms;
-    }
-    &.show{
-      visibility: visible !important;
-      display: block !important;
-    }
-  }
-}

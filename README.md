@@ -4,7 +4,7 @@ webappstarter generator will give you a Simple Mobile Web App Boilerplate and St
 
 Prereqs and installation requirements
 =====================================
-1.install [node](https://nodejs.org/).
+1.install [node](https://nodejs.org/) and [Python](https://www.python.org/).
 
 2.install [yeoman](http://yeoman.io/).
 ```shell
@@ -27,6 +27,11 @@ More configurations,please take a look at "project" property of "package.json" f
 
 Project commands
 =================
+run
+```shell
+npm install -g gulp
+```
+before you get started.
 
 1.build project,watch change and start browserSync,run
 
@@ -39,6 +44,9 @@ gulp
 gulp deploytest
 ```
 view the page on test server [http://m.deja.me/PROJECTNAME/](http://m.deja.me/PROJECTNAME/).
+This deploy require [openssl](https://www.openssl.org/).
+For window,you might needd to add openssl path to classpath.
+
 
 3.deploy to offical server,run
 
@@ -46,6 +54,8 @@ view the page on test server [http://m.deja.me/PROJECTNAME/](http://m.deja.me/PR
 gulp deploy
 ```
 view the page on offical server [http://office.mozat.com:8081/m/PROJECTNAME/](http://office.mozat.com:8081/m/PROJECTNAME/).
+This deploy require [rsync](https://rsync.samba.org/).
+For window,unzip  /tools/rsync.zip to a local path,add the path to classpath,excute `set RSYNC_PROXY=proxy.lan:8080` in CMD, then modify `gulpfile.js` change `.executable('RSYNC_PROXY=proxy.lan:8080 rsync')` to .executable('rsync').You may need to reboot your system.
 
 4.run `gulp copy` to copy source images to project's `/resources/images/` path and generates sprites for sourceSprites in `package.json`.
 

@@ -121,7 +121,7 @@ var AUTOPREFIXER_BROWSERS = [
 ];
 gulp.task('sass', function () {
     return gulp.src('./scss/*.scss')
-        .pipe($.replace(/_VIEWPORT_WIDTH_/ig,viewport))
+        .pipe($.replace(/_VIEWPORT_WIDTH_/ig,conf.project.viewport||640))
         .pipe($.sourcemaps.init())
         .pipe($.sass({errLogToConsole: true}))
         .pipe($.sourcemaps.write())
@@ -269,6 +269,7 @@ gulp.task('deploy:test', function (cb) {
 //view http://m.deja.me/PROJECTNAME/
 gulp.task('deploy:offical', function() {
     var client = new rsync()
+        //for window,please run "set RSYNC_PROXY=proxy.lan:8080" in CMD,and change to ".executable('rsync')"
         .executable('RSYNC_PROXY=proxy.lan:8080 rsync')
         .flags('az')
         .source(distPath)
