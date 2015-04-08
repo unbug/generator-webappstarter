@@ -48,6 +48,14 @@ module.exports = yeoman.generators.Base.extend({
 
     projectfiles: function () {
       this.fs.copy(
+        this.templatePath('ftppass'),
+        this.destinationPath('.ftppass')
+      );
+      this.fs.copy(
+        this.templatePath('gitignore'),
+        this.destinationPath('.gitignore')
+      );
+      this.fs.copy(
         this.templatePath('editorconfig'),
         this.destinationPath('.editorconfig')
       );

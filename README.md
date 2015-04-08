@@ -1,15 +1,30 @@
 Readme
 =================
-This project require [node](https://nodejs.org/).
-Run `npm link` to develope the generator locally before get started.
+webappstarter generator will give you a Simple Mobile Web App Boilerplate and Structure!
 
+Prereqs and installation requirements
+=====================================
+1.install [node](https://nodejs.org/).
+2.use npm to install [yeoman](http://yeoman.io/)
+```shell
+npm install -g yo
+```
+3.Clone this git repo to your local,and from the root of the repo,run
+```shell
+npm link
+```
+to developing the generator locally.
+
+Generate commands
+==================
 1.generate a new project,run
 
 ```shell
 yo webappstarter
 ```
+input your project's name
 
-Project commands:
+Project commands
 =================
 
 1.build project,watch change and start browserSync,run
@@ -47,4 +62,3 @@ Random git commit message
  git commit -m"`curl -s http://whatthecommit.com/index.txt`"
 
  ```
-I will give you a Simple Mobile Web App Boilerplate and Structure!

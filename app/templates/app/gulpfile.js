@@ -61,7 +61,7 @@ gulp.task('sprites', function () {
             cssPath: '../images/',
             processor: 'css'
         }))
-        .pipe($.if('*.png', gulp.dest('./resources/images/'), gulp.dest('./resources/scss/')))
+        .pipe($.if('*.png', gulp.dest('./resources/images/'), gulp.dest('./scss/')))
         .pipe($.size({title: 'sprites'}));
 });
 
@@ -79,7 +79,7 @@ gulp.task('clean:dist', function (cb) {
 gulp.task('watch', function () {
     return gulp.watch([
         'gulpfile.js', 'src/**/*.js', '!src/app.js',
-        'resources/**/*.scss',
+        'scss/**/*.scss',
         'html/site/**/*.html'
     ], function (event) {
         console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
@@ -120,7 +120,8 @@ var AUTOPREFIXER_BROWSERS = [
     'bb >= 10'
 ];
 gulp.task('sass', function () {
-    return gulp.src('./resources/scss/*.scss')
+    return gulp.src('./scss/*.scss')
+        .pipe($.replace(/_VIEWPORT_WIDTH_/ig,viewport))
         .pipe($.sourcemaps.init())
         .pipe($.sass({errLogToConsole: true}))
         .pipe($.sourcemaps.write())
@@ -128,7 +129,6 @@ gulp.task('sass', function () {
             optimizeMemory: true
         }))
         .pipe($.autoprefixer({browsers: AUTOPREFIXER_BROWSERS}))
-        .pipe($.replace(/_VIEWPORT_WIDTH_/ig,viewport))
         .pipe(gulp.dest('./resources/css/'));
 });
 
@@ -231,6 +231,13 @@ gulp.task('includes:official', function () {
         .pipe($.size({title: 'html'}));
 });
 
+//copy resources to "/dist/resources/"
+gulp.task('dist:resources', function () {
+  return gulp.src('./resources/**/*.*')
+    .pipe(gulp.dest(distProjectPath + '/resources/'))
+    .pipe($.size({title: 'copy resources'}));
+});
+
 //compress images to dist
 gulp.task('dist:images', function (cb) {
     return gulp.src(['./resources/**/*.*g'])
@@ -328,7 +335,7 @@ gulp.task('compile', function(cb){
     runSequence(['sass', 'requirejs','include:debug'],cb);
 });
 gulp.task('dist', function (cb) {
-    runSequence('clean:dist','build_version','dist:images','cssmin', 'uglifyjs', 'includes:official' ,'_endlog',cb);
+    runSequence('clean:dist','build_version','dist:resources','dist:images','cssmin', 'uglifyjs', 'includes:official' ,'_endlog',cb);
 });
 gulp.task('default', function(cb){
     runSequence('prepare','compile','watch','serve',cb);
