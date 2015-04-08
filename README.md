@@ -16,7 +16,7 @@ npm link
 ```
 to developing the generator locally.
 
-Generate commands
+Generator commands
 ==================
 1.generate a new project,run
 
@@ -45,7 +45,7 @@ view the page on test server [http://m.deja.me/PROJECTNAME/](http://m.deja.me/PR
 ```shell
 gulp deploy
 ```
-view the page on offical server [http://m.deja.me/PROJECTNAME/](http://m.deja.me/PROJECTNAME/).
+view the page on offical server [http://office.mozat.com:8081/m/PROJECTNAME/](http://office.mozat.com:8081/m/PROJECTNAME/).
 
 4.run `gulp copy` to copy source images to project's `/resources/images/` path and generates sprites for sourceSprites in `package.json`.
 

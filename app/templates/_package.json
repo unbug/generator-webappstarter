@@ -11,11 +11,12 @@
     "watchJshint": true,
     "watchScsslint": false,
     "browserSync": {
-      "proxy": "",
+      "open": true,
+      "proxy": "http://ilabs.mozat.com/webprojects/Deja/<%=projectName%>/",
       "reloadDelay": 350
     },
     "pagespeed": {
-      "url": "",
+      "url": "http://m.deja.me/<%=projectName%>/",
       "options": {
         "strategy": "mobile"
       }
