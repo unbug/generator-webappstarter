@@ -1,21 +1,21 @@
 {
-  "name": "rsvpmobile",
+  "name": "<%=projectName%>",
   "version": "0.0.0",
-  "description": "DEJA – Xclusive Fashion Party.",
+  "description": "Hello <%=projectName%>",
   "project": {
     "invalidNames": "products|account|config|feed|vote|share|favorite|creation|feedback|dilog|invite|vote|event|share",
-    "title": "DEJA – Xclusive Fashion Party",
+    "title": "Title - <%=projectName%>",
     "viewport": 720,
     "sourceImg": "../../../../../Mozat/Deja/rsvp/UI/build/img/**/*.{png,jpg}",
     "sourceSprites": "../../../../../Mozat/Deja/rsvp/UI/build/assets/*.png",
     "watchJshint": true,
     "watchScsslint": false,
     "browserSync": {
-      "proxy": "http://ilabs.mozat.com/webprojects/Deja/rsvp/",
+      "proxy": "",
       "reloadDelay": 350
     },
     "pagespeed": {
-      "url": "http://m.deja.me/rsvpmobile/",
+      "url": "",
       "options": {
         "strategy": "mobile"
       }
