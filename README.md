@@ -5,7 +5,8 @@ webappstarter generator will give you a Simple Mobile Web App Boilerplate and St
 Prereqs and installation requirements
 =====================================
 1.install [node](https://nodejs.org/).
-2.use npm to install [yeoman](http://yeoman.io/)
+
+2.install [yeoman](http://yeoman.io/).
 ```shell
 npm install -g yo
 ```
@@ -22,7 +23,7 @@ Generate commands
 ```shell
 yo webappstarter
 ```
-input your project's name
+More configurations,please take a look at "project" property of "package.json" file after the generator is done.
 
 Project commands
 =================
