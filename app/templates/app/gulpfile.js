@@ -1,3 +1,7 @@
+var spawn = require('child_process').spawn;
+var exec = require('child_process').exec;
+var fs = require('fs');
+
 var gulp = require('gulp');
 var source = require('vinyl-source-stream');
 var through2 = require('through2');
@@ -120,8 +124,9 @@ var AUTOPREFIXER_BROWSERS = [
     'bb >= 10'
 ];
 gulp.task('sass', function () {
-    return gulp.src('./scss/*.scss')
-        .pipe($.replace(/_VIEWPORT_WIDTH_/ig,conf.project.viewport||640))
+    return gulp.src(['./scss/*.scss'],{buffer:true})
+        .pipe($.replace(/_VIEWPORT_WIDTH_/g,conf.project.viewport||640))
+        .pipe(gulp.dest('./.scss'))//fix replace not working
         .pipe($.sourcemaps.init())
         .pipe($.sass({errLogToConsole: true}))
         .pipe($.sourcemaps.write())
@@ -129,7 +134,9 @@ gulp.task('sass', function () {
             optimizeMemory: true
         }))
         .pipe($.autoprefixer({browsers: AUTOPREFIXER_BROWSERS}))
-        .pipe(gulp.dest('./resources/css/'));
+        .pipe(gulp.dest('./resources/css/')).on('end',function(){
+            del(['./.scss'], {force: true});
+        });
 });
 
 //compress css to dist
@@ -203,10 +210,10 @@ gulp.task('include:debug', function () {
         .pipe($.cached('build-cache', {
             optimizeMemory: true
         }))
-        .pipe($.replace(/_BUILD_VERSION_/ig,buildVersion))
-        .pipe($.replace(/_GLOBAL_VERSION_/ig,globalVersion))
-        .pipe($.replace(/_VIEWPORT_WIDTH_/ig,viewport))
-        .pipe($.replace(/_TITLE_/ig,title))
+        .pipe($.replace(/_BUILD_VERSION_/g,buildVersion))
+        .pipe($.replace(/_GLOBAL_VERSION_/g,globalVersion))
+        .pipe($.replace(/_VIEWPORT_WIDTH_/g,viewport))
+        .pipe($.replace(/_TITLE_/g,title))
         .pipe(gulp.dest('./'));
 });
 //compress html to dist
@@ -215,10 +222,10 @@ gulp.task('includes:official', function () {
         .pipe($.fileInclude({
             basepath: './html/site/'
         }))
-        .pipe($.replace(/_BUILD_VERSION_/ig,buildVersion))
-        .pipe($.replace(/_GLOBAL_VERSION_/ig,globalVersion))
-        .pipe($.replace(/_VIEWPORT_WIDTH_/ig,viewport))
-        .pipe($.replace(/_TITLE_/ig,title))
+        .pipe($.replace(/_BUILD_VERSION_/g,buildVersion))
+        .pipe($.replace(/_GLOBAL_VERSION_/g,globalVersion))
+        .pipe($.replace(/_VIEWPORT_WIDTH_/g,viewport))
+        .pipe($.replace(/_TITLE_/g,title))
         .pipe(cachebust.references())
         .pipe($.minifyHtml({
             empty: true,
@@ -267,18 +274,23 @@ gulp.task('deploy:test', function (cb) {
 
 //deploy to offical server
 //view http://m.deja.me/PROJECTNAME/
-gulp.task('deploy:offical', function() {
+gulp.task('deploy:offical', function(cb) {
+    //set rsync proxy
+    process.env.RSYNC_PROXY = 'proxy.lan:8080';
     var client = new rsync()
-        //for window,please run "set RSYNC_PROXY=proxy.lan:8080" in CMD,and change to ".executable('rsync')"
-        .executable('RSYNC_PROXY=proxy.lan:8080 rsync')
-        .flags('az')
+        .executable('rsync')
+        .flags('azv')
         .source(distPath)
         .destination('rsync://10.160.241.153/m.deja.me/');
 
     client.execute(function(error, code, cmd) {
         console.log('\t'+cmd);
+        //reset rsync proxy
+        process.env.RSYNC_PROXY = '';
+        cb();
     });
 });
+
 
 // Lint JavaScript
 gulp.task('jshint', function () {

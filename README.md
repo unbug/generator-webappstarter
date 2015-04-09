@@ -23,6 +23,16 @@ Generator commands
 ```shell
 yo webappstarter
 ```
+2.generate a new module,run
+
+```shell
+//add "html/site/include/modulename.html" and inlude it to "html/site/include/views.html"
+//add "scss/_debug-modulename.scss" and inport it to "scss/_debug-view.scss"
+//add "src/app/view/ModuleNameView.js"
+//add "src/app/controller/ModuleNameController.js"
+//add "src/app/resources/TemplateModuleName.js
+yo webappstarter:module ModuleName
+```
 More configurations,please take a look at "project" property of "package.json" file after the generator is done.
 
 Project commands
@@ -55,7 +65,7 @@ gulp deploy
 ```
 view the page on offical server [http://office.mozat.com:8081/m/PROJECTNAME/](http://office.mozat.com:8081/m/PROJECTNAME/).
 This deploy require [rsync](https://rsync.samba.org/).
-For window,unzip  /tools/rsync.zip to a local path,add the path to classpath,excute `set RSYNC_PROXY=proxy.lan:8080` in CMD, then modify `gulpfile.js` change `.executable('RSYNC_PROXY=proxy.lan:8080 rsync')` to .executable('rsync').You may need to reboot your system.
+For window,unzip  /tools/rsync.zip to a local path and add the path to classpath.
 
 4.run `gulp copy` to copy source images to project's `/resources/images/` path and generates sprites for sourceSprites in `package.json`.
 
