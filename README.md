@@ -31,6 +31,7 @@ yo webappstarter
 //add "src/app/view/ModuleNameView.js"
 //add "src/app/controller/ModuleNameController.js"
 //add "src/app/resources/TemplateModuleName.js
+
 yo webappstarter:module ModuleName
 ```
 More configurations,please take a look at "project" property of "package.json" file after the generator is done.
@@ -51,21 +52,24 @@ gulp
 2.deploy to test server,run
 
 ```shell
+//This command require [openssl](https://www.openssl.org/).
+//For windows,you might needd to add openssl path to classpath.
+
 gulp deploytest
 ```
 view the page on test server [http://m.deja.me/PROJECTNAME/](http://m.deja.me/PROJECTNAME/).
-This deploy require [openssl](https://www.openssl.org/).
-For window,you might needd to add openssl path to classpath.
 
 
 3.deploy to offical server,run
 
 ```shell
+//This command require [rsync](https://rsync.samba.org/).
+//For windows,unzip  /tools/rsync.zip to a local path and add the path to classpath.
+
 gulp deploy
 ```
 view the page on offical server [http://office.mozat.com:8081/m/PROJECTNAME/](http://office.mozat.com:8081/m/PROJECTNAME/).
-This deploy require [rsync](https://rsync.samba.org/).
-For window,unzip  /tools/rsync.zip to a local path and add the path to classpath.
+
 
 4.run `gulp copy` to copy source images to project's `/resources/images/` path and generates sprites for sourceSprites in `package.json`.
 
