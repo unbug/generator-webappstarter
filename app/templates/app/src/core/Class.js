@@ -41,8 +41,8 @@ define(function(require, exports, module) {
     /**
      *
      * Model
-     * 
-     * 
+     *
+     *
      * Nested Model:
      * e.g.
      *    var testModel = new Model({
@@ -79,11 +79,35 @@ define(function(require, exports, module) {
                 this[attr] = option[attr];
             }
         }
+
+        //数据缓存更新
+        this.updateFactory = function(){
+            var lastUpdate = 0,
+                _timeout = 1000*60*5;
+            /**
+             *
+             * @param timeout 时间倍数，默认是1
+             * @returns {boolean}
+             */
+            this.isTimeout = function(timeout){
+                timeout = _timeout*(timeout||1);
+                return !lastUpdate || ( (new Date().getTime())-lastUpdate>timeout );
+            }
+            this.update = function(){
+                lastUpdate = new Date().getTime();
+            }
+            this.reset = function(){
+                lastUpdate = 0;
+            }
+            //end 数据缓存更新
+        }
+        this.timer = new this.updateFactory;
     }
     Class.extend(Subject,Model);
     Model.prototype.set = function(data){
         this.data = data;
         this.refresh();
+        this.timer.update();
     }
     Model.prototype.get = function(){
         return this.data;
