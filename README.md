@@ -71,13 +71,13 @@ gulp deploy
 view the page on offical server [http://office.mozat.com:8081/m/PROJECTNAME/](http://office.mozat.com:8081/m/PROJECTNAME/).
 
 
-4.run `gulp copy` to copy source images to project's `/resources/images/` path and generates sprites for sourceSprites in `package.json`.
+4.run ```gulp copy``` to copy source images to project's `/resources/images/` path and generates sprites for sourceSprites in `package.json`.
 
-5.run `gulp jshint` to start jshint.
+5.run ```gulp jshint``` to start jshint.
 
-6.run `gulp serve` to start browserSync,Change browserSync options in `package.json`.
+6.run ```gulp serve``` to start browserSync,Change browserSync options in `package.json`.
 
-7.run `gulp pagespeed` to start pagespeed,Change pagespeed options in `package.json`.
+7.run ```gulp pagespeed``` to start pagespeed,Change pagespeed options in `package.json`.
 
 Git
 ==========
