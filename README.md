@@ -21,6 +21,8 @@ Generator commands
 1.generate a new project,run
 
 ```shell
+mkdir myProject
+cd myProject
 yo webappstarter
 ```
 2.generate a new module,run
