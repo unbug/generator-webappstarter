@@ -17,7 +17,7 @@
     "app"
   ],
   "keywords": [
-    "yeoman-generator","mobile web app","MVC"
+    "yeoman-generator","mobile web app","MVC","mozat"
   ],
   "dependencies": {
     "yeoman-generator": "^0.19.0",
