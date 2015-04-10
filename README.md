@@ -54,24 +54,21 @@ gulp
 2.deploy to test server,run
 
 ```shell
-//This command require [openssl](https://www.openssl.org/).
-//For windows,you might needd to add openssl path to classpath.
-
 gulp deploytest
 ```
-view the page on test server [http://m.deja.me/PROJECTNAME/](http://m.deja.me/PROJECTNAME/).
+View the page on test server [http://office.mozat.com:8081/m/PROJECTNAME/](http://office.mozat.com:8081/m/PROJECTNAME/).
+This command require [openssl](https://www.openssl.org/).
+For windows,you might needd to add openssl path to classpath.
 
 
 3.deploy to offical server,run
 
 ```shell
-//This command require [rsync](https://rsync.samba.org/).
-//For windows,unzip  /tools/rsync.zip to a local path and add the path to classpath.
-
 gulp deploy
 ```
-view the page on offical server [http://office.mozat.com:8081/m/PROJECTNAME/](http://office.mozat.com:8081/m/PROJECTNAME/).
-
+View the page on offical server [http://m.deja.me/PROJECTNAME/](http://m.deja.me/PROJECTNAME/).
+This command require [rsync](https://rsync.samba.org/).
+For windows,unzip  /tools/rsync.zip to a local path and add the path to classpath.
 
 4.run 
 ```shell
