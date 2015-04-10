@@ -2,6 +2,12 @@ Readme
 =================
 webappstarter generator will give you a Simple Mobile Web App Boilerplate and Structure!
 
+Install
+========
+```shell
+npm install -g generator-webappstarter
+```
+
 Prereqs and installation requirements
 =====================================
 1.install [node](https://nodejs.org/) and [Python](https://www.python.org/).
@@ -10,7 +16,7 @@ Prereqs and installation requirements
 ```shell
 npm install -g yo
 ```
-3.Clone this git repo to your local,and from the root of the repo,run
+3.[option]Clone this git repo to your local,and from the root of the repo,run
 ```shell
 npm link
 ```
