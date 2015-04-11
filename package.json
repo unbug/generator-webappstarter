@@ -1,6 +1,6 @@
 {
   "name": "generator-webappstarter",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Quick start a web app for mobile",
   "license": "MIT",
   "main": "app/index.js",
@@ -14,10 +14,14 @@
     "test": "mocha"
   },
   "files": [
-    "app", "module"
+    "app",
+    "module"
   ],
   "keywords": [
-    "yeoman-generator","mobile web app","MVC","mozat"
+    "yeoman-generator",
+    "mobile web app",
+    "MVC",
+    "mozat"
   ],
   "dependencies": {
     "yeoman-generator": "^0.19.0",
@@ -25,6 +29,7 @@
     "yosay": "^1.0.2"
   },
   "devDependencies": {
+    "html-wiring": "^1.0.1",
     "mocha": "*"
   }
 }
