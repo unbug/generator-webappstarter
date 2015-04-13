@@ -62,6 +62,7 @@ gulp
 ```shell
 gulp deploytest
 ```
+Please update your ftp auth name and password in ".ftppass".
 View the page on test server [http://office.mozat.com:8081/m/PROJECTNAME/](http://office.mozat.com:8081/m/PROJECTNAME/).
 This command require [openssl](https://www.openssl.org/).
 For windows,you might needd to add openssl path to classpath.
