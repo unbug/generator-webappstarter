@@ -11,7 +11,7 @@ define(function(require, exports, module) {
             debug = false,
             isAndroid = androidReg.test(navigator.platform) || androidReg.test(navigator.userAgent),
             Callbacks,Protocols;
-            
+
         Callbacks = {
             afterEncrypt: emptyFn,
             afterShare: emptyFn,
@@ -45,7 +45,12 @@ define(function(require, exports, module) {
             debug = true;
         }
 
-        function isApp(){
+        function updateAppUA(ua){
+            appUA = new RegExp(ua,'ig').test(navigator.userAgent);
+        }
+
+        function isApp(ua){
+            ua && updateAppUA(ua);
             return appUA || debug;
         }
         function protocol(action,callback){
@@ -56,7 +61,7 @@ define(function(require, exports, module) {
                 callback(_data && _data[1]);
             }
         }
-        
+
         function afterCallback(rs,callback){
             callback = callback || emptyFn;
             callback(rs);
@@ -75,13 +80,13 @@ define(function(require, exports, module) {
             afterCallback(rs,Callbacks.afterLogin);
         }
         window.__newsapp_device_done = function(rs){
-            afterCallback(rs,Callbacks.afterDevice);       
+            afterCallback(rs,Callbacks.afterDevice);
         }
         window.__newsapp_upload_image_done = function(rs){
-            afterCallback(rs,Callbacks.afterUploadImage);       
+            afterCallback(rs,Callbacks.afterUploadImage);
         }
         window.__newsapp_comment_done = function(rs){
-            afterCallback(rs,Callbacks.afterComment);       
+            afterCallback(rs,Callbacks.afterComment);
         }
         window.__newsapp_otherappinfo_done = function(rs){
             afterCallback(rs,Callbacks.afterOtherappinfo);
@@ -96,27 +101,27 @@ define(function(require, exports, module) {
         /**
          * 登录
          * @param {Function} callback 成功回调
-         */         
+         */
         function login(callback){
             Callbacks.afterLogin = callback;
             protocol(Protocols.login,callback);
-        }    
+        }
         /**
          * 获取用户信息
          * @param {Function} callback 成功回调
-         */ 
+         */
         function userInfo(callback){
             Callbacks.afterUserinfo = callback;
             protocol(Protocols.userinfo,callback);
-        }    
+        }
         /**
          * 获取设备信息
          * @param {Function} callback 成功回调
-         */        
+         */
         function device(callback){
             Callbacks.afterDevice = callback;
             protocol(Protocols.device,callback);
-        }        
+        }
         /**
          * 分享
          * @param {Function} callback 成功回调
@@ -124,14 +129,14 @@ define(function(require, exports, module) {
         function share(callback){
             Callbacks.afterShare = callback;
             protocol(Protocols.share,callback);
-        }        
+        }
         /**
          * 打开客户端视图
          * @param {String} type feedback,font,personalcenter,skin,font
          */
         function pushView(type){
             protocol(Protocols.pushview.replace('{TYPE}',type));
-        }        
+        }
         /**
          * 加密
          * @param {String} data 待加密数据
@@ -142,9 +147,9 @@ define(function(require, exports, module) {
             if(window.extra && window.extra.__newsapp_encrypt){
                 afterCallback( window.extra.__newsapp_encrypt(data),Callbacks.afterEncrypt );
             }else{
-                protocol(Protocols.encrypt+encodeURI(data),callback);   
-            } 
-        }        
+                protocol(Protocols.encrypt+encodeURI(data),callback);
+            }
+        }
         /**
          * 上传图片 调用摄像头
          * @param {Integer} width 图片宽
