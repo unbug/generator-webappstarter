@@ -123,19 +123,24 @@ var AUTOPREFIXER_BROWSERS = [
     'android >= 4.4',
     'bb >= 10'
 ];
-gulp.task('sass', function () {
-    return gulp.src(['./scss/*.scss'],{buffer:true})
+gulp.task('sass', function (cb) {
+    gulp.src(['./scss/*.scss'],{buffer:true})
         .pipe($.replace(/_VIEWPORT_WIDTH_/g,conf.project.viewport||640))
         .pipe(gulp.dest('./.scss'))//fix replace not working
-        .pipe($.sourcemaps.init())
-        .pipe($.sass({errLogToConsole: true}))
-        .pipe($.sourcemaps.write())
-        .pipe($.cached('build-cache', {
-            optimizeMemory: true
-        }))
-        .pipe($.autoprefixer({browsers: AUTOPREFIXER_BROWSERS}))
-        .pipe(gulp.dest('./resources/css/')).on('end',function(){
-            del(['./.scss'], {force: true});
+        .on('end',function(){
+            gulp.src(['./.scss/*.scss'],{buffer:true})
+                .pipe($.sourcemaps.init())
+                .pipe($.sass({errLogToConsole: true}))
+                .pipe($.sourcemaps.write())
+                .pipe($.cached('build-cache', {
+                    optimizeMemory: true
+                }))
+                .pipe($.autoprefixer({browsers: AUTOPREFIXER_BROWSERS}))
+                .pipe(gulp.dest('./resources/css/'))
+                .on('end',function(){
+                    del(['./.scss'], {force: true});
+                    cb();
+                });
         });
 });
 
