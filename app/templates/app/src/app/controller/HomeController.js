@@ -50,12 +50,12 @@ define(function(require, exports, module) {
             Core.Router.forward('/home/'+(arg||''));
         }
         function analyticsCurView(params,title){
-            if( !Core.Router.currentMatch(['/home/']) ){
+            if( !Core.Router.currentMatch(['/home/',Core.Router.getUnsubscribedAction()]) ){
                 return;
             }
             params = params?('&'+params):'';
             title = title||viewNames[curViewId]||document.title;
-            
+
             Core.Event.trigger( 'analytics','viewid='+curViewId+params,title );
         }
     }

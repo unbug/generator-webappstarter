@@ -10,10 +10,20 @@ define(function(require, exports, module) {
      *                                                  --> (否)执行 run
      *
      *
-     *
      * Hash 变化事件执行流程：
      * Hash变化（或者显示调用 run,forward,back方法） --> 执行 onChanged 注册的所有事件 --> 执行 subscribe 注册的与 Hash 关联的所有事件
      *
+     * subscribe 注册的事件回调方法传递参数:
+     * actionValue - 当前 action 之后的字符串，如/user/id=1&name=test 对应 action 是 /user/ ，actionValue 是 id=1&name=test
+     * request - { action: 当前action字符串,
+                   valeu: actionValue,
+                   hash: {
+                    curHash: String,
+                    newHash: String,
+                    oldHash: String
+                   },
+                   query: actionValue的键值对，如 {id:1,name:test}
+                 }
      *
      * 本 Router 暂不支持正则表达式
      */
@@ -24,6 +34,7 @@ define(function(require, exports, module) {
             UN_SUB_NAME = '__UN_SUBSCRIBED_ACTION',
             INIT_HASH_STR = formatHash(HashHandler.get()),
             currentAction = INIT_HASH_STR,
+            currentQureyStr = '',
             _isFroward = true,
             actionsHistory = [INIT_HASH_STR],
             isReady = false,
@@ -37,7 +48,7 @@ define(function(require, exports, module) {
         }else{
             window.addEventListener('hashchange', locationHashChanged, false);
         }
-        
+
         //开启锚点，解决页面自动滚动的问题
         var _st = document.createElement('style'),
             _div = document.createElement('div');
@@ -45,7 +56,21 @@ define(function(require, exports, module) {
         _div.className = 'Router-anchor';
         document.body.appendChild(_st);
         document.body.appendChild(_div);
-        
+
+        function getQuery(search){
+            search = search || currentQureyStr || '';
+            var fn = function(str,reg){
+                if(str){
+                    var data = {};
+                    str.replace(reg,function( $0, $1, $2, $3 ){
+                        data[ $1 ] = $3;
+                    });
+                    return data;
+                }
+            }
+            return fn(search,new RegExp( "([^?=&]+)(=([^&]*))?", "g" ))||{};
+        }
+
         function formatHash(hash){
             if(hash){
                 //hash后不能带search值
@@ -82,7 +107,13 @@ define(function(require, exports, module) {
                         hash.curHash.replace(new RegExp(key+'(.*)','g'),function($1,$2){
                             if($1){
                                 published = true;
-                                Pubsub.publish(key,$2,key,hash);
+                                Pubsub.publish(key,$2,{
+                                    action: key,
+                                    value: $2,
+                                    hash: hash,
+                                    query: getQuery($2)
+                                });
+                                currentQureyStr = $2;
                             }
                         });
                     }
@@ -209,12 +240,12 @@ define(function(require, exports, module) {
             }
             return Pubsub;
         }
-        
+
         /**
          * 返回上一主题
          * action仅在解决当不确实是否有浏览历史，并且又需要跳转到一个指定的hash值时
          * 优先级是： 浏览器历史 > actionsHistory > action
-         * @param {String}|{Number} action 
+         * @param {String}|{Number} action
          */
         function back(action){
             var ac = getLastAction() || action || -1;
@@ -281,7 +312,7 @@ define(function(require, exports, module) {
             }
             l = ac.length;
             for(;i<l;i++){
-                if( (new RegExp('^'+ac[i]+'(.*)','i')).test(currentAction) ){
+                if( (new RegExp('^'+ac[i]+'(.*)','i')).test(currentAction||UN_SUB_NAME) ){
                     return true;
                 };
             }
@@ -297,8 +328,13 @@ define(function(require, exports, module) {
         Pubsub.onReady = onReady;
         Pubsub.onChanged = onChanged;
         Pubsub.onUnsubscribed = onUnsubscribed;
+        Pubsub.getQuery = getQuery;
+        Pubsub.getUnsubscribedAction = function(){
+            return UN_SUB_NAME;
+        };
+
 
         return Pubsub;
-    }    
+    }
     return Router(new Pubsub(Subject),HashHandler);
 });
