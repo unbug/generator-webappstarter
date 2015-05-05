@@ -48,13 +48,13 @@ define(function(require, exports, module) {
             return els;
         }
         function bindEvent(){
-            document.addEventListener('touchmove', function (e) { 
-                VIEW.GlobalTouch.preventMove && e.preventDefault();  
+            document.addEventListener('touchmove', function (e) {
+                VIEW.GlobalTouch.preventMove && e.preventDefault();
             },false);
-            document.addEventListener('touchstart', function (e) { 
+            document.addEventListener('touchstart', function (e) {
                 VIEW.GlobalTouch.touched = true;
             },false);
-            document.addEventListener('touchend', function (e) { 
+            document.addEventListener('touchend', function (e) {
                 VIEW.GlobalTouch.touched = false;
             },false);
             if(VIEW.tapEvent=='tap'){
@@ -71,6 +71,13 @@ define(function(require, exports, module) {
             });
             els.body.on(VIEW.tapEvent,'* [data-analytics]',function(){
                 Core.Event.trigger('analyticsCurView',this.getAttribute('data-analytics'));
+            });
+            els.body.on(VIEW.tapEvent,'* [data-eventname]',function(){
+                var ename = this.getAttribute('data-eventname'),
+                    eparam = this.getAttribute('data-eventparam')||'';
+                if(ename){
+                    Core.Event.trigger(ename,eparam);
+                }
             });
         }
         this.show = function(viewCls){

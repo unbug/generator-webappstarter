@@ -10,7 +10,11 @@ define(function(require, exports, module) {
         user:  Core.localHost +'/user/list.php',
 
         main: thisPath+'index.html',
-        analytics: thisPath+'analytics.html'
+        analytics: thisPath+'analytics.html',
+        dejame: 'http://deja.me/u/XPKab9',
+        dejaAppAndroid: 'http://deja.me/u/XPKab9',
+        dejaAppIos: 'http://deja.me/u/fzb1KO',
+        dejaDwonloadBridge: 'http://m.deja.me/bridge/'
     }
     //*/
 
@@ -19,7 +23,11 @@ define(function(require, exports, module) {
         user:  'data/user.json',
 
         main: thisPath+'index.html',
-        analytics: thisPath+'analytics.html'
+        analytics: thisPath+'analytics.html',
+        dejame: 'http://deja.me/u/XPKab9',
+        dejaAppAndroid: 'http://deja.me/u/XPKab9',
+        dejaAppIos: 'http://deja.me/u/fzb1KO',
+        dejaDwonloadBridge: 'http://m.deja.me/bridge/'
     }
     //*/
    return Actions;

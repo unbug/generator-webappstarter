@@ -12,20 +12,16 @@ define(function(require, exports, module) {
             Base: BaseView
         };
         //所有视图初始化前，需要获得客户端的用户登录信息
-        //Core.Router.onReady(onUserinfo);
+        Core.Router.onReady(onUserinfo);
 
         Core.Router.onChanged(onViewChanged);
 
         var CTRL = this,
             isApp = Core.NativeBridge.isApp(),
             params = Core.localParam(),
-            _userid = params.search['userid'],
-            _partner = params.search['partner'];
+            _userid = params.search['userid'];
         ///*Todo: debug user
         _userid && CTRL.models.Base.setUserId(_userid);
-        //*/
-        ///*Todo: debug user
-        _partner && CTRL.models.Base.setApplyType(_partner);
         //*/
 
         //更新数据缓存时间
@@ -36,18 +32,16 @@ define(function(require, exports, module) {
         Core.Event.on('appDownload',redirectToDownload);
         //去更新
         Core.Event.on('appUpdate',appUpdate);
+        //去deja.me
+        Core.Event.on('redirectToDejame',redirectToDejame);
         //跳转出商城
         Core.Event.on('redirect',redirectToPage);
         //去登录
         Core.Event.on('login',onLogin);
+        //去WEB登录
+        Core.Event.on('webLogin',webLogin);
         //去反馈
         Core.Event.on('feedback',onFeedback);
-        //首页 赚更多金币
-        Core.Event.on('appUserCenter',appUserCenter);
-        //更新客户端用户资料
-        Core.Event.on('appUpdateProfile',appUpdateProfile);
-        //打开跟贴
-        Core.Event.on('appOpenComment',appOpenComment);
         //复制文本
         Core.Event.on('appCopyText',appCopyText);
         //更新标题
@@ -81,6 +75,9 @@ define(function(require, exports, module) {
                     url += '&ios';
                 }else if($.os.android){
                     url += '&android';
+                }
+                if(ThirdVendor){
+                    url += '&plf='+ThirdVendor.code;
                 }
                 Core.Navigator.protocol(url,true);
             },0);
@@ -116,12 +113,10 @@ define(function(require, exports, module) {
 
         function onUserinfo(){
             if(isApp){
-                Core.NativeBridge.userInfo(function(rs){
+                Core.NativeBridge.userInfo(null,function(rs){
                     if(rs){
-                        CTRL.models.Base.setNativeBridgeUserMeta(rs);
+                        CTRL.models.Base.setAppUserMeta(rs);
 
-                        //onLogin();
-                        //return;
                         if(CTRL.models.Base.verifyLoginCookie() && CTRL.models.Base.verifyLoginCookieTimeout()){
                             Core.Router.run();
                         }else{
@@ -131,14 +126,14 @@ define(function(require, exports, module) {
                         Core.Router.run();
                     }
                 });
-                Core.NativeBridge.device(function(rs){
-                    if(rs){
-                        CTRL.models.Base.setNativeBridgeDeviceMeta(rs);
-                    }
-                });
+                //Core.NativeBridge.device(function(rs){
+                //    if(rs){
+                //        CTRL.models.Base.setNativeBridgeDeviceMeta(rs);
+                //    }
+                //});
             }else{
                 Core.Router.run();
-            }            
+            }
         }
 
         function onLogin(arg){
@@ -147,14 +142,9 @@ define(function(require, exports, module) {
                     if(rs){
                         CTRL.models.Base.saveLoginCookieTimeout();
                         CTRL.models.Base.initModelUpdateTimeout();
-                        CTRL.models.Base.setNativeBridgeUserMeta(rs);
+                        CTRL.models.Base.setAppUserMeta(rs);
                         Core.Router.run();
                     }
-                    /* 注释掉避免开启DEBUG模式时，出现死循环的问题
-                    else{
-                        Core.Router.run();
-                    }
-                    */
                 });
             }else{
                 CTRL.views.Base.msgbox.showDownload({
@@ -192,10 +182,22 @@ define(function(require, exports, module) {
             el.addClass(classname);
             el.animTimer = setTimeout(function(){
                 el.removeClass(classname);
-            },timeout);                  
-        }        
+            },timeout);
+        }
         function toggleTextSectionExpand(el){
             el && el.classList.toggle('expand');
+        }
+
+        function webLogin(surl,furl,pf){
+            var murl = window.location.href;
+            surl = surl || murl;
+            furl = furl || murl;
+            pf = pf || 'fb';
+
+            redirectToPage( Actions.login
+                .replace('{SURL}',encodeURIComponent(surl))
+                .replace('{FURL}',encodeURIComponent(furl))
+                .replace('{PF}',pf) );
         }
 
         function appUpdate(msg){
@@ -205,32 +207,18 @@ define(function(require, exports, module) {
                     noText: 'Close',
                     yesText: 'Update',
                     yesCallback: function(){
-                        downloadNativeBridgeInApp();
+                        downloadDejaInApp();
                     }
                 });
             });
         }
-        function appUserCenter(){
+        function appShare(callback,plf){
             redirectToApp(function(){
-                Core.NativeBridge.pushView('personalcenter');
-            });        
-        }
-        function appShare(callback){
-            redirectToApp(function(){
-                Core.NativeBridge.share(callback);
-            });   
-        }
-        
-        function appOpenComment(boardid,docid,title){
-            redirectToApp(function(){
-                Core.NativeBridge.openComment(boardid,docid,title);
+                var fn = Core.NativeBridge['share'+(plf?('_'+plf):'')];
+                fn && fn(null,callback);
             });
         }
-        function appUpdateProfile(){
-            if(isApp){
-                Core.NativeBridge.updateProfile();
-            }           
-        }
+
         function appCopyText(text){
             if(isApp){
                 Core.NativeBridge.copy(text);
@@ -245,23 +233,26 @@ define(function(require, exports, module) {
         }
         function appActionButton(name,callback){
             if(isApp){
-                Core.NativeBridge.actionbutton(name,callback);
+                Core.NativeBridge.updateBarButton(name,callback);
             }
         }
         function appActionShareButton(callback){
-            appActionButton('分享',function(){
+            appActionButton('share',function(){
                 appShare(callback);
             });
         }
         function appActionDefaultButton(){
             appActionButton('',function(){});
         }
-        function downloadNativeBridgeInApp(){
-            var url = Actions.NativeBridgeAndroid;
+        function downloadDejaInApp(){
+            var url = Actions.dejaAppAndroid;
             if($.os.ios && !$.os.android){
-                url  = Actions.NativeBridgeIos;
+                url  = Actions.dejaAppIos;
             }
             window.location = url;
+        }
+        function redirectToDejame(){
+            redirectToPage(Actions.dejame);
         }
         //打开客户端原生视图
         function redirectToApp(callback,link){
@@ -276,16 +267,16 @@ define(function(require, exports, module) {
             }
         }
         function redirectToDownload(link,autoopen){
-            link = link?('#url=NativeBridge://web/'+link):'';
-            redirectToPage(Actions.NativeBridgeDwonload+(autoopen?'?autoopen=1':'')+link);
-        }   
+            link = link?('#url=dejafashion://webview/'+link):'';
+            redirectToPage(Actions.dejaDwonloadBridge+(autoopen?'?autoopen=1':'')+link);
+        }
         function redirectToPage(link){
             if(link){
                 !(/__NativeBridge_target/g.test(link)) && appActionDefaultButton();
                 window.location = link;
             }
         }
-        
-    }//end Controller    
+
+    }//end Controller
     return new Controller;
 });

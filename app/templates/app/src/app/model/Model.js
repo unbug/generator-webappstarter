@@ -7,7 +7,7 @@ define(function(require, exports, module) {
             lcStorage = Core.localStorage,
             getJSON = Core.RequestHandler.getJSON,
             postJSON = Core.RequestHandler.postJSON,
-            userId,udid,NativeBridgeUserMeta,NativeBridgeDeviceMeta;
+            userId,udid,appUserMeta;
 
         this.getCookie = function(sKey) {
             return decodeURIComponent(document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" + encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1")) || null;
@@ -23,21 +23,22 @@ define(function(require, exports, module) {
         }
         //校验登录 cookies
         this.verifyLoginCookie = function(){
-            var S_INFO = this.getCookie('S_INFO'),
-                S_INFO = S_INFO && S_INFO.split('|'),
-                P_INFO = this.getCookie('P_INFO'),
-                P_INFO = P_INFO && P_INFO.split('|');
-            return (S_INFO && P_INFO && (P_INFO[2]!='2'));
+            var uid = this.getCookie('uid'),
+                sig = this.getCookie('sig');
+
+            this.setUserId(uid);
+
+            return uid && sig;
         }
         this.saveLoginCookieTimeout = function(){
             var key = this.getUserId()+'__loginCookieTimer';
             lcStorage.set(key,new Date().getTime());
         }
-        //校验 cookies 有效期，商城默认是1个小时过期，这里用 20 分钟
+        //校验 cookies 有效期，这里用 20天
         this.verifyLoginCookieTimeout = function(minutes){
             var key = this.getUserId()+'__loginCookieTimer',
                 last = lcStorage.get(key) || 0;
-            minutes = minutes || 20;
+            minutes = minutes || 1*60*24*20;
             return ( (new Date().getTime())-last ) < minutes*60*1000;
         }
         this.setUdId = function(id){
@@ -50,33 +51,17 @@ define(function(require, exports, module) {
             userId = id;
         }
         this.getUserId = function(){
-            return userId;
+            return userId || this.getCookie('uid');
         }
-        this.getNativeBridgeUserMeta = function(){
-            return NativeBridgeUserMeta;
+        this.getAppUserMeta = function(){
+            return appUserMeta;
         }
-        this.setNativeBridgeUserMeta = function(data){
-            NativeBridgeUserMeta = data;
-            NativeBridgeUserMeta && this.setUserId(NativeBridgeUserMeta.name);
-        }
-        this.getNativeBridgeDeviceVersion = function(){
-            return (NativeBridgeDeviceMeta && NativeBridgeDeviceMeta.v)|| '1.0.0';
-        }
-        this.getNativeBridgeDeviceMeta = function(){
-            return NativeBridgeDeviceMeta;
-        }
-        this.setNativeBridgeDeviceMeta = function(data){
-            NativeBridgeDeviceMeta = data;
-            NativeBridgeDeviceMeta && this.setUdId(NativeBridgeDeviceMeta.u);
-        }
-        //校验所需要客户端版号不低于 version
-        this.requiredNativeBridgeVersion = function(version){
-            return Core.versionCompare(this.getNativeBridgeDeviceVersion(),version) != -1;
+        this.setAppUserMeta = function(data){
+            appUserMeta = data;
         }
         this.isLogined = function(){
-            return !!userId;
+            return !!this.getUserId();
         }
-
         //剩余人数
         this.user = new Mdl({
             request: function(callback){
@@ -97,13 +82,7 @@ define(function(require, exports, module) {
         var modelUpdate;
         this.initModelUpdateTimeout = function(){
             modelUpdate = {
-                timeout: 1000*60*5,
-                profile: 0,
-                prizeAll: 0,
-                liveTrade: 0,
-                myPrize: 0,
-                prizeKey: 0,
-                myCashPrize: 0
+                timeout: 1000*60*5
             }
         }
         this.initModelUpdateTimeout();

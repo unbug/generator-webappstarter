@@ -2,57 +2,49 @@ define(function(require, exports, module) {
     var Navigator = require('./Navigator');
 
     /**
-     * 与新闻客户端交互
+     * 与客户端交互
+     *
+     *    前端与客户端交互的流程主要为前端调用，客户端读取，客户端回调三个步骤：
+     *    前端调用客户端规则为：dejafashion://NAME（android 前端调用window.__dejafashion_NAME()）
+     *    客户端读取前端的数据规则为 window.__dejafashion_data_NAME，前端返回JSON {default:'',...}
+     *    【如果有】客户端处理完逻辑回调前端的方法规则为： window.__dejafashion_after_NAME([json])
+     *    拿分享为例:
+     *    1 -------> 前端调用dejafashion://share（android 前端调用window.__dejafashion_share()）
+     *    2 --------> 客户端接收到请求，向前端读取必要参数window.__dejafashion_data_share
+     *    3 ------- >【如果有】 客户端处理完逻辑回调通知前端处理完毕调用window.__dejafashion_after_share([json])
+     *    4 ------>前端接收客户端传回来的参数该干嘛干嘛
+     *    注意，客户端在调用前端方法之前一定要先做判断，如 window.__dejafashion_after_share && window.__dejafashion_after_share([json])
+     *
      */
     function NativeBridge(protocolHandler){
-        var emptyFn = function(){},
+        var _NB = this,
+            global = window,
+            emptyFn = function(){},
             appUA = (/Deja/ig).test(navigator.userAgent),
             androidReg = /Android/gi,
             debug = false,
             isAndroid = androidReg.test(navigator.platform) || androidReg.test(navigator.userAgent),
-            Callbacks,Protocols;
+            afterCallbacks = {},
+            Protocols = {},
+            baseName = 'dejafashion',
+            baseProtocol = baseName+'://',
+            baseObjName = '__'+baseName+'_',
+            baseDataName = baseObjName+'data_',
+            baseAfterName = baseObjName+'after_',
+            baseUpdateDataName = 'set_data_for_';
 
-        Callbacks = {
-            afterEncrypt: emptyFn,
-            afterShare: emptyFn,
-            afterUserinfo: emptyFn,
-            afterLogin: emptyFn,
-            afterDevice: emptyFn,
-            afterUploadImage: emptyFn,
-            afterComment: emptyFn,
-            afterOtherappinfo: emptyFn,
-            afterActionbutton: emptyFn
-        }
-        Protocols = {
-            share: 'share://',
-            updateprofile: 'updateprofile://',
-            encrypt: 'encrypt://',
-            pushview: 'pushview://{TYPE}',
-            userinfo: 'userinfo://',
-            login: 'login://',
-            device: 'device://',
-            uploadImageByCamera: 'uploadimage://camera/{W}_{H}',
-            uploadImageByAlbum: 'uploadimage://album/{W}_{H}',
-            openComment: 'newsapp://comment/{BOARD_ID}/{DOC_ID}/{TITLE}',
-            comment: 'comment://',
-            otherappinfo: isAndroid?'otherappinfo://':'otherappinfo://intent/',
-            copy: 'copy://',
-            toolbar: 'docmode://toolbar/{COMMAND}',
-            modifytitle: 'docmode://modifytitle/{TITLE}',
-            actionbutton: 'docmode://actionbutton/{NAME}'
-        }
+        afterCallbacks = {};
+        Protocols = {};
+
+
         function enableDebug(){
             debug = true;
         }
 
-        function updateAppUA(ua){
-            appUA = new RegExp(ua,'ig').test(navigator.userAgent);
-        }
-
-        function isApp(ua){
-            ua && updateAppUA(ua);
+        function isApp(){
             return appUA || debug;
         }
+
         function protocol(action,callback){
             protocolHandler(action,true);
             //开启调试
@@ -61,191 +53,63 @@ define(function(require, exports, module) {
                 callback(_data && _data[1]);
             }
         }
-
         function afterCallback(rs,callback){
             callback = callback || emptyFn;
             callback(rs);
             callback = emptyFn;
         }
-        window.__newsapp_share_done = function(rs){
-            afterCallback(rs,Callbacks.afterShare);
-        }
-        window.__newsapp_encrypt_done = function(rs){
-            afterCallback(rs,Callbacks.afterEncrypt);
-        }
-        window.__newsapp_userinfo_done = function(rs){
-            afterCallback(rs,Callbacks.afterUserinfo);
-        }
-        window.__newsapp_login_done = function(rs){
-            afterCallback(rs,Callbacks.afterLogin);
-        }
-        window.__newsapp_device_done = function(rs){
-            afterCallback(rs,Callbacks.afterDevice);
-        }
-        window.__newsapp_upload_image_done = function(rs){
-            afterCallback(rs,Callbacks.afterUploadImage);
-        }
-        window.__newsapp_comment_done = function(rs){
-            afterCallback(rs,Callbacks.afterComment);
-        }
-        window.__newsapp_otherappinfo_done = function(rs){
-            afterCallback(rs,Callbacks.afterOtherappinfo);
-        }
-        window.__newsapp_browser_actionbutton = function(rs){
-            afterCallback(rs,Callbacks.afterActionbutton);
-        }
-        //更新用户资料
-        function updateProfile(){
-            protocol(Protocols.updateprofile);
-        }
-        /**
-         * 登录
-         * @param {Function} callback 成功回调
-         */
-        function login(callback){
-            Callbacks.afterLogin = callback;
-            protocol(Protocols.login,callback);
-        }
-        /**
-         * 获取用户信息
-         * @param {Function} callback 成功回调
-         */
-        function userInfo(callback){
-            Callbacks.afterUserinfo = callback;
-            protocol(Protocols.userinfo,callback);
-        }
-        /**
-         * 获取设备信息
-         * @param {Function} callback 成功回调
-         */
-        function device(callback){
-            Callbacks.afterDevice = callback;
-            protocol(Protocols.device,callback);
-        }
-        /**
-         * 分享
-         * @param {Function} callback 成功回调
-         */
-        function share(callback){
-            Callbacks.afterShare = callback;
-            protocol(Protocols.share,callback);
-        }
-        /**
-         * 打开客户端视图
-         * @param {String} type feedback,font,personalcenter,skin,font
-         */
-        function pushView(type){
-            protocol(Protocols.pushview.replace('{TYPE}',type));
-        }
-        /**
-         * 加密
-         * @param {String} data 待加密数据
-         * @param {Function} callback 成功回调
-         */
-        function encrypt(data,callback){
-            Callbacks.afterEncrypt = callback;
-            if(window.extra && window.extra.__newsapp_encrypt){
-                afterCallback( window.extra.__newsapp_encrypt(data),Callbacks.afterEncrypt );
-            }else{
-                protocol(Protocols.encrypt+encodeURI(data),callback);
+        function updateData(name,data){
+            if(data != null && data != undefined){
+                if(typeof data=='string'){
+                    data = {default:data};
+                }
+
+                global[baseDataName+name] = data;
             }
         }
-        /**
-         * 上传图片 调用摄像头
-         * @param {Integer} width 图片宽
-         * @param {Integer} height 图片高
-         * @param {Function} callback 成功回调
-         */
-        function uploadImageByCamera(width,height,callback){
-            Callbacks.afterUploadImage = callback;
-            protocol( Protocols.uploadImageByCamera.replace('{W}',width).replace('{H}',height),callback );
+        function registerUpdateDataFn(name,fn){
+            var updateName = baseUpdateDataName+name;
+            _NB[updateName] = fn || function(data){
+                    updateData(name,data);
+                }
+
         }
-        /**
-         * 上传图片 调用图库
-         * @param {Integer} width 图片宽
-         * @param {Integer} height 图片高
-         * @param {Function} callback 成功回调
-         */
-        function uploadImageByAlbum(width,height,callback){
-            Callbacks.afterUploadImage = callback;
-            protocol( Protocols.uploadImageByAlbum.replace('{W}',width).replace('{H}',height),callback );
+        function registerFn(name,fn){
+            Protocols[name] = baseProtocol+name;
+            afterCallbacks[name] = emptyFn;
+            global[baseAfterName+name] = function(rs){
+                afterCallback(rs,afterCallbacks[name]);
+            }
+            registerUpdateDataFn(name);
+            _NB[name] = fn
+                || function(data,callback,subProtocol){
+                    updateData(name,data);
+                    afterCallbacks[name] = callback;
+                    if(isApp()){
+                        if(global[baseObjName+name]){
+                            global[baseObjName+name]();
+                        }else{
+                            protocol(Protocols[name]+(subProtocol?('/'+subProtocol):''),callback);
+                        }
+                    }
+                };
+
+            return _NB[name];
         }
-        /**
-         * 打开文章跟贴
-         * @param {String} boardid 版块ID
-         * @param {String} docid 文章ID
-         * @param {String} title 文章标题
-         */
-        function openComment(boardid,docid,title){
-            protocol( Protocols.openComment.replace('{BOARD_ID}',boardid).replace('{DOC_ID}',docid).replace('{TITLE}',title||'') );
-        }
-        /**
-         * 直接发表跟贴
-         * @param {Function} callback 成功回调
-         */
-        function comment(callback){
-            Callbacks.afterComment = callback;
-            protocol( Protocols.comment,callback );
-        }
-        /**
-         * 其他应用信息
-         * @param {String} id
-         * @param {Function} callback 成功回调
-         */
-        function otherappinfo(id,callback){
-            Callbacks.afterOtherappinfo = callback;
-            protocol( Protocols.otherappinfo+id,callback );
-        }
-        /**
-         * 复制文本到剪贴板
-         * @param {String} text
-         */
-        function copy(text){
-            protocol( Protocols.copy+text );
-        }
-        /**
-         * 显示隐藏正文工具栏
-         * @param {String} command  show|hide
-         */
-        function toolbar(command){
-            protocol( Protocols.toolbar.replace('{COMMAND}',command) );
-        }
-        /**
-         * 更新标题
-         * @param {String} title
-         */
-        function modifytitle(title){
-            document.title = title || document.title;
-            protocol( Protocols.modifytitle.replace('{TITLE}',encodeURI(title)) );
-        }
-        /**
-         * 更新右上角功能菜单按钮
-         * @param {String} name
-         */
-        function actionbutton(name,callback){
-            Callbacks.afterActionbutton = callback;
-            protocol( Protocols.actionbutton.replace('{NAME}',encodeURI(name)),callback );
-        }
-        return {
-            isApp: isApp,
-            login: login,
-            userInfo: userInfo,
-            device: device,
-            share: share,
-            encrypt: encrypt,
-            updateProfile: updateProfile,
-            uploadImageByCamera: uploadImageByCamera,
-            uploadImageByAlbum: uploadImageByAlbum,
-            pushView: pushView,
-            openComment: openComment,
-            comment: comment,
-            otherappinfo: otherappinfo,
-            copy: copy,
-            toolbar: toolbar,
-            modifytitle: modifytitle,
-            actionbutton: actionbutton,
-            enableDebug: enableDebug
-        }
-    }//end newsApp
+
+        this.isApp = isApp;
+        this.enableDebug = enableDebug;
+
+        ;['userInfo','login','share','modifytitle','updateBarButton','setBgColor','copy'].forEach(function(key,index){
+            registerFn(key);
+        });
+
+        ;['facebook','twitter','instagram'].forEach(function(key,index){
+            _NB['share_'+key] = function(data,callback){
+                _NB['share'](data,callback,key);
+            }
+            _NB[baseUpdateDataName+'share_'+key] = _NB[baseUpdateDataName+'share'];
+        });
+    }
     return new NativeBridge(Navigator.protocol);
 });
