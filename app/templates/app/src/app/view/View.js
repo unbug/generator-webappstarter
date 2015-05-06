@@ -1,8 +1,8 @@
 define(function(require, exports, module) {
     var Actions = require('../resources/Actions');
     var Msgbox = require('widget/Msgbox');
-    //var WechatShare = require('util/WechatShare');
-    //var YiXinShare = require('util/YiXinShare');
+    var WechatShare = require('util/WechatShare');
+    var YiXinShare = require('util/YiXinShare');
 
     var BaseModel = require('app/model/Model');
 
@@ -96,63 +96,58 @@ define(function(require, exports, module) {
         }
 
         /**
-         *  weiboMsg String  微博文案
-            weiboImg    String  微博配图
-            weixinTitle String  微信标题
-            weixinMsg   String  微信文案
-            weixinImg   String  微信配图
-            url 分享连接
+         *
+         * option = {
+             title String 'share title',
+             text String 'share text',
+             summary String 'share summary',
+             imageurl String 'share image url',
+             thumburl String 'share image thumb url',
+             link String 'share link'
+             }
          */
         this.renderShare = function(option){
-            return;
             option = option || {};
-            var url = option.url || Actions.main,
-                title = '@客户端 有态度俱乐部',
-                msg = '好礼等你抢~',
-                weixinTitle = option.weixinTitle || title.replace('@','').replace(' ',''),
-                weixinMsg = option.weixinMsg || msg;
-            option.weiboMsg = option.weiboMsg?( option.weiboMsg+' '+url ): (title+msg+' '+url);
-            els.shareText.html( option.weiboMsg);
-            els.sharePhoto.html( option.weiboImg || '' );
+            var link = option.link || window.location.href,
+                title = option.title || document.title,
+                summary = option.summary || title,
+                text = option.text || summary,
+                thumburl = option.thumburl || Actions.dejaShareLogo,
+                imageurl = option.imageurl || thumburl;
 
-            els.shareWXTitle.html(weixinTitle);
-            els.shareWXText.html( weixinMsg );
-            els.shareWXThumb.html( option.weixinImg || '' );
-            els.shareWXUrl.html( url );
 
-            updateWechatShareMeta(weixinTitle,weixinMsg,url,option.weixinImg);
-            updateYiXinShareMeta(weixinMsg,option.weixinImg);
+            Core.NativeBridge.set_data_for_share({
+                title: title,
+                text: text,
+                summary: summary,
+                imageurl: imageurl,
+                thumburl: thumburl,
+                link: link
+            });
+
+            updateWechatShareMeta(title,summary,thumburl || imageurl);
+            updateYiXinShareMeta(summary,thumburl || imageurl);
             return this;
-        }
-        this.renderShareCommon = function(d,url){
-            if(d){
-                var option = {
-                    weiboMsg: d.weiboMsg,
-                    weiboImg: d.weiboImg,
-                    weixinTitle: d.weixinTitle,
-                    weixinMsg: d.weixinMsg,
-                    weixinImg: d.weixinImg,
-                    url: url
-                }
-                VIEW.renderShare(option);
-            }
         }
 
         function updateWechatShareMeta(title,content,link,img){
             WechatShare({
                 "appid": "",
-                "img_url": img || Actions.NativeBridgeLogo,
+                "img_url": img || Actions.dejaShareLogo,
                 "img_width": "200",
                 "img_height": "200",
-                "link": link || window.location,
-                "url": link || window.location,
+                "link": link || window.location.href,
+                "url": link || window.location.href,
                 "desc": content || document.title,
                 "content": content || document.title,
                 "title": title || document.title
             });
         }
         function updateYiXinShareMeta(content,img){
-            YiXinShare({content:content||document.title,img:img||Actions.NativeBridgeLogo});
+            YiXinShare({
+                content: content||document.title,
+                img: img||Actions.dejaShareLogo
+            });
         }
 
         this.lazyLoadImg = function (el){

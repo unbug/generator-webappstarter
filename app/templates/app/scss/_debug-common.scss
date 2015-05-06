@@ -19,7 +19,7 @@ body, html {
   text-align: left;
   height: 100%;/*高度必须为100%*/
   width: 100%;
-  font-family: "Gill Sans",Roboto,HelveticaNeue,Helvetica,Arial,sans-serif;
+  font-family: "Latin725 BT","Freight Sans Pro Book",Roboto,HelveticaNeue,Helvetica,Arial,sans-serif;
   font-size: 16px;
   font-weight: normal;
   display: -webkit-box;
@@ -41,7 +41,6 @@ textarea,input[type="password"],input[type="text"]{
 audio{width: 0;height:0;padding: 0;margin: 0;opacity: 0;visibility: hidden;display: none;position: absolute;top:0;left:0;}
 body{
      width: $layout-with;
-     background-color: #3d1c21;
 }
 .ellipsis {
   text-overflow: ellipsis;
@@ -57,7 +56,7 @@ a {
 .fix-break-word,p{
     @include blank-bg;
     background-color: transparent;
-    word-break: break-all;
+    word-break: normal;
 }
 .hide{
 	display: none !important;
@@ -66,5 +65,8 @@ a {
 	@include active-default;
 }
 .disabled-select{
-  -webkit-user-select: none;
+  @include disabled-select;
+}
+.disabled-select-all{
+  @include disabled-select-all;
 }

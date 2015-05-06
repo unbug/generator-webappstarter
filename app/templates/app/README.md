@@ -21,7 +21,7 @@ gulp
 ```shell
 gulp deploytest
 ```
-View the page on test server [http://office.mozat.com:8081/m/PROJECTNAME/](http://office.mozat.com:8081/m/PROJECTNAME/).
+View the page on test server [http://office.mozat.com:8083/PROJECTNAME/](http://office.mozat.com:8083/PROJECTNAME/).
 This command require [openssl](https://www.openssl.org/).
 For windows,you might needd to add openssl path to classpath.
 

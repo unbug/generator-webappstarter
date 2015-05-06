@@ -48,10 +48,10 @@ define(function(require, exports, module) {
             return udid;
         }
         this.setUserId = function(id){
-            userId = id;
+            userId = id || userId;
         }
         this.getUserId = function(){
-            return userId || this.getCookie('uid');
+            return userId || (appUserMeta && appUserMeta.userid) || this.getCookie('uid');
         }
         this.getAppUserMeta = function(){
             return appUserMeta;

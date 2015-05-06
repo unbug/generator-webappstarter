@@ -8,15 +8,33 @@ define(function(require, exports, module) {
         var reg = new RegExp(name,'gi');
         return reg.test(ua);
     }
-    if( isUA('NewsApp') ){
+    if( isUA('Deja') ){
         vendor = {
-            code: 'NTES',
-            name: '网易新闻'
+            code: 'Deja',
+            name: 'DejaFashion'
+        }
+    }
+    else if( isUA('FBAN') ){
+        vendor = {
+            code: 'Facebook',
+            name: 'Facebook'
+        }
+    }
+    else if( isUA('Twitter') ){
+        vendor = {
+            code: 'Twitter',
+            name: 'Twitter'
+        }
+    }
+    else if( isUA('Instagram') ){
+        vendor = {
+            code: 'Instagram',
+            name: 'Instagram'
         }
     }
     else if( isUA('weibo') ){
         vendor = {
-            code: 'WB',
+            code: 'Weibo',
             name: '微博'
         }
     }

@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "description": "Hello <%=projectName%>",
   "project": {
-    "invalidNames": "products|account|config|feed|vote|share|favorite|creation|feedback|dilog|invite|vote|event|share",
+    "invalidNames": "products|account|config|favorite|creation|feed|feedback|dilog|invite|vote|event|share|monitor|follow",
     "title": "Title - <%=projectName%>",
     "viewport": 720,
     "sourceImg": "../../../../../Mozat/Deja/rsvp/UI/build/img/**/*.{png,jpg}",

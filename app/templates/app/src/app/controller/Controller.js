@@ -12,7 +12,7 @@ define(function(require, exports, module) {
             Base: BaseView
         };
         //所有视图初始化前，需要获得客户端的用户登录信息
-        Core.Router.onReady(onUserinfo);
+        //Core.Router.onReady(onUserinfo);
 
         Core.Router.onChanged(onViewChanged);
 
@@ -138,7 +138,7 @@ define(function(require, exports, module) {
 
         function onLogin(arg){
             if(isApp){
-                Core.NativeBridge.login(function(rs){
+                Core.NativeBridge.login(null,function(rs){
                     if(rs){
                         CTRL.models.Base.saveLoginCookieTimeout();
                         CTRL.models.Base.initModelUpdateTimeout();

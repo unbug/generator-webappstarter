@@ -28,9 +28,9 @@ define(function(require, exports, module) {
             Protocols = {},
             baseName = 'dejafashion',
             baseProtocol = baseName+'://',
-            baseObjName = '__'+baseName+'_',
-            baseDataName = baseObjName+'data_',
-            baseAfterName = baseObjName+'after_',
+            baseObjName = '__'+baseName,
+            baseDataName = baseObjName+'_data_',
+            baseAfterName = baseObjName+'_after_',
             baseUpdateDataName = 'set_data_for_';
 
         afterCallbacks = {};
@@ -70,8 +70,8 @@ define(function(require, exports, module) {
         function registerUpdateDataFn(name,fn){
             var updateName = baseUpdateDataName+name;
             _NB[updateName] = fn || function(data){
-                    updateData(name,data);
-                }
+                updateData(name,data);
+            }
 
         }
         function registerFn(name,fn){
@@ -86,8 +86,8 @@ define(function(require, exports, module) {
                     updateData(name,data);
                     afterCallbacks[name] = callback;
                     if(isApp()){
-                        if(global[baseObjName+name]){
-                            global[baseObjName+name]();
+                        if(global[baseObjName] && global[baseObjName][name]){
+                            global[baseObjName][name]();
                         }else{
                             protocol(Protocols[name]+(subProtocol?('/'+subProtocol):''),callback);
                         }

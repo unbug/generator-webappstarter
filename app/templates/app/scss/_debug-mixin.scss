@@ -135,3 +135,16 @@
 @mixin gpu-accelerate {
   -webkit-transform: translateZ(0);
 }
+
+@mixin goods-bulletin-size-normal {
+  width: $goods-bulletin-w;
+  height: $goods-bulletin-h;
+}
+@mixin disabled-select{
+  -webkit-user-select: none;
+}
+@mixin disabled-select-all{
+  *{
+    @include disabled-select;
+  }
+}
