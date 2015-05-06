@@ -1,6 +1,6 @@
 {
   "name": "<%=projectName%>",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Hello <%=projectName%>",
   "project": {
     "invalidNames": "products|account|config|favorite|creation|feed|feedback|dilog|invite|vote|event|share|monitor|follow",

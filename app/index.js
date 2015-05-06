@@ -22,7 +22,7 @@ module.exports = yeoman.generators.Base.extend({
     var prompts = [{
       type    : 'input',
       name    : 'name',
-      message : 'Give your project a name:(products|account|config|feed|vote|share|favorite|creation|feedback|dilog|invite|vote|event|share,are invalid names).',
+      message : 'Give your project a name:(products|account|config|favorite|creation|feed|feedback|dilog|invite|vote|event|share|monitor|follow,are invalid names).',
       default : this.appname // Default to current folder name
     }];
 
