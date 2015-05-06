@@ -6,8 +6,8 @@
     "invalidNames": "products|account|config|favorite|creation|feed|feedback|dilog|invite|vote|event|share|monitor|follow",
     "title": "Title - <%=projectName%>",
     "viewport": 720,
-    "sourceImg": "../../../../../Mozat/Deja/rsvp/UI/build/img/**/*.{png,jpg}",
-    "sourceSprites": "../../../../../Mozat/Deja/rsvp/UI/build/assets/*.png",
+    "sourceImg": "../../../../../Mozat/Deja/<%=projectName%>/UI/build/img/**/*.{png,jpg}",
+    "sourceSprites": "../../../../../Mozat/Deja/<%=projectName%>/UI/build/assets/*.png",
     "watchJshint": true,
     "watchScsslint": false,
     "browserSync": {
