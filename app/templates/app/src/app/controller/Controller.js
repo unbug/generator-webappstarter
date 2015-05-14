@@ -236,10 +236,8 @@ define(function(require, exports, module) {
                 Core.NativeBridge.updateBarButton(name,callback);
             }
         }
-        function appActionShareButton(callback){
-            appActionButton('share',function(){
-                appShare(callback);
-            });
+        function appActionShareButton(){
+            appActionButton('share');
         }
         function appActionDefaultButton(){
             appActionButton('',function(){});
