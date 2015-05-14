@@ -108,25 +108,19 @@ define(function(require, exports, module) {
          */
         this.renderShare = function(option){
             option = option || {};
-            var link = option.link || window.location.href,
-                title = option.title || document.title,
-                summary = option.summary || title,
-                text = option.text || summary,
-                thumburl = option.thumburl || Actions.dejaShareLogo,
-                imageurl = option.imageurl || thumburl;
+            option.link = option.link || window.location.href;
+            option.title = option.title || document.title;
+            option.summary = option.summary || option.title;
+            option.text = option.text || option.summary;
+            option.thumburl = option.thumburl || Actions.dejaShareLogo;
+            option.imageurl = option.imageurl || option.thumburl;
 
 
-            Core.NativeBridge.set_data_for_share({
-                title: title,
-                text: text,
-                summary: summary,
-                imageurl: imageurl,
-                thumburl: thumburl,
-                link: link
-            });
+            Core.NativeBridge.set_data_for_share(option);
 
-            updateWechatShareMeta(title,summary,thumburl || imageurl);
-            updateYiXinShareMeta(summary,thumburl || imageurl);
+            updateWechatShareMeta(option.title,option.summary,option.thumburl || option.imageurl);
+            updateYiXinShareMeta(option.summary,option.thumburl || option.imageurl);
+            updateFacebookShareMeta(option.link,option.title,option.text, option.imageurl);
             return this;
         }
 

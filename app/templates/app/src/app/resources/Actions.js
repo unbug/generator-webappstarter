@@ -14,7 +14,8 @@ define(function(require, exports, module) {
         dejame: 'http://deja.me/u/XPKab9',
         dejaAppAndroid: 'http://deja.me/u/XPKab9',
         dejaAppIos: 'http://deja.me/u/fzb1KO',
-        dejaDwonloadBridge: 'http://m.deja.me/bridge/'
+        dejaDwonloadBridge: 'http://m.deja.me/bridge/',
+        dejaShareLogo: thisPath+'resources/images/deja_icon_ios_228.png'
     }
     //*/
 
@@ -27,7 +28,8 @@ define(function(require, exports, module) {
         dejame: 'http://deja.me/u/XPKab9',
         dejaAppAndroid: 'http://deja.me/u/XPKab9',
         dejaAppIos: 'http://deja.me/u/fzb1KO',
-        dejaDwonloadBridge: 'http://m.deja.me/bridge/'
+        dejaDwonloadBridge: 'http://m.deja.me/bridge/',
+        dejaShareLogo: thisPath+'resources/images/deja_icon_ios_228.png'
     }
     //*/
    return Actions;
