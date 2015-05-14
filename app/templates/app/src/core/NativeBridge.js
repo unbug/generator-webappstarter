@@ -70,8 +70,8 @@ define(function(require, exports, module) {
         function registerUpdateDataFn(name,fn){
             var updateName = baseUpdateDataName+name;
             _NB[updateName] = fn || function(data){
-                updateData(name,data);
-            }
+                    updateData(name,data);
+                }
 
         }
         function registerFn(name,fn){
