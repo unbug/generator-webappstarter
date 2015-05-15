@@ -20,7 +20,8 @@
   display: inline-block;
   background-image: url($bg-icon-url);
 }
-@mixin box-h{
+
+@mixin box-h {
   display: -webkit-box;
   -webkit-box-orient: horizontal;
 }
@@ -74,7 +75,7 @@
   -webkit-box-align: end;
 }
 
-@mixin box-v{
+@mixin box-v {
   display: -webkit-box;
   -webkit-box-orient: vertical;
 }
@@ -132,6 +133,7 @@
     opacity: $active-opacity;
   }
 }
+
 @mixin gpu-accelerate {
   -webkit-transform: translateZ(0);
 }
@@ -140,11 +142,13 @@
   width: $goods-bulletin-w;
   height: $goods-bulletin-h;
 }
-@mixin disabled-select{
+
+@mixin disabled-select {
   -webkit-user-select: none;
 }
-@mixin disabled-select-all{
-  *{
+
+@mixin disabled-select-all {
+  * {
     @include disabled-select;
   }
 }

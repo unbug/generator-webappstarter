@@ -58,7 +58,7 @@
           }
         }
       }
-      > .box-ct.dialog{
+      > .box-ct.dialog {
         $dialog-w: 534px;
         left: ($layout-with - $dialog-w)/2;
         top: 195px;
@@ -70,7 +70,7 @@
           > div {
             @include box-v;
           }
-          .content{
+          .content {
             padding-top: 30px;
             background-color: rgba(225, 225, 225, .9);
             -webkit-border-radius: 10px 10px 0 0;
@@ -116,10 +116,10 @@
               padding: 20px 0;
               height: 81px;
               background-color: rgba(225, 225, 225, .9);
-              &:first-child{
+              &:first-child {
                 -webkit-border-radius: 0 0 0 10px;
               }
-              &:last-child{
+              &:last-child {
                 -webkit-border-radius: 0 0 10px 0;
               }
               &.no {

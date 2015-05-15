@@ -1,8 +1,9 @@
 @charset "UTF-8";
-.slide{
+.slide {
   position: relative;
 }
-.slide>*{
+
+.slide > * {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -11,30 +12,37 @@
   bottom: 0;
   left: 0;
 }
-.slide>*:not(.selected):not([animate]){
+
+.slide > *:not(.selected):not([animate]) {
   display: none !important;
 }
-.slide-from-right>*,.slide-from-bottom>*{
+
+.slide-from-right > *, .slide-from-bottom > * {
   -webkit-transition: -webkit-transform .6s cubic-bezier(0.4, 0, 0.2, 1);
   transition: transform .6s cubic-bezier(0.4, 0, 0.2, 1);
 }
-.slide-from-right>.selected ~ [animate]:not(.selected){
+
+.slide-from-right > .selected ~ [animate]:not(.selected) {
   -webkit-transform: translateX(100%);
   transform: translateX(100%);
 }
-.slide-from-right>[animate]:not(.selected){
+
+.slide-from-right > [animate]:not(.selected) {
   -webkit-transform: translateX(-100%);
   transform: translateX(-100%);
 }
-.slide-from-bottom>.selected ~ [animate]:not(.selected){
+
+.slide-from-bottom > .selected ~ [animate]:not(.selected) {
   -webkit-transform: translateY(100%);
   transform: translateY(100%);
 }
-.slide-from-bottom>[animate]:not(.selected){
+
+.slide-from-bottom > [animate]:not(.selected) {
   -webkit-transform: translateY(-100%);
   transform: translateY(-100%);
 }
-.slide-from-right>.selected,.slide-from-bottom>.selected{
+
+.slide-from-right > .selected, .slide-from-bottom > .selected {
   -webkit-transform: none;
   transform: none;
 }

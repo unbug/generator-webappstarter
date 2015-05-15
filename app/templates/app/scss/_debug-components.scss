@@ -24,69 +24,69 @@
       -webkit-transform-origin: 0.05em 0.5em;
       -webkit-border-radius: 0.05em;
       border-radius: 0.05em;
-      content: " "; 
+      content: " ";
     }
     &.loading-top {
-      background-color: rgba(0,0,0, 0.99);
+      background-color: rgba(0, 0, 0, 0.99);
       &:after {
-        background-color: rgba(0,0,0, 0.9); 
-      } 
+        background-color: rgba(0, 0, 0, 0.9);
+      }
     }
     &.loading-left {
-      background-color: rgba(0,0,0, 0.7);
+      background-color: rgba(0, 0, 0, 0.7);
       &:before {
-        background-color: rgba(0,0,0, 0.8); 
+        background-color: rgba(0, 0, 0, 0.8);
       }
       &:after {
-        background-color: rgba(0,0,0, 0.6); 
-      } 
+        background-color: rgba(0, 0, 0, 0.6);
+      }
     }
     &.loading-bottom {
-      background-color: rgba(0,0,0, 0.4);
+      background-color: rgba(0, 0, 0, 0.4);
       &:before {
-        background-color: rgba(0,0,0, 0.5); 
+        background-color: rgba(0, 0, 0, 0.5);
       }
       &:after {
-        background-color: rgba(0,0,0, 0.35); 
-      } 
+        background-color: rgba(0, 0, 0, 0.35);
+      }
     }
     &.loading-right {
-      background-color: rgba(0,0,0, 0.25);
+      background-color: rgba(0, 0, 0, 0.25);
       &:before {
-        background-color: rgba(0,0,0, 0.3); 
+        background-color: rgba(0, 0, 0, 0.3);
       }
       &:after {
-        background-color: rgba(0,0,0, 0.2); 
-      } 
+        background-color: rgba(0, 0, 0, 0.2);
+      }
     }
     &.loading-top {
       &:before {
-        background-color: rgba(0,0,0, 0.15); 
+        background-color: rgba(0, 0, 0, 0.15);
       }
-      -webkit-transform: rotate(0deg); 
+      -webkit-transform: rotate(0deg);
     }
     left: 50%;
     margin-left: -0.05em;
     &.loading-right {
-      -webkit-transform: rotate(90deg); 
+      -webkit-transform: rotate(90deg);
     }
     &.loading-bottom {
-      -webkit-transform: rotate(180deg); 
+      -webkit-transform: rotate(180deg);
     }
     &.loading-left {
-      -webkit-transform: rotate(270deg); 
+      -webkit-transform: rotate(270deg);
     }
     &:before {
-      -webkit-transform: rotate(30deg); 
+      -webkit-transform: rotate(30deg);
     }
     &:after {
-      -webkit-transform: rotate(-30deg); 
-    } 
+      -webkit-transform: rotate(-30deg);
+    }
   }
   -webkit-animation-name: spinnerRotateRight;
   -webkit-animation-duration: .8s;
   -webkit-animation-iteration-count: infinite;
-  -webkit-animation-timing-function: linear; 
+  -webkit-animation-timing-function: linear;
 }
 
 /*debug-button.scss*/

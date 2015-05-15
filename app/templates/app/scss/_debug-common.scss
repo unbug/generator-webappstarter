@@ -4,69 +4,101 @@
   margin: 0;
   padding: 0;
   border: 0;
-  -webkit-user-select: text; 
+  -webkit-user-select: text;
 }
 
-a,img{
-	-webkit-touch-callout: none;/*禁用长按弹出系统菜单*/
+a, img {
+  -webkit-touch-callout: none; /*禁用长按弹出系统菜单*/
 }
+
 *, :after, :before {
-  -webkit-box-sizing: border-box;/*高宽不算padding,margin*/
+  -webkit-box-sizing: border-box; /*高宽不算padding,margin*/
   -webkit-text-size-adjust: none;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0); 
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
+
 body, html {
   text-align: left;
-  height: 100%;/*高度必须为100%*/
+  height: 100%; /*高度必须为100%*/
   width: 100%;
-  font-family: "Latin725 BT","Freight Sans Pro Book",Roboto,HelveticaNeue,Helvetica,Arial,sans-serif;
+  font-family: "Latin725 BT", "Freight Sans Pro Book", Roboto, HelveticaNeue, Helvetica, Arial, sans-serif;
   font-size: 16px;
   font-weight: normal;
   display: -webkit-box;
-  -webkit-box-orient: vertical; 
+  -webkit-box-orient: vertical;
   -webkit-box-align: center;
 }
-section,p,div{
-	max-height: 999999px;
+
+section, p, div {
+  max-height: 999999px;
 }
-textarea,input[type="password"],input[type="text"]{
-    resize: none;/*禁用可缩放*/
-    outline: none;/*禁用发光效果*/
-    -webkit-appearance: none;/*禁用增加外观效果*/
-    white-space: pre-wrap;
-    word-wrap: break-word;  
-    background: #fff;
-    overflow: scroll;
+
+textarea, input[type="password"], input[type="text"] {
+  resize: none; /*禁用可缩放*/
+  outline: none; /*禁用发光效果*/
+  -webkit-appearance: none; /*禁用增加外观效果*/
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  background: #fff;
+  overflow: scroll;
 }
-audio{width: 0;height:0;padding: 0;margin: 0;opacity: 0;visibility: hidden;display: none;position: absolute;top:0;left:0;}
-body{
-     width: $layout-with;
+
+audio {
+  width: 0;
+  height: 0;
+  padding: 0;
+  margin: 0;
+  opacity: 0;
+  visibility: hidden;
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
+
+body {
+  width: $layout-with;
+}
+
 .ellipsis {
   text-overflow: ellipsis;
   display: block;
   white-space: nowrap;
-  overflow: hidden; 
+  overflow: hidden;
 }
 
 a {
   text-decoration: none;
 }
 
-.fix-break-word,p{
-    @include blank-bg;
-    background-color: transparent;
-    word-break: normal;
+.clearfix::before,
+.clearfix::after {
+  content: "";
+  display: table;
 }
-.hide{
-	display: none !important;
+
+.clearfix::after {
+  clear: both;
 }
-.default-active{
-	@include active-default;
+
+.fix-break-word, p {
+  @include blank-bg;
+  background-color: transparent;
+  word-break: normal;
 }
-.disabled-select{
+
+.hide {
+  display: none !important;
+}
+
+.default-active {
+  @include active-default;
+}
+
+.disabled-select {
   @include disabled-select;
 }
-.disabled-select-all{
+
+.disabled-select-all {
   @include disabled-select-all;
 }

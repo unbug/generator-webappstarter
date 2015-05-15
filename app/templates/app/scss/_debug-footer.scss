@@ -1,25 +1,25 @@
 @charset "UTF-8";
-.footer-section{
+.footer-section {
   margin-top: -1px;
   width: 100%;
   background-color: #3d1c21;
   padding: 45px 0;
   color: #fff;
-  >.stores{
+  > .stores {
     @include box-h-c-c;
-    a{
+    a {
       display: inline-block;
       margin: 0 20px;
     }
   }
-  >.about{
+  > .about {
     font-size: 24px;
     margin-top: 18px;
-    p{
+    p {
       line-height: 30px;
       text-align: center;
     }
-    .a,a:active,a:link,a:hover{
+    .a, a:active, a:link, a:hover {
       color: #fff;
       text-decoration: underline;
     }

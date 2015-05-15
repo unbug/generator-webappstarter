@@ -1,8 +1,9 @@
-define(function(require, exports, module) {
-    var Templates = {};
-    
-    Templates.Home = require('./TemplateHome');
-    Templates.User = require('./TemplateUser');
+define(function (require, exports, module) {
+  var Templates = {};
 
-    return Templates;
+  Templates.Home = require('./TemplateHome');
+  Templates.User = require('./TemplateUser');
+  //__INSERT_POINT__ Don't delete!!
+
+  return Templates;
 });

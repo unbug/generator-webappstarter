@@ -1,9 +1,9 @@
 @charset "UTF-8";
-.user-item-default{
+.user-item-default {
   @include box-v;
   width: 100%;
   font-size: 38px;
-  >.item{
+  > .item {
     @include box-h;
     width: 100%;
     padding: 30px;

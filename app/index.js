@@ -8,7 +8,7 @@ module.exports = yeoman.generators.Base.extend({
     yeoman.generators.Base.apply(this, arguments);
 
     this.option('skip-install', {
-      desc:     'Whether dependencies should be installed',
+      desc: 'Whether dependencies should be installed',
       defaults: false
     });
   },
@@ -20,10 +20,10 @@ module.exports = yeoman.generators.Base.extend({
     this.log(yosay('I will give you a Simple Mobile Web App Boilerplate and Structure!'));
 
     var prompts = [{
-      type    : 'input',
-      name    : 'name',
-      message : 'Give your project a name:(products|account|config|favorite|creation|feed|feedback|dilog|invite|vote|event|share|monitor|follow,are invalid names).',
-      default : this.appname // Default to current folder name
+      type: 'input',
+      name: 'name',
+      message: 'Give your project a name:(products|account|config|favorite|creation|feed|feedback|dilog|invite|vote|event|share|monitor|follow,are invalid names).',
+      default: this.appname // Default to current folder name
     }];
 
     this.prompt(prompts, function (answers) {
@@ -41,9 +41,9 @@ module.exports = yeoman.generators.Base.extend({
 
   writing: {
     app: function () {
-      this.template('_package.json','package.json');
+      this.template('_package.json', 'package.json');
 
-      this.directory('app','./');
+      this.directory('app', './');
     },
 
     projectfiles: function () {

@@ -64,7 +64,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "web app","mozat"
+    "web app",
+    "mozat"
   ],
   "author": "unbug",
   "license": "MIT"

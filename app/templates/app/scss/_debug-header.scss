@@ -31,7 +31,7 @@
   }
 }
 
-.tabs-title-underline{
+.tabs-title-underline {
   position: relative;
   @include box-h;
   height: 70px;
@@ -39,27 +39,27 @@
   padding: 0 28px;
   background-color: #fff;
   color: #747474;
-  >article{
+  > article {
     position: relative;
     @include box-h-c-c;
     height: 100%;
     -webkit-box-flex: 1;
     @include active-default;
-    >.title{
+    > .title {
       height: 100%;
       width: 100%;
       text-align: center;
       line-height: 70px;
       font-size: 32px;
     }
-    >.underline{
+    > .underline {
       position: absolute;
       bottom: 0;
       left: 0;
       @include box-h-c-c;
       height: 5px;
       width: 100%;;
-      >div{
+      > div {
         opacity: 0;
         height: 0;
         width: 0;
@@ -67,7 +67,7 @@
         -webkit-transition: all .35s ease-in-out;
       }
     }
-    >.notify{
+    > .notify {
       display: none;
       z-index: 2;
       position: absolute;
@@ -77,14 +77,14 @@
       right: 14px;
       background-color: #e84142;
       -webkit-border-radius: 100%;
-      &.on{
+      &.on {
         @include box-h;
       }
     }
-    &.on{
+    &.on {
       color: #292929;
-      >.underline{
-        >div{
+      > .underline {
+        > div {
           opacity: 1;
           height: 100%;
           width: 80%;
@@ -93,6 +93,7 @@
     }
   }
 }
+
 .sesstion-title-default {
   @include box-h-c-l;
   height: 100px;
@@ -126,26 +127,26 @@
       color: #00a0e9;
     }
   }
-  &.bar{
+  &.bar {
     height: 120px;
     line-height: 120px;
-    >.dot{
+    > .dot {
       width: 4px;
       height: 30px;
       background-color: #ef533e;
       -webkit-border-radius: 0;
     }
-    >.title{
+    > .title {
       color: #414141;
       padding-left: 20px;
     }
   }
-  &.center{
+  &.center {
     @include box-h-c-c;
-    .title{
+    .title {
       display: inline-block;
     }
-    .dot{
+    .dot {
       margin-top: -14px;
     }
   }
