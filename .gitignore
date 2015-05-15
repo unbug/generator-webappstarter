@@ -1,7 +1,6 @@
 .DS_Store
 Thumbs.db
 .sass-cache
-.idea
 lib-cov
 *.seed
 *.log
