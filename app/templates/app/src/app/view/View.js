@@ -3,7 +3,7 @@ define(function(require, exports, module) {
   var Msgbox = require('widget/Msgbox');
   var WechatShare = require('util/WechatShare');
   var YiXinShare = require('util/YiXinShare');
-  var FacebookShare = require('util/FacebookShare');
+  //var FacebookShare = require('util/FacebookShare');
 
   var BaseModel = require('app/model/Model');
 
@@ -118,7 +118,7 @@ define(function(require, exports, module) {
 
       updateWechatShareMeta(option.title,option.summary,option.thumburl || option.imageurl);
       updateYiXinShareMeta(option.summary,option.thumburl || option.imageurl);
-      updateFacebookShareMeta(option.link,option.title,option.text, option.imageurl);
+      //updateFacebookShareMeta(option.link,option.title,option.text, option.imageurl);
       return this;
     }
 
@@ -141,14 +141,14 @@ define(function(require, exports, module) {
         img: img||Actions.dejaShareLogo
       });
     }
-    function updateFacebookShareMeta( url, title, description, image){
-      FacebookShare({
-        url: url,
-        title: title,
-        description: description,
-        image: image ||Actions.dejaShareLogo
-      });
-    }
+    //function updateFacebookShareMeta( url, title, description, image){
+    //  FacebookShare({
+    //    url: url,
+    //    title: title,
+    //    description: description,
+    //    image: image ||Actions.dejaShareLogo
+    //  });
+    //}
 
     this.lazyLoadImg = function (el){
       el && el.find("img").unveil( 200,function() {
