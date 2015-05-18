@@ -16,11 +16,6 @@
   display: block !important;
 }
 
-@mixin icon-bg {
-  display: inline-block;
-  background-image: url($bg-icon-url);
-}
-
 @mixin box-h {
   display: -webkit-box;
   -webkit-box-orient: horizontal;
