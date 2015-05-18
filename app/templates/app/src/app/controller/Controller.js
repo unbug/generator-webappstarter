@@ -148,11 +148,16 @@ define(function (require, exports, module) {
           }
         });
       } else {
-        CTRL.views.Base.msgbox.showDownload({
-          yesCallback: function () {
-            redirectToDownload(Actions.main + (arg || ''));
+        CTRL.views.Base.msgbox.showSignin({
+          yesCallback: function (plf) {
+            webLogin( Actions.main + (arg || ''), null, plf );
           }
         });
+        //CTRL.views.Base.msgbox.showDownload({
+        //  yesCallback: function () {
+        //    redirectToDownload(Actions.main + (arg || ''));
+        //  }
+        //});
       }
     }
 

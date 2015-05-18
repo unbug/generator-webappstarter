@@ -10,6 +10,24 @@ define(function (require, exports, module) {
      */
     frame = null;
     /**
+     * append iframe
+     *
+     * @param frame
+     */
+    function appendFrame(frame){
+      frame && document.body.appendChild(frame);
+    }
+    /**
+     * 删除iframe
+     *
+     * @method removeFrame
+     * @param {Element} frame 执行的方法
+     */
+    function removeFrame(frame) {
+      frame && frame.parentNode.removeChild(frame);
+    }
+
+    /**
      * 创建iframe,帮助解决iOS的UIWebView没有JS API
      *
      * @method getFrame
@@ -24,19 +42,9 @@ define(function (require, exports, module) {
       if (src) {
         _frame.setAttribute("src", src);
       } else {
-        document.documentElement.appendChild(_frame);
+        appendFrame(_frame);
       }
       return _frame;
-    }
-
-    /**
-     * 删除iframe
-     *
-     * @method removeFrame
-     * @param {Element} frame 执行的方法
-     */
-    function removeFrame(frame) {
-      frame && frame.parentNode.removeChild(frame);
     }
 
     /**
@@ -85,7 +93,7 @@ define(function (require, exports, module) {
           _frame.setAttribute("src", command);
         } else {
           _frame = getFrame(command);
-          document.documentElement.appendChild(_frame);
+          appendFrame(_frame);
         }
         timer = setTimeout(function () {
           _frame && removeFrame(_frame);
