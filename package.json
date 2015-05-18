@@ -1,6 +1,6 @@
 {
   "name": "generator-webappstarter",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "description": "Quick start a web app for mobile",
   "license": "MIT",
   "main": "app/index.js",
