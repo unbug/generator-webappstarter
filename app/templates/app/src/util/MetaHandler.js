@@ -147,7 +147,7 @@ define(function(require, exports, module) {
           me.setContentProperty('viewport','maximum-scale',ratio);
         }else if(os.ios && !os.android){
           me.setContentProperty('viewport','user-scalable','no');
-          if($.os.ios && parseInt($.os.version)<7){
+          if(os.ios && parseInt(os.version)<7){
             Core.MetaHandler.setContentProperty('viewport','initial-scale',ratio);
           }
         }
