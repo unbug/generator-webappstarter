@@ -16,7 +16,7 @@ Prereqs and installation requirements
 ```shell
 npm install -g yo
 ```
-3.[option]Clone this git repo to your local,and from the root of the repo,run
+3.[optional]Clone this git repo to your local,and from the root of the repo,run
 ```shell
 npm link
 ```
