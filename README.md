@@ -34,6 +34,7 @@ yo webappstarter
 2.generate a new module,run
 
 ```shell
+//this command will do:
 //add "html/site/include/modulename.html" and inlude it to "html/site/include/views.html"
 //add "scss/_debug-modulename.scss" and inport it to "scss/_debug-view.scss"
 //add "src/app/view/ModuleNameView.js"
