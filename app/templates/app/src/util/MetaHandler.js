@@ -147,8 +147,10 @@ define(function(require, exports, module) {
           me.setContentProperty('viewport','maximum-scale',ratio);
         }else if(os.ios && !os.android){
           me.setContentProperty('viewport','user-scalable','no');
-          if($.os.ios && parseInt($.os.version)<7){
-            Core.MetaHandler.setContentProperty('viewport','initial-scale',ratio);
+          var iosVersion = /iPhone OS ([0-9])/.exec(navigator.userAgent) ? /iPhone OS ([0-9])/.exec(navigator.userAgent)[1] : 0;
+          var isIOS = /iPhone OS/i.test(navigator.userAgent);
+          if( isIOS && iosVersion > 7){
+              this.setContentProperty('viewport','initial-scale',ratio);
           }
         }
       }
