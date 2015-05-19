@@ -139,8 +139,8 @@ define(function(require, exports, module) {
      *      ....
      *      //defind the viewport meta
      *      <meta content="target-densitydpi=device-dpi,width=640" name="viewport">
+     *      <script> MetaHandler.fixViewportWidth(); </script>
      *     </head>
-     *     <script> MetaHandler.fixViewportWidth(); </script>
      *
      * @param width {number} the size of the viewport
      * @param fixBody {boolean} force to set body's with to the size of the viewport
