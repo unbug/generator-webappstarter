@@ -132,6 +132,8 @@ define(function(require, exports, module) {
      *  For android it works in all of build-in broswers,it might be break in some third-part ROM's build-in broswers(webview).
      *  That's because they don't do a good job for the webview,such as they should not use "webview.setBuiltInZoomControls(false)".
      *
+     *  This is not a perfect solution,it's a painless way.For more extra work,checkout the [REM solution](http://gregrickaby.com/using-the-golden-ratio-and-rems/).
+     *
      * e.g.:
      *     <head>
      *      ....
