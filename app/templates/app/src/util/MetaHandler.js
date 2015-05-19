@@ -126,6 +126,12 @@ define(function(require, exports, module) {
     }
     /**
      * Automatically adjusts according to a device’s screen size.
+     *
+     * Note:
+     *  For iOS it just works perfectly,if it's not,try to use "webView.scalesPageToFit = YES" in the webview.
+     *  For android it works in all of build-in broswers,it might be break in some third-part ROM's build-in broswers(webview).
+     *  That's because they don't do a good job for the webview,such as they should not use "webview.setBuiltInZoomControls(false)".
+     *
      * e.g.:
      *     <head>
      *      ....
@@ -133,14 +139,6 @@ define(function(require, exports, module) {
      *      <meta content="target-densitydpi=device-dpi,width=640" name="viewport">
      *     </head>
      *     <script> MetaHandler.fixViewportWidth(); </script>
-     *
-     * Note:
-     *  For iOS it just works perfectly.
-     *  For android it works in all of build-in broswers,
-     *  it might be break in some third-part ROM's build-in broswers(webview),
-     *  that's because they don't do a good job for the webview,
-     *  such as they should not use "webview.setBuiltInZoomControls(false)".
-     *
      *
      * @param width {number} the size of the viewport
      * @param fixBody {boolean} force to set body's with to the size of the viewport
