@@ -1,5 +1,5 @@
   
-  >Note: This generator is supporting a very early stage app,things gonna change very frequently,so please do not fork it.
+  >Note: This generator is supporting a very early stage app,things gonna change very frequently,so please do not fork it or do any pull request.
   
 Readme
 =================
