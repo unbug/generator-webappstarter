@@ -124,6 +124,7 @@ define(function(require, exports, module) {
       }
       return me;
     }
+
     /**
      * Automatically adjusts according to a device’s screen size.
      *
@@ -134,11 +135,16 @@ define(function(require, exports, module) {
      *
      *  This is a painless solution.For more extra work,checkout the [REM solution](http://gregrickaby.com/using-the-golden-ratio-and-rems/).
      *
-     * e.g.:
+     * e.g.
      *     <head>
      *      ....
-     *      //defind the viewport meta
+     *      <!-- defind the viewport meta -->
      *      <meta content="target-densitydpi=device-dpi,width=640" name="viewport">
+     *      <!-- set the body's width to be the same as the viewport's width -->
+     *      <style type="text/css">
+     *           body{width: 640px;}
+     *      </style>
+     *      <!-- magic happens here -->
      *      <script> MetaHandler.fixViewportWidth(); </script>
      *     </head>
      *
