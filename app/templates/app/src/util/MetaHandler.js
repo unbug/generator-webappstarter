@@ -21,7 +21,6 @@ define(function(require, exports, module) {
     var meta = {},_els;
 
     /**
-     * 初始化
      * _els
      * meta = {name:{content:String,seriation:Array,store:{property:String},...},...}
      * @method init
@@ -125,26 +124,53 @@ define(function(require, exports, module) {
       }
       return me;
     }
-    this.fixViewportWidth = function(width){
+    /**
+     * Automatically adjusts according to a device’s screen size.
+     * e.g.:
+     *     <head>
+     *      ....
+     *      //defind the viewport meta
+     *      <meta content="target-densitydpi=device-dpi,width=640" name="viewport">
+     *     </head>
+     *     <script> MetaHandler.fixViewportWidth(); </script>
+     *
+     * Note:
+     *  For iOS it just works perfectly.
+     *  For android it works in all of build-in broswers,
+     *  it might be break in some third-part ROM's build-in broswers(webview),
+     *  that's because they don't do a good job for the webview,
+     *  such as they should not use "webview.setBuiltInZoomControls(false)".
+     *
+     *
+     * @param width {number} the size of the viewport
+     * @param fixBody {boolean} force to set body's with to the size of the viewport
+     */
+    this.fixViewportWidth = function(width,fixBody){
       width = width || me.getContentProperty('viewport','width');
       if(width != 'device-width'){
         var iw = window.innerWidth || width,
-          ow = window.outerHeight || iw,
+          ow = window.outerWidth || iw,
           sw = window.screen.width || iw,
           saw = window.screen.availWidth || iw,
           ih = window.innerHeight || width,
           oh = window.outerHeight || ih,
-          ish = window.screen.height || ih,
+          sh = window.screen.height || ih,
           sah = window.screen.availHeight || ih,
-          w = Math.min(iw,ow,sw,saw,ih,oh,ish,sah),
+          w = Math.min(iw,ow,sw,saw,ih,oh,sh,sah),
           ratio = w/width,
-          dpr = window.devicePixelRatio,
-          ratio = Math.min(ratio,dpr);
+          dpr = window.devicePixelRatio;
+        ratio = Math.min(ratio,dpr);
+
+        //fixBody may trigger a reflow,you should not use it if you could do it in your css
+        if(fixBody){
+          document.body.style.width = width+'px';
+        }
 
         if(os.android){
-          me.removeContentProperty('viewport','user-scalable');
-          me.setContentProperty('viewport','initial-scale',ratio);
-          me.setContentProperty('viewport','maximum-scale',ratio);
+          me.removeContentProperty('viewport','user-scalable')
+            .setContentProperty('viewport','target-densitydpi','device-dpi')
+            .setContentProperty('viewport','initial-scale',ratio)
+            .setContentProperty('viewport','maximum-scale',ratio);
         }else if(os.ios && !os.android){
           me.setContentProperty('viewport','user-scalable','no');
           if(os.ios && parseInt(os.version)<7){
