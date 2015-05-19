@@ -1,3 +1,6 @@
+  
+  >Note: This generator is supporting a very early stage app,things gonna change very frequently,so please do not fork it.
+  
 Readme
 =================
 webappstarter generator will give you a Simple Mobile Web App Boilerplate and Structure!
