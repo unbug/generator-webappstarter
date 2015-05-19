@@ -145,7 +145,7 @@ define(function(require, exports, module) {
      *           body{width: 640px;}
      *      </style>
      *      <!-- magic happens here -->
-     *      <script> MetaHandler.fixViewportWidth(); </script>
+     *      <script> (new MetaHandler()).fixViewportWidth(); </script>
      *     </head>
      *
      * @param width {number} the size of the viewport
