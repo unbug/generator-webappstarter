@@ -148,6 +148,10 @@ define(function(require, exports, module) {
      *      <script> (new MetaHandler()).fixViewportWidth(); </script>
      *     </head>
      *
+     * Demo:
+     * [NetEase newsapp member club](http://c.3g.163.com/CreditMarket/default.html)
+     * [Deja Fashion topic](http://m.deja.me/topics/#/special/9)
+     *
      * @param width {number} the size of the viewport
      * @param fixBody {boolean} force to set body's with to the size of the viewport
      */
