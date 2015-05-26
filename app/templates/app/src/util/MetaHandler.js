@@ -127,6 +127,7 @@ define(function(require, exports, module) {
 
     /**
      * Automatically adjusts according to a device’s screen size.
+     * Base on [theory](https://www.icloud.com/keynote/AwBWCAESEJd5uucfBPGt6KPotb3tNfsaKm-Q7fqs2-4ojmPoPJuWZCvjYgKl5jEf1URdRgdgNHe38BTzeF3DK7q1ewMCUCAQEEIJ85mw21ii_AwybOqxoF-V02v51Vdg855ED4qVA_8bXr)
      *
      * Note:
      *  For iOS it just works perfectly,if it's not,try to use "webView.scalesPageToFit = YES" in the webview.
