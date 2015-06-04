@@ -12,7 +12,9 @@
     "watchScsslint": false,
     "browserSync": {
       "open": true,
-      "proxy": "http://ilabs.mozat.com/webprojects/Deja/<%=projectName%>/",
+      "server": {
+        "baseDir": "./"
+      },
       "reloadDelay": 350
     },
     "pagespeed": {
