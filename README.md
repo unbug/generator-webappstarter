@@ -111,5 +111,4 @@ Random git commit message
 
 ```shell
  git commit -m"`curl -s http://whatthecommit.com/index.txt`"
-
  ```
