@@ -40,6 +40,8 @@ define(function (require, exports, module) {
     Core.Event.on('login', onLogin);
     //去WEB登录
     Core.Event.on('webLogin', webLogin);
+    //去App登录
+    Core.Event.on('appLogin', appLogin);
     //去反馈
     Core.Event.on('feedback', onFeedback);
     //复制文本
@@ -139,14 +141,7 @@ define(function (require, exports, module) {
 
     function onLogin(arg) {
       if (isApp) {
-        Core.NativeBridge.login(null, function (rs) {
-          if (rs) {
-            CTRL.models.Base.saveLoginCookieTimeout();
-            CTRL.models.Base.initModelUpdateTimeout();
-            CTRL.models.Base.setAppUserMeta(rs);
-            Core.Router.run();
-          }
-        });
+        appLogin();
       } else {
         CTRL.views.Base.msgbox.showSignin({
           yesCallback: function (plf) {
@@ -212,6 +207,17 @@ define(function (require, exports, module) {
         .replace('{SURL}', encodeURIComponent(surl))
         .replace('{FURL}', encodeURIComponent(furl))
         .replace('{PF}', pf));
+    }
+
+    function appLogin(){
+      Core.NativeBridge.login(null, function (rs) {
+        if (rs) {
+          CTRL.models.Base.saveLoginCookieTimeout();
+          CTRL.models.Base.initModelUpdateTimeout();
+          CTRL.models.Base.setAppUserMeta(rs);
+          Core.Router.run();
+        }
+      });
     }
 
     function appUpdate(msg) {
