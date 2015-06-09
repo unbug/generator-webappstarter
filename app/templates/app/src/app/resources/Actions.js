@@ -9,6 +9,7 @@ define(function (require, exports, module) {
   var Actions = {
     user: Core.localHost + '/user/list.php',
 
+    login: Core.localHost + '/account/login_third?success={SURL}&fail={FURL}&pf={PF}',
     main: thisPath + 'index.html',
     analytics: thisPath + 'analytics.html',
     dejame: 'http://deja.me/u/XPKab9',
@@ -23,6 +24,7 @@ define(function (require, exports, module) {
   var Actions = {
     user: 'data/user.json',
 
+    login: Core.localHost + '/account/login_third?success={SURL}&fail={FURL}&pf={PF}',
     main: thisPath + 'index.html',
     analytics: thisPath + 'analytics.html',
     dejame: 'http://deja.me/u/XPKab9',

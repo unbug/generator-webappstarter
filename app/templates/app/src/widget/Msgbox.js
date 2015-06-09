@@ -18,12 +18,12 @@ define(function (require, exports, module) {
       bd: $('.msgbox .msgbox-bd'),
       dialog: $('.box-ct.dialog'),
       loading: $('.box-ct.loading'),
-      slot: $('.box-ct.slot')
+      signin: $('.box-ct.signin')
 
     }
     bEl.dialog.hide();
     bEl.loading.hide();
-    bEl.slot.hide();
+    bEl.signin.hide();
 
     //dialog
     bEl.dialog.nbt = bEl.dialog.find('.no');
@@ -115,45 +115,41 @@ define(function (require, exports, module) {
       }
       _this.showDialog(_option);
     }
-    //slot
-    bEl.slot.nbt = bEl.slot.find('.no');
-    bEl.slot.ybt = bEl.slot.find('.yes');
-    bEl.slot.msg = bEl.slot.find('.msg');
-    bEl.slot.nbt.on('click', function () {
-      _this.hideSlot(bEl.slot.noCallback);
+    //signin
+    bEl.signin.nbt = bEl.signin.find('.no');
+    bEl.signin.ybt = bEl.signin.find('.plf');
+    bEl.signin.msg = bEl.signin.find('.msg');
+    bEl.signin.nbt.on('click', function () {
+      _this.hideSignin(bEl.signin.noCallback);
     });
-    bEl.slot.ybt.on('click', function () {
-      _this.hideSlot(bEl.slot.yesCallback);
+    bEl.signin.ybt.on('click', '.b', function () {
+      _this.hideSignin(bEl.signin.yesCallback, this.getAttribute('data-plf'));
     });
     /**
      * option = {
          *     msg,
-         *     yesText,
-         *     noText,
          *     yesCallback,
          *     noCallback
          * }
      */
-    this.showSlot = function (option) {
+    this.showSignin = function (option) {
       option = option || {};
       readyToHide = false;
 
-      bEl.slot.noCallback = option.noCallback;
-      bEl.slot.yesCallback = option.yesCallback;
+      bEl.signin.noCallback = option.noCallback;
+      bEl.signin.yesCallback = option.yesCallback;
 
-      bEl.slot.msg.html(option.msg || '');
+      bEl.signin.msg.html(option.msg || 'Please sign in');
 
-      bEl.slot.nbt.html(option.noText || '');
-      bEl.slot.ybt.html(option.yesText || '');
 
-      bEl.slot.show();
+      bEl.signin.show();
       this.show();
     }
-    this.hideSlot = function (callback) {
+    this.hideSignin = function (callback, data) {
       readyToHide = true;
-      bEl.slot.hide();
+      bEl.signin.hide();
       _this.hide();
-      callbackHandler(callback);
+      callbackHandler(callback, data);
     }
     this.show = function (el) {
       el = el || bEl.box;

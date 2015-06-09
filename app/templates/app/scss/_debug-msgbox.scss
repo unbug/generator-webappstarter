@@ -155,6 +155,44 @@
           }
         }
       }
+      > .box-ct.signin {
+        $dialog-w: 620px;
+        left: ($layout-with - $dialog-w)/2;
+        top: 300px;
+        > .box-bd {
+          position: relative;
+          width: $dialog-w;
+          min-height: 340px;
+          background-color: #fff;
+          padding: 30px;
+          > div {
+            @include box-v-c-c;
+          }
+          .msg {
+            font-size: 34px;
+            color: #414141;
+            min-height: 200px;
+            text-align: center;
+            padding-top: 100px;
+          }
+          .plf {
+            .b {
+              @include active-default;
+            }
+          }
+          .no {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 80px;
+            height: 80px;
+            background-color: #e1e1e1;
+            &:active {
+              background-color: #ef533e;
+            }
+          }
+        }
+      }
     }
   }
 }
