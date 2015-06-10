@@ -5,6 +5,7 @@
   padding: 0;
   border: 0;
   -webkit-user-select: text;
+  word-break: normal;
 }
 
 a, img {
@@ -84,11 +85,14 @@ a {
 .fix-break-word, p {
   @include blank-bg;
   background-color: transparent;
-  word-break: normal;
 }
 
 .hide {
   display: none !important;
+}
+
+.uppercase {
+  text-transform: uppercase;
 }
 
 .default-active {

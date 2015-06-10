@@ -10,9 +10,7 @@ define(function (require, exports, module) {
       bEl,
       readyToHide = true,
       isLoading,
-      VIEW = option.view,
-      emptyFn = function () {
-      };
+      emptyFn = function () {};
     bEl = {
       box: $('.msgbox'),
       bd: $('.msgbox .msgbox-bd'),
@@ -190,18 +188,6 @@ define(function (require, exports, module) {
         _this.hide();
         //globalPreventTouchmove = false;
       }
-    }
-    this.showDonateComplete = function () {
-      readyToHide = false;
-
-      bEl.donateComplete.show();
-      this.show();
-      setTimeout(_this.hideDonateComplete, 2500);
-    }
-    this.hideDonateComplete = function () {
-      readyToHide = true;
-      bEl.donateComplete.hide();
-      _this.hide();
     }
     function callbackHandler(callback, data) {
       if (callback) {
