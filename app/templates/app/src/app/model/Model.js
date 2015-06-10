@@ -8,7 +8,7 @@ define(function (require, exports, module) {
 
   function Model() {
     var MODEL = this,
-      userId, udid, appUserMeta;
+      userId,login, udid, appUserMeta;
 
     this.getCookie = function (sKey) {
       return decodeURIComponent(document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" + encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1")) || null;
@@ -60,8 +60,11 @@ define(function (require, exports, module) {
     this.setAppUserMeta = function (data) {
       appUserMeta = data;
     }
+    this.setLogin = function (login) {
+      login = login;
+    }
     this.isLogined = function () {
-      return !!this.getUserId();
+      return login!=undefined?login:!!this.getUserId();
     }
 
     //数据缓存更新
