@@ -22,6 +22,7 @@ define(function (require, exports, module) {
         type: option.type,
         url: option.action,
         dataType: option.dataType,
+        contentType: option.contentType,
         data: option.data || null,//空值设置null避免向后端发送undefined无用参数
         success: function (data, status, xhr) {
           if (option.complete && typeof option.complete === 'function') {
