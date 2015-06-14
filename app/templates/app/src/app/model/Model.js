@@ -1,7 +1,8 @@
 define(function (require, exports, module) {
   var Actions = require('app/resources/Actions');
 
-  var Mdl = Core.Class.Model,
+  var OMODEL,
+    Mdl = Core.Class.Model,
     lcStorage = Core.localStorage,
     getJSON = Core.RequestHandler.getJSON,
     postJSON = Core.RequestHandler.postJSON;
@@ -120,5 +121,19 @@ define(function (require, exports, module) {
     }
   });
 
-  return new Model;
+  //userInfo
+  Model.prototype.userInfo = new Mdl({
+    request: function (data,callback) {
+      var _this = this;
+      JSONP({
+        action: Actions.user+'&callback=afterRequestUserInfo'
+      });
+    }
+  });
+  window.afterRequestUserInfo = function(data){
+    OMODEL.userInfo.set(data);
+  }
+
+  OMODEL = new Model;
+  return OMODEL;
 });
