@@ -5,7 +5,7 @@
   "project": {
     "invalidNames": "products|account|config|favorite|creation|feed|feedback|dilog|invite|vote|event|share|monitor|follow",
     "title": "Title - <%=projectName%>",
-    "viewport": 720,
+    "viewport": 750,
     "sourceImg": "../../../../../Mozat/Deja/<%=projectName%>/UI/build/img/**/*.{png,jpg}",
     "sourceSprites": "../../../../../Mozat/Deja/<%=projectName%>/UI/build/assets/*.png",
     "watchJshint": true,

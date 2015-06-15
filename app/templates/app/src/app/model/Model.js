@@ -125,7 +125,6 @@ define(function (require, exports, module) {
   //userInfo
   Model.prototype.userInfo = new Mdl({
     request: function (data,callback) {
-      var _this = this;
       JSONP({
         action: Actions.user+'&callback=afterRequestUserInfo'
       });
