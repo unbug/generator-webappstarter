@@ -31,8 +31,10 @@ define(function (require, exports, module) {
       baseProtocol = baseName + '://',
       baseObjName = '__' + baseName,
       baseDataName = baseObjName + '_data_',
+      baseBeforeName = baseObjName + '_before_',
       baseAfterName = baseObjName + '_after_',
-      baseUpdateDataName = 'set_data_for_';
+      baseUpdateDataName = 'set_data_for_',
+      baseUpdateBeforeName = 'set_before_for_';
 
     afterCallbacks = {};
     Protocols = {};
@@ -70,13 +72,35 @@ define(function (require, exports, module) {
         global[baseDataName + name] = data;
       }
     }
+    function updateBefore(name, fn) {
+      if(/function/i.test(typeof fn) ){
+        global[baseBeforeName + name] = fn;
+      }else{
+        delete global[baseBeforeName + name];
+      }
+    }
 
+    /**
+     * set_data_for_NAME = function(data)
+     * @param name
+     * @param fn
+     */
     function registerUpdateDataFn(name, fn) {
       var updateName = baseUpdateDataName + name;
       _NB[updateName] = fn || function (data) {
           updateData(name, data);
         }
+    }
 
+    /**
+     * set_before_for_NAME = function(callback)
+     * @param name
+     */
+    function registerBeforeFn(name) {
+      var beforeName = baseUpdateBeforeName + name;
+      _NB[beforeName] = function (fn) {
+        updateBefore(name, fn);
+      }
     }
 
     function registerFn(name, fn) {
@@ -105,18 +129,21 @@ define(function (require, exports, module) {
     this.isApp = isApp;
     this.enableDebug = enableDebug;
 
-    ;
-    ['userInfo', 'login', 'share', 'modifytitle', 'updateBarButton', 'setBgColor', 'copy'].forEach(function (key, index) {
+    ['userInfo', 'login', 'share', 'modifytitle', 'updateBarButton', 'setBgColor', 'copy','closeweb'].forEach(function (key, index) {
       registerFn(key);
     });
 
-    ;
     ['facebook', 'twitter', 'instagram'].forEach(function (key, index) {
       _NB['share_' + key] = function (data, callback) {
         _NB['share'](data, callback, key);
       }
       _NB[baseUpdateDataName + 'share_' + key] = _NB[baseUpdateDataName + 'share'];
     });
+
+    ['unload'].forEach(function (key, index) {
+      registerBeforeFn(key);
+    });
+
   }
 
   return new NativeBridge(Navigator.protocol);
