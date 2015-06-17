@@ -46,6 +46,23 @@ yo webappstarter
 
 yo webappstarter:module ModuleName
 ```
+3.update your project's boilerplate and structure
+
+```shell
+//this command will update
+//"./src/core" directory
+//"./src/lib" directory
+//"./src/util" directory
+//"./src/widget" directory
+//some files in "./src/app/" directory
+//some files in "./scss/" directory
+//some files in "./html/" directory
+
+yo webappstarter:update
+```
+ > Warning: When you are asked before an overwrite can occur,please be careful.Default "Y" is overwrite,"n" is skip.
+ 
+
 More configurations,please take a look at "project" property of "package.json" file after the generator is done.
 
 Project commands

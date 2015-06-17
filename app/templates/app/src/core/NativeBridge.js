@@ -129,7 +129,7 @@ define(function (require, exports, module) {
     this.isApp = isApp;
     this.enableDebug = enableDebug;
 
-    ['userInfo', 'login', 'share', 'modifytitle', 'updateBarButton', 'setBgColor', 'copy','closeweb'].forEach(function (key, index) {
+    ['userInfo', 'login', 'share', 'modifytitle', 'updateBarButton', 'setBgColor', 'copy','closeweb','selfieTest'].forEach(function (key, index) {
       registerFn(key);
     });
 
