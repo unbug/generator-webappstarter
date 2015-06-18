@@ -54,6 +54,12 @@ define(function (require, exports, module) {
     Core.Event.on('appActionDefaultButton', appActionDefaultButton);
     //修改右上角功能菜单成分享
     Core.Event.on('appActionShareButton', appActionShareButton);
+    //注册webview关闭事件
+    Core.Event.on('appOnUnload', appOnUnload);
+    //关闭webview
+    Core.Event.on('appCloseWebView', appCloseWebView);
+    //打开 Selfie Test
+    Core.Event.on('appSelfieTest', appSelfieTest);
     //tab 切换
     Core.Event.on('switchTab', switchTab);
     //触发暂时性动画
@@ -268,7 +274,21 @@ define(function (require, exports, module) {
       appActionButton('', function () {
       });
     }
-
+    function appOnUnload(callback){
+      if (isApp) {
+        Core.NativeBridge.set_before_for_unload(callback);
+      }
+    }
+    function appCloseWebView(){
+      if (isApp) {
+        Core.NativeBridge.closeweb();
+      }
+    }
+    function appSelfieTest(callback){
+      if (isApp) {
+        Core.NativeBridge.selfieTest(null,callback);
+      }
+    }
     function downloadDejaInApp() {
       var url = Actions.dejaAppAndroid;
       if ($.os.ios && !$.os.android) {

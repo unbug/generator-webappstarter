@@ -22,9 +22,7 @@ define(function (require, exports, module) {
       emptyFn = function () {
       },
       appUA = (/Deja/ig).test(navigator.userAgent),
-      androidReg = /Android/gi,
       debug = false,
-      isAndroid = androidReg.test(navigator.platform) || androidReg.test(navigator.userAgent),
       afterCallbacks = {},
       Protocols = {},
       baseName = 'dejafashion',
@@ -103,6 +101,13 @@ define(function (require, exports, module) {
       }
     }
 
+    /**
+     * register a native API
+     *
+     * @param name
+     * @param fn
+     * @returns {*}
+     */
     function registerFn(name, fn) {
       Protocols[name] = baseProtocol + name;
       afterCallbacks[name] = emptyFn;
@@ -126,8 +131,25 @@ define(function (require, exports, module) {
       return _NB[name];
     }
 
+    /**
+     *
+     * execute a native API  by it's name
+     * if it's not exist then register it and execute it
+     *
+     * @param name
+     */
+    function trigger(name){
+      var fn = _NB[name],
+        args = [].slice.call(arguments,1);
+      if(!fn){
+        fn = registerFn(name);
+      }
+      fn.apply(_NB,args);
+    }
+
     this.isApp = isApp;
     this.enableDebug = enableDebug;
+    this.trigger = trigger;
 
     ['userInfo', 'login', 'share', 'modifytitle', 'updateBarButton', 'setBgColor', 'copy','closeweb','selfieTest'].forEach(function (key, index) {
       registerFn(key);
