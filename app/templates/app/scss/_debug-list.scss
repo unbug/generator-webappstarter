@@ -1,4 +1,14 @@
 @charset "UTF-8";
+.tabs-content-default {
+  display: none;
+  &.show {
+    display: block;
+    @include animated-1s;
+  }
+  &.animated {
+    -webkit-animation-name: fadeInUp;
+  }
+}
 .user-item-default {
   @include box-v;
   width: 100%;
