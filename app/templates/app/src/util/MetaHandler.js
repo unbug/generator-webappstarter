@@ -154,7 +154,7 @@ define(function(require, exports, module) {
      * [Deja Fashion topic](http://m.deja.me/topics/#/special/9)
      *
      * @param width {number} the size of the viewport
-     * @param fixBody {boolean} force to set body's with to the size of the viewport
+     * @param fixBody {boolean} force to set body's width as same as the size of the viewport
      */
     this.fixViewportWidth = function(width,fixBody){
       width = width || me.getContentProperty('viewport','width');
