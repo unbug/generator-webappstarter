@@ -87,6 +87,9 @@ define(function (require, exports, module) {
         if (ThirdVendor) {
           url += '&plf=' + ThirdVendor.code;
         }
+        if(CTRL.models.Base.isLogined()){
+          url += '&logined';
+        }
         Core.Navigator.protocol(url, true);
       }, 0);
     }
