@@ -15,7 +15,8 @@ define(function (require, exports, module) {
 
     var CTRL = this,
       viewNames,
-      curViewId = '';
+      curViewId = '',
+      viewQuery = {};
 
     viewNames = {
       'home': 'Home'
@@ -40,8 +41,9 @@ define(function (require, exports, module) {
       Core.Event.trigger('analytics');
     }
 
-    function onViewHome() {
+    function onViewHome(param,req) {
       curViewId = 'home';
+      viewQuery = req.query;
       CTRL.views.Home.show();
 
       //追加统计

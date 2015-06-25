@@ -108,9 +108,10 @@ define(function (require, exports, module) {
 
   //剩余人数
   Model.prototype.user = new Mdl({
-    request: function (callback) {
+    request: function (data,callback) {
       var _this = this;
       getJSON({
+        data: data,
         action: Actions.user,
         complete: function (data) {
           if (data.success) {
