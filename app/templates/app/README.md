@@ -16,6 +16,10 @@ before you get started.
 ```shell
 gulp
 ```
+or run with forever
+```shell
+forever ./node_modules/.bin/gulp
+```
 2.deploy to test server,run
 
 ```shell
