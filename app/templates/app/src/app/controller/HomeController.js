@@ -16,7 +16,7 @@ define(function (require, exports, module) {
     var CTRL = this,
       viewNames,
       curViewId = '',
-      viewQuery = {};
+      viewHomeQuery = {};
 
     viewNames = {
       'home': 'Home'
@@ -36,14 +36,14 @@ define(function (require, exports, module) {
       }
     }
 
-    function onViewUnnamed(hash) {
-      onViewHome();
+    function onViewUnnamed(param,req) {
+      onViewHome(param,req);
       Core.Event.trigger('analytics');
     }
 
     function onViewHome(param,req) {
       curViewId = 'home';
-      viewQuery = req.query;
+      viewHomeQuery = req.query;
       CTRL.views.Home.show();
 
       //追加统计

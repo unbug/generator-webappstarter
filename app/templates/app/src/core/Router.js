@@ -122,7 +122,13 @@ define(function (require, exports, module) {
         }
       }
       if (!published) {
-        Pubsub.publish(UN_SUB_NAME, hash.curHash, hash.curHash, hash);
+        Pubsub.publish(UN_SUB_NAME, hash.curHash, {
+          action: hash.curHash,
+          value: hash.curHash,
+          hash: hash,
+          query: getQuery(hash.curHash)
+        });
+        currentQureyStr = hash.curHash;
       }
     }
 

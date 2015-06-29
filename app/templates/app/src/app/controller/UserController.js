@@ -16,7 +16,7 @@ define(function (require, exports, module) {
     var CTRL = this,
       viewNames,
       curViewId = '',
-      viewQuery = {};
+      viewUserQuery = {};
 
     viewNames = {
       'user': 'User'
@@ -38,11 +38,11 @@ define(function (require, exports, module) {
 
     function onViewUser(param,req) {
       curViewId = 'user';
-      viewQuery = req.query;
+      viewUserQuery = req.query;
       CTRL.views.User.show();
 
       CTRL.views.Base.msgbox.hideLoading();
-      CTRL.models.Base.user.request({id: viewQuery.userid},afterRequestUser);
+      CTRL.models.Base.user.request({id: viewUserQuery.userid},afterRequestUser);
 
       //追加统计
       analyticsCurView();

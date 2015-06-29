@@ -15,7 +15,8 @@ define(function (require, exports, module) {
 
     var CTRL = this,
       viewNames,
-      curViewId = '';
+      curViewId = '',
+      view<%=moduleName%>Query = {};
 
     viewNames = {
       '<%=lmoduleName%>': '<%=moduleName%>'
@@ -35,8 +36,9 @@ define(function (require, exports, module) {
       }
     }
 
-    function onView<%=moduleName%>(){
+    function onView<%=moduleName%>(param, req){
       curViewId = '<%=lmoduleName%>';
+      view<%=moduleName%>Query = req.query;
       CTRL.views.<%=moduleName%>.show();
 
       //追加统计
