@@ -10,18 +10,30 @@ define(function (require, exports, module) {
       bEl,
       readyToHide = true,
       isLoading,
-      emptyFn = function () {};
+      emptyFn = function () {},
+      onBD = emptyFn,
+      box = $('.msgbox');
     bEl = {
-      box: $('.msgbox'),
-      bd: $('.msgbox .msgbox-bd'),
-      dialog: $('.box-ct.dialog'),
-      loading: $('.box-ct.loading'),
-      signin: $('.box-ct.signin')
+      box: box,
+      mask: box.find('.box-mask'),
+      bd: box.find('.msgbox-bd'),
+      dialog: box.find('.box-ct.dialog'),
+      menu: box.find('.box-ct.menu'),
+      loading: box.find('.box-ct.loading'),
+      signin: box.find('.box-ct.signin')
 
     }
     bEl.dialog.hide();
+    bEl.menu.hide();
     bEl.loading.hide();
     bEl.signin.hide();
+
+    bEl.box.on('click',function(e){
+      if(/msgbox-bd/i.test(e.target.className ) ) {
+        onBD();
+        onBD = emptyFn;
+      }
+    });
 
     //dialog
     bEl.dialog.nbt = bEl.dialog.find('.no');
@@ -36,13 +48,13 @@ define(function (require, exports, module) {
     });
     /**
      * option = {
-         *     title,
-         *     msg,
-         *     yesText,
-         *     noText,
-         *     yesCallback,
-         *     noCallback
-         * }
+     *     title,
+     *     msg,
+     *     yesText,
+     *     noText,
+     *     yesCallback,
+     *     noCallback
+     * }
      */
     this.showDialog = function (option) {
       option = option || {};
@@ -64,13 +76,68 @@ define(function (require, exports, module) {
       _this.hide();
       callbackHandler(callback);
     }
+    //menu
+    bEl.menu.nbt = bEl.menu.find('.no');
+    bEl.menu.options = bEl.menu.find('.options');
+    bEl.menu.nbt.on('click', function () {
+      _this.hideMenu(bEl.menu.noCallback);
+    });
     /**
      * option = {
-         *     title,
-         *     msg,
-         *     yesText,
-         *     yesCallback
-         * }
+     *     msg,
+     *     noText,
+     *     noCallback,
+     *     noCls,
+     *     options: {
+     *      text,cls,callback
+     *     }
+     * }
+     */
+    this.showMenu = function (option) {
+      option = option || {};
+      readyToHide = false;
+      bEl.menu.noCallback = option.noCallback;
+      bEl.menu.nbt.html(option.noText || 'Cancel').addClass(option.noCls);
+      bEl.menu.options.html('');
+      if(option.msg){
+        bEl.menu.options.append('<div class="opt msg">'+option.msg+'</div>');
+      }
+      if(option.options){
+        var tpl = '<div class="opt"></div>';
+        option.options.forEach(function(k){
+          var el = $(tpl);
+          el.html(k.text);
+          el.addClass(k.cls);//highlight
+          k.callback && el.on('click', function(){
+            _this.hideMenu(k.callback);
+          });
+          bEl.menu.options.append(el);
+        });
+      }
+      setTimeout(function () {
+        bEl.menu.show();
+        _this.show();
+        onBD = function(){
+          _this.hideMenu( bEl.menu.noCallback );
+        }
+      }, 400);
+    }
+    this.hideMenu = function (callback) {
+      readyToHide = true;
+      bEl.menu.addClass('close');
+      setTimeout(function(){
+        bEl.menu.hide().removeClass('close');
+        _this.hide();
+        callbackHandler(callback);
+      },350)
+    }
+    /**
+     * option = {
+     *     title,
+     *     msg,
+     *     yesText,
+     *     yesCallback
+     * }
      */
     this.showFailed = function (option) {
       option = option || {};
@@ -84,9 +151,9 @@ define(function (require, exports, module) {
     }
     /**
      * option = {
-         *     msg,
-         *     hideCallback
-         * }
+     *     msg,
+     *     hideCallback
+     * }
      */
     this.showError = function (option) {
       option = option || {};
@@ -100,15 +167,15 @@ define(function (require, exports, module) {
     }
     /**
      * option = {
-         *     yesCallback
-         * }
+     *     yesCallback
+     * }
      */
     this.showDownload = function (option) {
       option = option || {};
       var _option = {
-        msg: '请安装或启动客户端最新版!',
-        noText: '取消',
-        yesText: '前往',
+        msg: 'Please download the latest app!',
+        noText: 'Cancel',
+        yesText: 'OK',
         yesCallback: option.yesCallback
       }
       _this.showDialog(_option);
@@ -125,10 +192,10 @@ define(function (require, exports, module) {
     });
     /**
      * option = {
-         *     msg,
-         *     yesCallback,
-         *     noCallback
-         * }
+     *     msg,
+     *     yesCallback,
+     *     noCallback
+     * }
      */
     this.showSignin = function (option) {
       option = option || {};
@@ -178,7 +245,6 @@ define(function (require, exports, module) {
         isLoading = true;
         bEl.loading.show();
         this.show();
-        //globalPreventTouchmove = true;
       }
     }
     this.hideLoading = function () {
@@ -186,7 +252,6 @@ define(function (require, exports, module) {
         isLoading = false;
         bEl.loading.hide();
         _this.hide();
-        //globalPreventTouchmove = false;
       }
     }
     function callbackHandler(callback, data) {
