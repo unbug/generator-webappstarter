@@ -5,7 +5,6 @@ define(function (require, exports, module) {
       return Msgbox.prototype.instance;
     }
     option = option || {};
-    var GlobalTouch = option.GlobalTouch;
     var _this = this,
       bEl,
       readyToHide = true,
@@ -94,6 +93,7 @@ define(function (require, exports, module) {
      * }
      */
     this.showMenu = function (option) {
+      //bEl.menu.css({bottom: (document.body.scrollHeight-window.screen.height) + 'px'});
       option = option || {};
       readyToHide = false;
       bEl.menu.noCallback = option.noCallback;
@@ -218,9 +218,9 @@ define(function (require, exports, module) {
     }
     this.show = function (el) {
       el = el || bEl.box;
-      setTimeout(function () {
-        bEl.box.css({height: document.body.scrollHeight + 'px'});
-      }, 500);
+      //setTimeout(function () {
+      //bEl.box.css({height: document.body.scrollHeight + 'px'});
+      //}, 500);
       if (el == bEl.box) {
         el.addClass('show');
       } else {
