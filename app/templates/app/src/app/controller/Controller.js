@@ -25,7 +25,9 @@ define(function (require, exports, module) {
     //*/
 
     //更新数据缓存时间
-    Core.Event.on('resetModelUpdateTimeout', CTRL.models.Base.resetModelTimeout);
+    Core.Event.on('resetModelUpdateTimeout', CTRL.models.Base.modelUpdate.timer.resetAll);
+    //通过API名称，调用客户API
+    Core.Event.on('appAPI', appAPI);
     //分享
     Core.Event.on('share', appShare);
     //去下载
@@ -60,6 +62,8 @@ define(function (require, exports, module) {
     Core.Event.on('appCloseWebView', appCloseWebView);
     //打开 Selfie Test
     Core.Event.on('appSelfieTest', appSelfieTest);
+    //Update Profile
+    Core.Event.on('appUpdateProfile', appUpdateProfile);
     //tab 切换
     Core.Event.on('switchTab', switchTab);
     //触发暂时性动画
@@ -222,7 +226,7 @@ define(function (require, exports, module) {
       Core.NativeBridge.login(null, function (rs) {
         if (rs) {
           CTRL.models.Base.saveLoginCookieTimeout();
-          CTRL.models.Base.initModelUpdateTimeout();
+          CTRL.models.Base.modelUpdate.timer.resetAll();
           CTRL.models.Base.setAppUserMeta(rs);
           Core.Router.run();
         }
@@ -288,8 +292,19 @@ define(function (require, exports, module) {
       }
     }
     function appSelfieTest(callback){
+      appAPI('selfieTest',null,callback)
+    }
+
+    /**
+     * @param subProtocol String creationLike,creationDelete,productLike,follow
+     */
+    function appUpdateProfile(subProtocol){
+      CTRL.models.Base.profile.timer.reset();
+      appAPI('updateProfile',null,null,subProtocol);
+    }
+    function appAPI(name, data, callback, subProtocol){
       if (isApp) {
-        Core.NativeBridge.selfieTest(null,callback);
+        Core.NativeBridge.trigger.apply(null,arguments);
       }
     }
     function downloadDejaInApp() {
@@ -318,7 +333,7 @@ define(function (require, exports, module) {
     }
 
     function redirectToDownload(link, autoopen) {
-      link = link ? ('#url=dejafashion://webview/' + link) : '';
+      link = link ? ('#url=dejafashion://web/' + link) : '';
       redirectToPage(Actions.dejaDwonloadBridge + (autoopen ? '?autoopen=1' : '') + link);
     }
 
