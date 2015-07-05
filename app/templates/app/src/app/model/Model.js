@@ -10,7 +10,8 @@ define(function (require, exports, module) {
 
   function Model() {
     var MODEL = this,
-      userId,login, udid, appUserMeta;
+      userId, udid, appUserMeta,
+      loginCookieTimerPrefix = 'loginCookieTimer_';
 
     this.getCookie = function (sKey) {
       return decodeURIComponent(document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" + encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1")) || null;
@@ -34,12 +35,12 @@ define(function (require, exports, module) {
       return uid && sig;
     }
     this.saveLoginCookieTimeout = function () {
-      var key = this.getUserId() + '__loginCookieTimer';
+      var key = loginCookieTimerPrefix + this.getUserId();
       lcStorage.set(key, new Date().getTime());
     }
     //校验 cookies 有效期，这里用 20天
     this.verifyLoginCookieTimeout = function (minutes) {
-      var key = this.getUserId() + '__loginCookieTimer',
+      var key = loginCookieTimerPrefix + this.getUserId(),
         last = lcStorage.get(key) || 0;
       minutes = minutes || 1 * 60 * 24 * 20;
       return ( (new Date().getTime()) - last ) < minutes * 60 * 1000;
@@ -62,48 +63,13 @@ define(function (require, exports, module) {
     this.setAppUserMeta = function (data) {
       appUserMeta = data;
     }
-    this.setLogin = function (login) {
-      login = login;
-    }
     this.isLogined = function () {
-      return login!=undefined?login:!!this.getUserId();
+      return !!this.getUserId();
     }
 
     //数据缓存更新
-    var modelUpdate;
-    this.initModelUpdateTimeout = function () {
-      modelUpdate = {
-        timeout: 1000 * 60 * 5
-      }
-    }
-    this.initModelUpdateTimeout();
-    /**
-     *
-     * @param name
-     * @param timeout 时间倍数，默认是1
-     * @returns {boolean}
-     */
-    this.isModelUpdateTimeout = function (name, timeout) {
-      timeout = modelUpdate.timeout * (timeout || 1);
-      return !modelUpdate[name] || ( (new Date().getTime()) - modelUpdate[name] > timeout );
-    }
-    this.updateModelTimeout = function (name, fresh) {
-      if (name === undefined) {
-        return;
-      }
-      if (modelUpdate[name] === undefined) {
-        this.resetModelTimeout(name);
-      } else if (!fresh) {
-        modelUpdate[name] = new Date().getTime();
-      }
-    }
-    this.resetModelTimeout = function (name) {
-      if (name === undefined) {
-        return;
-      }
-      modelUpdate[name] = 0;
-    }
-    //end 数据缓存更新
+    this.modelUpdate = new Mdl();
+
   }
 
   //剩余人数

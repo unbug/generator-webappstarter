@@ -87,20 +87,40 @@ define(function (require, exports, module) {
     //数据缓存更新
     this.updateFactory = function () {
       var lastUpdate = 0,
-        _timeout = 1000 * 60 * 5;
+        _timeout = 1000 * 60 * 5,
+        names = {};
       /**
        *
        * @param timeout 时间倍数，默认是1
+       * @param name
        * @returns {boolean}
        */
-      this.isTimeout = function (timeout) {
+      this.isTimeout = function (timeout,name) {
         timeout = _timeout * (timeout || 1);
-        return !lastUpdate || ( (new Date().getTime()) - lastUpdate > timeout );
+        name = name !== undefined?names[name]:lastUpdate;
+        return !name || ( (new Date().getTime()) - name > timeout );
       }
-      this.update = function () {
-        lastUpdate = new Date().getTime();
+      this.update = function (name) {
+        var now = new Date().getTime();
+        if(name !== undefined){
+          if(names[name] === undefined){
+            this.reset(name);
+          }else{
+            names[name] = now;
+          }
+        }else{
+          lastUpdate = now;
+        }
       }
-      this.reset = function () {
+      this.reset = function (name) {
+        if(name !== undefined){
+          names[name] = 0;
+        }else{
+          lastUpdate = 0;
+        }
+      }
+      this.resetAll = function () {
+        names = {};
         lastUpdate = 0;
       }
       //end 数据缓存更新
