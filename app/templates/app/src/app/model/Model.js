@@ -38,11 +38,11 @@ define(function (require, exports, module) {
       var key = loginCookieTimerPrefix + this.getUserId();
       lcStorage.set(key, new Date().getTime());
     }
-    //校验 cookies 有效期，这里用 20天
+    //校验 cookies 有效期，这里用 1 天
     this.verifyLoginCookieTimeout = function (minutes) {
       var key = loginCookieTimerPrefix + this.getUserId(),
         last = lcStorage.get(key) || 0;
-      minutes = minutes || 1 * 60 * 24 * 20;
+      minutes = minutes || 1 * 60 * 24 * 1;
       return ( (new Date().getTime()) - last ) < minutes * 60 * 1000;
     }
     this.setUdId = function (id) {

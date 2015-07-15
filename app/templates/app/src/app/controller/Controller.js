@@ -130,10 +130,9 @@ define(function (require, exports, module) {
     function onUserinfo() {
       if (isApp) {
         Core.NativeBridge.userInfo(null, function (rs) {
-          if (rs) {
-            CTRL.models.Base.setAppUserMeta(rs);
-
-            if (CTRL.models.Base.verifyLoginCookie() && CTRL.models.Base.verifyLoginCookieTimeout()) {
+          CTRL.models.Base.setAppUserMeta(rs);
+          if (rs && !!rs.userid) {
+            if (CTRL.models.Base.verifyLoginCookie() && CTRL.models.Base.verifyLoginCookieTimeout(30)) {
               Core.Router.run();
             } else {
               onLogin();
@@ -233,11 +232,11 @@ define(function (require, exports, module) {
       });
     }
 
-    function appUpdate(msg) {
+    function appUpdate(msg,force) {
       redirectToApp(function () {
         CTRL.views.Base.msgbox.showDialog({
           msg: msg || 'Please up to date your App',
-          noText: 'Close',
+          noText: force?null:'Close',
           yesText: 'Update',
           yesCallback: function () {
             downloadDejaInApp();
@@ -305,6 +304,10 @@ define(function (require, exports, module) {
     function appAPI(name, data, callback, subProtocol){
       if (isApp) {
         Core.NativeBridge.trigger.apply(null,arguments);
+      }else{
+        var proto = [name];
+        subProtocol && proto.push(subProtocol);
+        redirectToDownload(null,true,Actions.dejafashionSchema+proto.join('/'));
       }
     }
     function downloadDejaInApp() {
@@ -332,8 +335,9 @@ define(function (require, exports, module) {
       }
     }
 
-    function redirectToDownload(link, autoopen) {
-      link = link ? ('#url=dejafashion://web/' + link) : '';
+    function redirectToDownload(link, autoopen, schema) {
+      link = !!link && link!='0'? ('#url=dejafashion://web/' + link) : '';
+      link = !!schema?('#url='+schema): link;
       redirectToPage(Actions.dejaDwonloadBridge + (autoopen ? '?autoopen=1' : '') + link);
     }
 

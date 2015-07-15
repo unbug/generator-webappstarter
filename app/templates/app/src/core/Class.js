@@ -50,26 +50,26 @@ define(function (require, exports, module) {
    * Nested Model:
    * e.g.
    *    var testModel = new Model({
-     *           store: new Model({
-     *               request: function(){
-     *                   console.log('store.request',this);
-     *               }
-     *           }),
-     *           request: function(){
-     *               console.log('request',this);
-     *           }
-     *       });
+   *           store: new Model({
+   *               request: function(){
+   *                   console.log('store.request',this);
+   *               }
+   *           }),
+   *           request: function(){
+   *               console.log('request',this);
+   *           }
+   *       });
    *
    *    testModel.updated(function(){
-     *           console.log(testModel.get());
-     *           testModel.request();
-     *       });
+   *           console.log(testModel.get());
+   *           testModel.request();
+   *       });
    *    testModel.set('1');
    *
    *    testModel.store.updated(function(){
-     *           console.log(testModel.store.get());
-     *           testModel.store.request();
-     *       });
+   *           console.log(testModel.store.get());
+   *           testModel.store.request();
+   *       });
    *    testModel.store.set('2');
    */
   function Model(option) {

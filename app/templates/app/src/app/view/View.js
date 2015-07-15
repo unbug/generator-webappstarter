@@ -72,9 +72,18 @@ define(function(require, exports, module) {
       });
       els.body.on(VIEW.tapEvent,'* [data-eventname]',function(){
         var ename = this.getAttribute('data-eventname'),
-          eparam = this.getAttribute('data-eventparam')||'';
+          eparam = this.getAttribute('data-eventparam')||'',
+          eparams = this.getAttribute('data-eventparams')||'';
+
         if(ename){
-          Core.Event.trigger(ename,eparam);
+          var params = [];
+          params.push(ename);
+          if(eparams){
+            Array.prototype.push.apply(params,eparams.split(','));
+          }else if(eparam){
+            params.push(eparam);
+          }
+          Core.Event.trigger.apply(null,params);
         }
       });
     }
