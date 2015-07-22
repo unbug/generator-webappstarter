@@ -33,12 +33,13 @@ define(function (require, exports, module) {
      * @method getFrame
      * @return {Element} iframe
      */
-    function getFrame(src) {
+    function getFrame(src,name) {
       var _frame = document.createElement("iframe");
       _frame.setAttribute("style", "display:none;width:0;height:0;position: absolute;top:0;left:0;border:0;");
       _frame.setAttribute("height", "0px");
       _frame.setAttribute("width", "0px");
       _frame.setAttribute("frameborder", "0");
+      name && _frame.setAttribute("name", name);
       if (src) {
         _frame.setAttribute("src", src);
       } else {
@@ -110,7 +111,10 @@ define(function (require, exports, module) {
 
     return {
       protocol: protocol,
-      excute: excute
+      excute: excute,
+      getFrame: getFrame,
+      appendFrame: appendFrame,
+      removeFrame: removeFrame
     }
   })();//end Object Navigator
 
