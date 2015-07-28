@@ -332,7 +332,6 @@ define(function (require, exports, module) {
         if ((new RegExp('^' + ac[i] + '(.*)', 'i')).test(currentAction || UN_SUB_NAME)) {
           return true;
         }
-        ;
       }
       return false;
     }

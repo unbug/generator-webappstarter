@@ -77,13 +77,13 @@ define(function (require, exports, module) {
         hou = parseInt(_date.hour),
         min = parseInt(_date.minute);
       if (day > 0) {
-        return day + '天前';
+        return day + ' days ago';
       } else if (hou > 0) {
-        return hou + '小时前';
+        return hou + ' hours ago';
       } else if (min >= 3) {
-        return min + '分钟前';
+        return min + ' mins ago';
       } else {
-        return '刚刚';
+        return 'just now';
       }
     }
 
