@@ -51,13 +51,13 @@ define(function (require, exports, module) {
       //开启调试
       if (debug && callback) {
         var _data = action.match(/[\w]:\/\/(.*)/);
-        callback(_data && _data[1]);
+        if(typeof callback=='function'){callback(_data && _data[1]);}
       }
     }
 
     function afterCallback(rs, callback) {
       callback = callback || emptyFn;
-      callback(rs);
+      if(typeof callback=='function'){callback(rs);}
       callback = emptyFn;
     }
 
