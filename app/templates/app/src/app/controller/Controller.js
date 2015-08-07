@@ -168,8 +168,8 @@ define(function (require, exports, module) {
       }
     }
 
-    function onFeedback() {
-      Core.Navigator.protocol('mailto:mozat@mozat.com?subject=Suggestion', true);
+    function onFeedback(email) {
+      Core.Navigator.protocol('mailto:'+(email||'mozat@mozat.com?subject=Suggestion'), true);
     }
 
     function switchTab(el, tabs, tabContents) {

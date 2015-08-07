@@ -48,10 +48,16 @@
     height: 70px;
     line-height: 70px;
   }
+  &.disabled{
+    background-color: #aeaeae;
+    &:active{
+      background-color: #aeaeae;
+    }
+  }
 }
 
 .bt-c {
-  width: 432px;
+  padding: 0 30px;
   height: 102px;
   line-height: 102px;
   font-size: 38px;
@@ -61,5 +67,10 @@
   &:active {
     background-color: #3363ef;
     color: #fff;
+  }
+  &.size-s{
+    font-size: 32px;
+    height: 70px;
+    line-height: 70px;
   }
 }
