@@ -296,6 +296,28 @@ gulp.task('deploy:offical', function (cb) {
   });
 });
 
+//deploy to offical server form home
+//view http://m.deja.me/PROJECTNAME/
+// deploy guide
+// 1. get rsync's port
+// grep rsync /etc/services
+// 2. open tunnel
+// sudo ssh -N -L 127.0.0.1:873:10.160.241.153:873 tunnel@ssh.mozat.com
+gulp.task('_deploy:offical', function (cb) {
+  //set rsync proxy
+  var client = new rsync()
+    .executable('rsync')
+    .flags('azv')
+    .source(distPath)
+    .destination('rsync://localhost/m.deja.me/');
+
+  client.execute(function (error, code, cmd) {
+    console.log('\t' + cmd);
+    //reset rsync proxy
+    process.env.RSYNC_PROXY = '';
+    cb();
+  });
+});
 
 // Lint JavaScript
 gulp.task('jshint', function () {
@@ -366,4 +388,8 @@ gulp.task('deploytest', function (cb) {
 //deploy to offical server
 gulp.task('deploy', function (cb) {
   runSequence('dist', 'deploy:offical', cb);
+});
+//deploy to offical server from home
+gulp.task('_deploy', function (cb) {
+  runSequence('dist', '_deploy:offical', cb);
 });
