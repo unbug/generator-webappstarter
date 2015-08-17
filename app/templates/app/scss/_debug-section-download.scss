@@ -1,0 +1,27 @@
+@charset "UTF-8";
+.section-download{
+  @include box-h-c-c;
+  padding: 20px;
+  background-color: #fdfdfd;
+  .sd-logo{
+    width: 114px;
+    height: 114px;
+    img{
+      width: 100%;
+      height: 100%;
+    }
+  }
+  .sd-info{
+    @include box-v;
+    padding: 23px 20px;
+    -webkit-box-flex: 1;
+    .name{
+      font-size: 36px;
+      font-weight: bold;
+    }
+    .dest{
+      font-size: 28px;
+      color: #818181;
+    }
+  }
+}

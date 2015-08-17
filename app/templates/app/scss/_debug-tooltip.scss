@@ -1,0 +1,66 @@
+@charset "UTF-8";
+.tooltip {
+  position: fixed;
+  z-index: 90;
+  left: 0;
+  width: 100%;
+  display: none;
+  background-color: transparent;
+  &.show {
+    @include box-h-c-c;
+  }
+  >.tooltip-ct{
+    width: $layout-with;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    overflow-x: hidden;
+    >.tooltip-bd{
+      position: relative;
+      display: inline-block;
+      top: 0;
+      padding: 20px;
+      background-color: #fff;
+      font-size: 30px;
+      color: #414141;
+      border: 1px solid rgba(0, 0, 0, 0.3);
+      -webkit-box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.3);
+      -webkit-border-radius: 5px;
+      @include gpu-accelerate;
+      &.fadeIn{
+        @include animated-1s;
+        -webkit-animation-name: fadeIn;
+        -webkit-animation-duration: 350ms;
+      }
+      >.arrow{
+        position: absolute;
+        background-color: #fff;
+        width: 16px;
+        height: 16px;
+        overflow: hidden;
+        @include gpu-accelerate;
+        >div{
+          width: 32px;
+          height: 32px;
+          border: 1px solid rgba(0, 0, 0, 0.3);
+        }
+        &.left{
+          left: -9px;
+          -webkit-transform: rotate(-45deg);
+        }
+        &.right{
+          right: -9px;
+          -webkit-transform: rotate(135deg);
+        }
+        &.top{
+          top: -9px;
+          -webkit-transform: rotate(45deg);
+        }
+        &.bottom{
+          bottom: -9px;
+          -webkit-transform: rotate(-135deg);
+        }
+      }
+    }
+  }
+
+}
