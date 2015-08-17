@@ -63,7 +63,7 @@ define(function (require, exports, module) {
 
     function updateData(name, data) {
       if (data != null && data != undefined) {
-        if (typeof data == 'string') {
+        if ( !/object/i.test(typeof data) ) {
           data = {default: data};
         }
 
