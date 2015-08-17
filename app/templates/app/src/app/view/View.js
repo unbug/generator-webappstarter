@@ -1,5 +1,5 @@
 define(function(require, exports, module) {
-  var Actions = require('../resources/Actions');
+  var Actions = require('app/resources/Actions');
   var Msgbox = require('widget/Msgbox');
   var WechatShare = require('util/WechatShare');
   var YiXinShare = require('util/YiXinShare');

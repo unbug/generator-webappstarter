@@ -1,5 +1,5 @@
 define(function (require, exports, module) {
-  var Actions = require('../resources/Actions');
+  var Actions = require('app/resources/Actions');
   var ThirdVendor = require('util/ThirdVendor');
   var BaseModel = require('app/model/Model');
   var BaseView = require('app/view/View');
