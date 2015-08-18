@@ -106,7 +106,7 @@ define(function (require, exports, module) {
         for (var i = 0; i < topics.length; i++) {
           var key = topics[i];
           if (key !== UN_SUB_NAME) {
-            hash.curHash.replace(new RegExp(key + '(.*)', 'g'), function ($1, $2) {
+            hash.curHash.replace(new RegExp('^'+key + '(.*)', 'g'), function ($1, $2) {
               if ($1) {
                 published = true;
                 Pubsub.publish(key, $2, {
@@ -332,6 +332,7 @@ define(function (require, exports, module) {
         if ((new RegExp('^' + ac[i] + '(.*)', 'i')).test(currentAction || UN_SUB_NAME)) {
           return true;
         }
+        ;
       }
       return false;
     }
