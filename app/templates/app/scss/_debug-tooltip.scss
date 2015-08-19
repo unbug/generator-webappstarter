@@ -62,5 +62,21 @@
       }
     }
   }
-
+  &.red{
+    >.tooltip-ct{
+      >.tooltip-bd{
+        background-color: #f05c48;
+        color: #fff;
+        border: 0;
+        -webkit-box-shadow: none;
+        -webkit-border-radius: 0;
+        >.arrow {
+          background-color: #f05c48;
+          >div {
+            border: 0;
+          }
+        }
+      }
+    }
+  }
 }
