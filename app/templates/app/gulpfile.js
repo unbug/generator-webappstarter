@@ -295,8 +295,7 @@ gulp.task('deploy:offical', function (cb) {
     cb();
   });
 });
-
-//deploy to offical server form home
+//deploy to offical server
 //view http://m.deja.me/PROJECTNAME/
 // deploy guide
 // 1. get rsync's port
@@ -318,6 +317,7 @@ gulp.task('_deploy:offical', function (cb) {
     cb();
   });
 });
+
 
 // Lint JavaScript
 gulp.task('jshint', function () {
@@ -387,6 +387,11 @@ gulp.task('deploytest', function (cb) {
 });
 //deploy to offical server
 gulp.task('deploy', function (cb) {
+  runSequence('dist', 'deploy:offical', cb);
+});
+//deploy to offical server
+gulp.task('deployrc', function (cb) {
+  distProjectPath = distProjectPath +'_rc';
   runSequence('dist', 'deploy:offical', cb);
 });
 //deploy to offical server from home
