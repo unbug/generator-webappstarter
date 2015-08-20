@@ -151,11 +151,12 @@ define(function (require, exports, module) {
       }
     }
 
-    function onLogin(arg) {
+    function onLogin(arg,msg) {
       if (isApp) {
         appLogin();
       } else {
         CTRL.views.Base.msgbox.showSignin({
+          msg: msg,
           yesCallback: function (plf) {
             webLogin( Actions.main + (arg || ''), null, plf );
           }
