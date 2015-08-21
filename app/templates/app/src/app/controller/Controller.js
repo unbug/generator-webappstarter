@@ -1,15 +1,15 @@
 define(function (require, exports, module) {
   var Actions = require('app/resources/Actions');
   var ThirdVendor = require('util/ThirdVendor');
-  var BaseModel = require('app/model/Model');
-  var BaseView = require('app/view/View');
+  var BasicModel = require('app/model/Model');
+  var BasicView = require('app/view/View');
 
   function Controller() {
     this.models = {
-      Base: BaseModel
+      Basic: BasicModel
     };
     this.views = {
-      Base: BaseView
+      Basic: BasicView
     };
     //所有视图初始化前，需要获得客户端的用户登录信息
     //Core.Router.onReady(onUserinfo);
@@ -21,11 +21,11 @@ define(function (require, exports, module) {
       params = Core.localParam(),
       _userid = params.search['userid'];
     ///*Todo: debug user
-    _userid && CTRL.models.Base.setUserId(_userid);
+    _userid && CTRL.models.Basic.setUserId(_userid);
     //*/
 
     //更新数据缓存时间
-    Core.Event.on('resetModelUpdateTimeout', CTRL.models.Base.modelUpdate.timer.resetAll);
+    Core.Event.on('resetModelUpdateTimeout', CTRL.models.Basic.modelUpdate.timer.resetAll);
     //通过API名称，调用客户API
     Core.Event.on('appAPI', appAPI);
     //分享
@@ -91,7 +91,7 @@ define(function (require, exports, module) {
         if (ThirdVendor) {
           url += '&plf=' + ThirdVendor.code;
         }
-        if(CTRL.models.Base.isLogined()){
+        if(CTRL.models.Basic.isLogined()){
           url += '&logined';
         }
         Core.Navigator.protocol(url, true);
@@ -110,7 +110,7 @@ define(function (require, exports, module) {
       (function animloop() {
         // increment the time
         currentTime += increment;
-        if (start < 2 || CTRL.views.Base.GlobalTouch.touched || currentTime > duration) {
+        if (start < 2 || CTRL.views.Basic.GlobalTouch.touched || currentTime > duration) {
           if (start < 2) {
             window.scrollTo(0, 1);
           }
@@ -124,15 +124,15 @@ define(function (require, exports, module) {
 
     function onViewChanged() {
       appModifyTitle();
-      CTRL.views.Base.msgbox.hideLoading();
+      CTRL.views.Basic.msgbox.hideLoading();
     }
 
     function onUserinfo() {
       if (isApp) {
         Core.NativeBridge.userInfo(null, function (rs) {
-          CTRL.models.Base.setAppUserMeta(rs);
+          CTRL.models.Basic.setAppUserMeta(rs);
           if (rs && !!rs.userid) {
-            if (CTRL.models.Base.verifyLoginCookie() && CTRL.models.Base.verifyLoginCookieTimeout(30)) {
+            if (CTRL.models.Basic.verifyLoginCookie() && CTRL.models.Basic.verifyLoginCookieTimeout(30)) {
               Core.Router.run();
             } else {
               onLogin();
@@ -143,7 +143,7 @@ define(function (require, exports, module) {
         });
         //Core.NativeBridge.device(function(rs){
         //    if(rs){
-        //        CTRL.models.Base.setNativeBridgeDeviceMeta(rs);
+        //        CTRL.models.Basic.setNativeBridgeDeviceMeta(rs);
         //    }
         //});
       } else {
@@ -155,13 +155,13 @@ define(function (require, exports, module) {
       if (isApp) {
         appLogin();
       } else {
-        CTRL.views.Base.msgbox.showSignin({
+        CTRL.views.Basic.msgbox.showSignin({
           msg: msg,
           yesCallback: function (plf) {
             webLogin( Actions.main + (arg || ''), null, plf );
           }
         });
-        //CTRL.views.Base.msgbox.showDownload({
+        //CTRL.views.Basic.msgbox.showDownload({
         //  yesCallback: function () {
         //    redirectToDownload(Actions.main + (arg || ''));
         //  }
@@ -225,9 +225,9 @@ define(function (require, exports, module) {
     function appLogin(){
       Core.NativeBridge.login(null, function (rs) {
         if (rs) {
-          CTRL.models.Base.saveLoginCookieTimeout();
-          CTRL.models.Base.modelUpdate.timer.resetAll();
-          CTRL.models.Base.setAppUserMeta(rs);
+          CTRL.models.Basic.saveLoginCookieTimeout();
+          CTRL.models.Basic.modelUpdate.timer.resetAll();
+          CTRL.models.Basic.setAppUserMeta(rs);
           Core.Router.run();
         }
       });
@@ -235,7 +235,7 @@ define(function (require, exports, module) {
 
     function appUpdate(msg,force) {
       redirectToApp(function () {
-        CTRL.views.Base.msgbox.showDialog({
+        CTRL.views.Basic.msgbox.showDialog({
           msg: msg || 'Please up to date your App',
           noText: force?null:'Close',
           yesText: 'Update',
@@ -299,7 +299,6 @@ define(function (require, exports, module) {
      * @param subProtocol String creationLike,creationDelete,productLike,follow
      */
     function appUpdateProfile(subProtocol){
-      CTRL.models.Base.profile.timer.reset();
       appAPI('updateProfile',null,null,subProtocol);
     }
     function appAPI(name, data, callback, subProtocol){
@@ -328,7 +327,7 @@ define(function (require, exports, module) {
       if (isApp) {
         callback && callback();
       } else {
-        CTRL.views.Base.msgbox.showDownload({
+        CTRL.views.Basic.msgbox.showDownload({
           yesCallback: function () {
             redirectToDownload(link || window.location.href);
           }

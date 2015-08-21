@@ -2,7 +2,7 @@ define(function (require, exports, module) {
   require('lib/zepto');
   require('lib/Core');
 
-  var BaseController = require('./Controller/Controller');
+  var BasicController = require('./Controller/Controller');
   var HomeController = require('./Controller/HomeController');
   var UserController = require('./Controller/UserController');
   //__INSERT_POINT__ Don't delete!!

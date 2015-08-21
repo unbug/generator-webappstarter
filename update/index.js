@@ -29,12 +29,20 @@ module.exports = yeoman.generators.Base.extend({
       this.log('updating "./src/widget" directory');
       this.directory('../../app/templates/app/src/widget', './src/widget');
     },
+    reqirejs: function () {
+      this.log('updating reqirejs files');
+      this.copy('../../app/templates/app/src/almond.js', './src/almond.js');
+      this.copy('../../app/templates/app/src/require.js', './src/require.js');
+      this.copy('../../app/templates/app/src/require-config.js', './src/require-config.js');
+    },
     app: function(){
       this.log('updating some files in "./src/app/" directory');
-      //copy Base Controller.js
+      //copy Basic Controller.js
       this.copy('../../app/templates/app/src/app/controller/Controller.js', './src/app/controller/Controller.js');
-      //copy Base View.js
+      //copy Basic View.js
       this.copy('../../app/templates/app/src/app/view/View.js', './src/app/view/View.js');
+      //copy Basic Model.js
+      this.copy('../../app/templates/app/src/app/model/Model.js', './src/app/model/Model.js');
     },
     scss: function(){
       this.log('updating some files in "./scss/" directory');
@@ -43,12 +51,16 @@ module.exports = yeoman.generators.Base.extend({
       this.copy('../../app/templates/app/scss/_debug-components.scss','./scss/_debug-components.scss');
       this.copy('../../app/templates/app/scss/_debug-slide.scss','./scss/_debug-slide.scss');
       this.copy('../../app/templates/app/scss/_debug-msgbox.scss','./scss/_debug-msgbox.scss');
+      this.copy('../../app/templates/app/scss/_debug-tooltip.scss','./scss/_debug-tooltip.scss');
       this.copy('../../app/templates/app/scss/_debug-animate.scss','./scss/_debug-animate.scss');
       this.copy('../../app/templates/app/scss/_debug-button.scss','./scss/_debug-button.scss');
     },
     html: function(){
       this.log('updating some files in "./html/" directory');
       this.copy('../../app/templates/app/html/site/include/msgbox.html','./html/site/include/msgbox.html');
+      this.copy('../../app/templates/app/html/site/include/tooltip.html','./html/site/include/tooltip.html');
+      this.copy('../../app/templates/app/html/site/include/components.html','./html/site/include/components.html');
+      this.copy('../../app/templates/app/html/site/include/download.html','./html/site/include/download.html');
       this.copy('../../app/templates/app/html/site/include/scripts-version.html','./html/site/include/scripts-version.html');
       this.copy('../../app/templates/app/html/site/include/styles-version.html','./html/site/include/styles-version.html');
     }

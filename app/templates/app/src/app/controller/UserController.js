@@ -1,15 +1,17 @@
 define(function (require, exports, module) {
   var Actions = require('../resources/Actions');
-  var BaseModel = require('app/model/Model');
-  var BaseView = require('app/view/View');
+  var BasicModel = require('app/model/Model');
+  var UserModel = require('app/model/UserModel');
+  var BasicView = require('app/view/View');
   var UserView = require('app/view/UserView');
 
   function UserController() {
     this.models = {
-      Base: BaseModel
+      Basic: BasicModel,
+      User: UserModel
     }
     this.views = {
-      Base: BaseView,
+      Basic: BasicView,
       User: UserView
     };
 
@@ -41,19 +43,19 @@ define(function (require, exports, module) {
       viewUserQuery = req.query;
       CTRL.views.User.show();
 
-      CTRL.views.Base.msgbox.hideLoading();
-      CTRL.models.Base.user.request({id: viewUserQuery.userid},afterRequestUser);
+      CTRL.views.Basic.msgbox.hideLoading();
+      CTRL.models.User.user.request({id: viewUserQuery.userid},afterRequestUser);
 
       //追加统计
       analyticsCurView();
     }
 
     function afterRequestUser(success) {
-      CTRL.views.Base.msgbox.hideLoading();
+      CTRL.views.Basic.msgbox.hideLoading();
       if (success) {
-        CTRL.models.Base.updateModelTimeout('user');
+        CTRL.models.User.user.timer.update();
       } else {
-        CTRL.views.Base.msgbox.showFailed();
+        CTRL.views.Basic.msgbox.showFailed();
       }
     }
 

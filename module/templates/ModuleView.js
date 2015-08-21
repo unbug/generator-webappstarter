@@ -1,20 +1,19 @@
 define(function (require, exports, module) {
   var Templates = require('app/resources/Templates');
-  var BaseView = require('app/view/View');
-  var BaseModel = require('app/model/Model');
+  var BasicView = require('app/view/View');
+  var BasicModel = require('app/model/Model');
 
-
-  function <%=moduleName%>View(owner){
+  function <%=moduleName%>View(){
     this.models = {
-      Base: BaseModel
+      Basic: BasicModel
     }
     this.viewCls = 'view-<%=lmoduleName%>';
-    this._owner = owner;
+    this._BasicView = BasicView;
 
     var VIEW = this,
       isApp = Core.NativeBridge.isApp(),
       Tpl, els,
-      tap = VIEW._owner.tapEvent;
+      tap = VIEW._BasicView.tapEvent;
 
     //注册model观察者
 
@@ -47,7 +46,7 @@ define(function (require, exports, module) {
     this.show = function () {
       initResources();
 
-      VIEW._owner.show(VIEW.viewCls);
+      VIEW._BasicView.show(VIEW.viewCls);
     }
     this.hide = function () {
       if (!els) {
@@ -60,5 +59,5 @@ define(function (require, exports, module) {
     }//end render
 
   }//end View
-  return new <%=moduleName%>View(BaseView);
+  return new <%=moduleName%>View();
 });

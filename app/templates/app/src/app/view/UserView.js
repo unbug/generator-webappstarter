@@ -1,23 +1,24 @@
 define(function (require, exports, module) {
   var Templates = require('app/resources/Templates');
-  var BaseView = require('app/view/View');
-  var BaseModel = require('app/model/Model');
+  var BasicView = require('app/view/View');
+  var BasicModel = require('app/model/Model');
+  var UserModel = require('app/model/UserModel');
 
-
-  function UserView(owner) {
+  function UserView() {
     this.models = {
-      Base: BaseModel
+      Basic: BasicModel,
+      User: UserModel
     }
     this.viewCls = 'view-user';
-    this._owner = owner;
+    this._BasicView = BasicView;
 
     var VIEW = this,
       isApp = Core.NativeBridge.isApp(),
       Tpl, els,
-      tap = VIEW._owner.tapEvent;
+      tap = VIEW._BasicView.tapEvent;
 
     //注册model观察者
-    VIEW.models.Base.user.updated(render);
+    VIEW.models.User.user.updated(render);
 
     function initEls() {
       if (els) {
@@ -48,7 +49,7 @@ define(function (require, exports, module) {
     this.show = function () {
       initResources();
 
-      VIEW._owner.show(VIEW.viewCls);
+      VIEW._BasicView.show(VIEW.viewCls);
     }
     this.hide = function () {
       if (!els) {
@@ -58,7 +59,7 @@ define(function (require, exports, module) {
     function render(data) {
       initResources();
 
-      data = data || VIEW.models.Base.user.get();
+      data = data || VIEW.models.User.user.get();
 
       if (!data || !data.length) {
         return;
@@ -74,5 +75,5 @@ define(function (require, exports, module) {
 
 
   }//end View
-  return new UserView(BaseView);
+  return new UserView();
 });

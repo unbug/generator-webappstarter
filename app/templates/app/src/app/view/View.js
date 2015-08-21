@@ -5,11 +5,11 @@ define(function(require, exports, module) {
   var YiXinShare = require('util/YiXinShare');
   //var FacebookShare = require('util/FacebookShare');
 
-  var BaseModel = require('app/model/Model');
+  var BasicModel = require('app/model/Model');
 
-  function View(config){
+  function View(){
     this.models = {
-      Base: BaseModel
+      Basic: BasicModel
     }
 
     var VIEW = this,

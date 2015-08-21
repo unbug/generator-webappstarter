@@ -1,12 +1,10 @@
 define(function (require, exports, module) {
   var Actions = require('app/resources/Actions');
 
-  var OMODEL,
-    Mdl = Core.Class.Model,
+  var Mdl = Core.Class.Model,
     lcStorage = Core.localStorage,
     getJSON = Core.RequestHandler.getJSON,
-    postJSON = Core.RequestHandler.postJSON,
-    JSONP = Core.RequestHandler.JSONP;
+    postJSON = Core.RequestHandler.postJSON;
 
   function Model() {
     var MODEL = this,
@@ -71,36 +69,5 @@ define(function (require, exports, module) {
     this.modelUpdate = new Mdl();
 
   }
-
-  //剩余人数
-  Model.prototype.user = new Mdl({
-    request: function (data,callback) {
-      var _this = this;
-      getJSON({
-        data: data,
-        action: Actions.user,
-        complete: function (data) {
-          if (data.success) {
-            _this.set(data.data);
-          }
-          callback && callback(data.success);
-        }
-      });
-    }
-  });
-
-  //userInfo
-  Model.prototype.userInfo = new Mdl({
-    request: function (data,callback) {
-      JSONP({
-        action: Actions.user+'&callback=afterRequestUserInfo'
-      });
-    }
-  });
-  window.afterRequestUserInfo = function(data){
-    OMODEL.userInfo.set(data);
-  }
-
-  OMODEL = new Model;
-  return OMODEL;
+  return new Model;
 });

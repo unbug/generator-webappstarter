@@ -1,15 +1,15 @@
 define(function (require, exports, module) {
   var Actions = require('../resources/Actions');
-  var BaseModel = require('app/model/Model');
-  var BaseView = require('app/view/View');
+  var BasicModel = require('app/model/Model');
+  var BasicView = require('app/view/View');
   var <%=moduleName%>View = require('app/view/<%=moduleName%>View');
 
   function <%=moduleName%>Controller(){
     this.models = {
-      Base: BaseModel
+      Basic: BasicModel
     }
     this.views = {
-      Base: BaseView,
+      Basic: BasicView,
       <%=moduleName%>: <%=moduleName%>View
     }
 
