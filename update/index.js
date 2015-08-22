@@ -63,6 +63,9 @@ module.exports = yeoman.generators.Base.extend({
       this.copy('../../app/templates/app/html/site/include/download.html','./html/site/include/download.html');
       this.copy('../../app/templates/app/html/site/include/scripts-version.html','./html/site/include/scripts-version.html');
       this.copy('../../app/templates/app/html/site/include/styles-version.html','./html/site/include/styles-version.html');
+    },
+    other: function(){
+      this.copy('../../app/templates/app/README.md', './README.md');
     }
   }
 });

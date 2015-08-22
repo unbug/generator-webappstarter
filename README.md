@@ -69,11 +69,11 @@ More configurations,please take a look at "project" property of "package.json" f
 
 Project commands
 =================
-run
+run this command before you get started.
+
 ```shell
 npm install -g gulp
 ```
-before you get started.
 
 1.build project,watch change and start browserSync,run
 
@@ -104,29 +104,29 @@ View the page on offical server [http://m.deja.me/PROJECTNAME/](http://m.deja.me
 This command require [rsync](https://rsync.samba.org/).
 For windows,unzip  /tools/rsync.zip to a local path and add the path to classpath.
 
-4.run 
+4.run this command to copy source images to project's `resources/images/` path,then generate `scss/_dubug-sprites.csss` and `resources/images/sprites.png` for sourceSprites in `package.json`.
+
 ```shell
 gulp copy
 ``` 
-to copy source images to project's `resources/images/` path,then generate `scss/_dubug-sprites.csss` and `resources/images/sprites.png` for sourceSprites in `package.json`.
 
-5.run 
+5.run this command to start jshint.
+
 ```shell
 gulp jshint
 ```
- to start jshint.
 
-6.run 
+6.run this command to start browserSync,Change browserSync options in `package.json`.
+
 ```shell
 gulp serve
 ``` 
-to start browserSync,Change browserSync options in `package.json`.
 
-7.run 
+7.run this command to start pagespeed,Change pagespeed options in `package.json`.
+
 ```shell
 gulp pagespeed
 ``` 
-to start pagespeed,Change pagespeed options in `package.json`.
 
 Git
 ==========
