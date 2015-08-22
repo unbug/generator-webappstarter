@@ -3,7 +3,6 @@ define(function (require, exports, module) {
   require('util/Easing');
   //require('util/AppCache');
 
-  var localStorage = require('core/LocalStorage');
   var Navigator = require('core/Navigator');
   var Subject = require('core/Subject');
   var MicroTmpl = require('core/MicroTmpl');
@@ -13,6 +12,7 @@ define(function (require, exports, module) {
   var HashHandler = require('core/HashHandler');
   var Event = require('core/Event');
 
+  var localStorage = require('util/LocalStorage');
   var LocalHost = require('util/LocalHost');
   var localParam = require('util/LocalParam');
   var MetaHandler = require('util/MetaHandler');
