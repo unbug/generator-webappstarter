@@ -29,10 +29,10 @@ define(function (require, exports, module) {
       if (lcst) {
         if (typeof id === 'object') {
           for (var key in id) {
-            id[key] && lcst.setItem(key, id[key]);
+            try{id[key] && lcst.setItem(key, id[key]);}catch(err){}
           }
         } else {
-          lcst.setItem(id, val);
+          try{lcst.setItem(id, val);}catch(err){}
         }
       }
       return this;
@@ -46,10 +46,10 @@ define(function (require, exports, module) {
       if (lcst) {
         if (typeof id === 'object') {
           for (var key in id) {
-            lcst.removeItem(id[key]);
+            try{lcst.removeItem(id[key]);}catch(err){}
           }
         } else {
-          lcst.removeItem(id);
+          try{lcst.removeItem(id);}catch(err){}
         }
       }
       return this;
