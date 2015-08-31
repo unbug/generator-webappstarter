@@ -6,7 +6,8 @@ define(function (require, exports, module) {
     Mdl = Core.Class.Model,
     lcStorage = Core.localStorage,
     getJSON = Core.RequestHandler.getJSON,
-    postJSON = Core.RequestHandler.postJSON;
+    postJSON = Core.RequestHandler.postJSON,
+    JSONP = Core.RequestHandler.JSONP;
 
   function User() {
 
