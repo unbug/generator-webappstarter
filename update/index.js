@@ -52,6 +52,7 @@ module.exports = yeoman.generators.Base.extend({
       this.copy('../../app/templates/app/scss/_debug-slide.scss','./scss/_debug-slide.scss');
       this.copy('../../app/templates/app/scss/_debug-msgbox.scss','./scss/_debug-msgbox.scss');
       this.copy('../../app/templates/app/scss/_debug-tooltip.scss','./scss/_debug-tooltip.scss');
+      this.copy('../../app/templates/app/scss/_debug-loading-spinner.scss','./scss/_debug-loading-spinner.scss');
       this.copy('../../app/templates/app/scss/_debug-animate.scss','./scss/_debug-animate.scss');
       this.copy('../../app/templates/app/scss/_debug-button.scss','./scss/_debug-button.scss');
     },
