@@ -51,7 +51,8 @@ define(function (require, exports, module) {
         dataType: 'jsonp',
         jsonp: false,
         jsonpCallback: false,
-        contentType: "application/json"
+        contentType: "application/json",
+        data: option.data || null//空值设置null避免向后端发送undefined无用参数
       });
     }
 
