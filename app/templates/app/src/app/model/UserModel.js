@@ -1,39 +1,25 @@
 define(function (require, exports, module) {
+  var RequestHelper = require('app/model/RequestHelper');
   var Actions = require('app/resources/Actions');
   var Basic = require('app/model/Model');
 
   var USER,
     Mdl = Core.Class.Model,
-    lcStorage = Core.localStorage,
-    getJSON = Core.RequestHandler.getJSON,
-    postJSON = Core.RequestHandler.postJSON,
-    JSONP = Core.RequestHandler.JSONP;
+    lcStorage = Core.localStorage;
 
   function User() {
 
   }
 
-  //剩余人数
   User.prototype.user = new Mdl({
     request: function (data,callback) {
-      var _this = this;
-      getJSON({
-        data: data,
-        action: Actions.user,
-        complete: function (data) {
-          if (data.success) {
-            _this.set(data.data);
-          }
-          callback && callback(data.success);
-        }
-      });
+      RequestHelper.request(Actions.user,data,callback,this);
     }
   });
 
-  //userInfo
   User.prototype.userInfo = new Mdl({
     request: function (data,callback) {
-      JSONP({
+      RequestHelper.JSONP({
         action: Actions.user+'&callback=afterRequestUserInfo'
       });
     }

@@ -1,11 +1,9 @@
 define(function (require, exports, module) {
+  var RequestHelper = require('app/model/RequestHelper');
   var Actions = require('app/resources/Actions');
 
   var Mdl = Core.Class.Model,
-    lcStorage = Core.localStorage,
-    getJSON = Core.RequestHandler.getJSON,
-    postJSON = Core.RequestHandler.postJSON,
-    JSONP = Core.RequestHandler.JSONP;
+    lcStorage = Core.localStorage;
 
   function Model() {
     var MODEL = this,

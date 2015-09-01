@@ -43,6 +43,7 @@ module.exports = yeoman.generators.Base.extend({
       this.copy('../../app/templates/app/src/app/view/View.js', './src/app/view/View.js');
       //copy Basic Model.js
       this.copy('../../app/templates/app/src/app/model/Model.js', './src/app/model/Model.js');
+      this.copy('../../app/templates/app/src/app/model/RequestHelper.js', './src/app/model/RequestHelper.js');
     },
     scss: function(){
       this.log('updating some files in "./scss/" directory');
