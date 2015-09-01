@@ -151,9 +151,9 @@ define(function (require, exports, module) {
       }
     }
 
-    function onLogin(arg,msg) {
+    function onLogin(arg,msg,callback) {
       if (isApp) {
-        appLogin();
+        appLogin(callback);
       } else {
         CTRL.views.Basic.msgbox.showSignin({
           msg: msg,
@@ -222,13 +222,17 @@ define(function (require, exports, module) {
         .replace('{PF}', pf));
     }
 
-    function appLogin(){
+    function appLogin(callback){
       Core.NativeBridge.login(null, function (rs) {
         if (rs) {
           CTRL.models.Basic.saveLoginCookieTimeout();
           CTRL.models.Basic.modelUpdate.timer.resetAll();
           CTRL.models.Basic.setAppUserMeta(rs);
-          Core.Router.run();
+          if(callback){
+            callback();
+          }else{
+            Core.Router.run();
+          }
         }
       });
     }
