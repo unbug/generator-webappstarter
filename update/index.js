@@ -68,6 +68,7 @@ module.exports = yeoman.generators.Base.extend({
       this.copy('../../app/templates/app/html/site/include/styles-version.html','./html/site/include/styles-version.html');
     },
     other: function(){
+      this.copy('../../app/templates/app/gulpfile.js', './gulpfile.js');
       this.copy('../../app/templates/app/README.md', './README.md');
     }
   }
