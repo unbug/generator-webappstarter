@@ -1,5 +1,4 @@
 define(function (require, exports, module) {
-  var Templates = require('app/resources/Templates');
   var BasicView = require('app/view/View');
   var BasicModel = require('app/model/Model');
 
@@ -13,31 +12,35 @@ define(function (require, exports, module) {
 
     var VIEW = this,
       isApp = Core.NativeBridge.isApp(),
-      Tpl, els, viewParam,
+      Tpl, els,
       tap = VIEW._BasicView.tapEvent;
 
     //注册model观察者
 
     function initEls() {
-      if (els) {
-        return;
-      }
-      var main = $('.view-home');
+      if(els){return;}
+      var main = VIEW._BasicView.getView(VIEW.viewCls);
       els = {
-        //body: $('body'),
         main: main
 
       }
       bindEvent();
     }//end initEls
-    function initResources() {
-      Tpl = new Templates.Home;
-      viewParam = '';
-      initEls();
+    function initTpls(){
+      if(Tpl){return;}
+      Tpl = Tpl || VIEW._BasicView.getTemplates(VIEW.viewCls);
     }
-
+    function initResources() {
+      initEls();
+      initTpls();
+    }
     this.getEls = function () {
+      initEls();
       return els;
+    }
+    this.getTpls = function(){
+      initTpls();
+      return Tpl;
     }
     function bindEvent() {
 

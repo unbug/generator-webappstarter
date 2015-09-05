@@ -43,7 +43,6 @@ yo webappstarter
 //add "scss/_debug-modulename.scss" and import it to "scss/_debug-view.scss"
 //add "src/app/view/ModuleNameView.js"
 //add "src/app/controller/ModuleNameController.js" and require it in src/app/App.js
-//add "src/app/resources/TemplateModuleName.js and require it in src/app/resources/Templates.js
 
 yo webappstarter:module ModuleName
 ```

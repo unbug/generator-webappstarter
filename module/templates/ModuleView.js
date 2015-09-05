@@ -1,5 +1,4 @@
 define(function (require, exports, module) {
-  var Templates = require('app/resources/Templates');
   var BasicView = require('app/view/View');
   var BasicModel = require('app/model/Model');
 
@@ -18,29 +17,31 @@ define(function (require, exports, module) {
     //注册model观察者
 
     function initEls() {
-      if (els) {
-        return;
-      }
-      var main = $('.view-<%=lmoduleName%>');
+      if(els){return;}
+      var main = VIEW._BasicView.getView(VIEW.viewCls);
       els = {
-        //body: $('body'),
-        main: main,
-
-        list: main.find('.list'),
-        back: main.find('.back')
+        main: main
       }
       bindEvent();
     }//end initEls
-    function initResources() {
-      Tpl = new Templates.<%=moduleName%>;
-      initEls();
+    function initTpls(){
+      if(Tpl){return;}
+      Tpl = Tpl || VIEW._BasicView.getTemplates(VIEW.viewCls);
     }
-
+    function initResources() {
+      initEls();
+      initTpls();
+    }
     this.getEls = function () {
+      initEls();
       return els;
     }
+    this.getTpls = function(){
+      initTpls();
+      return Tpl;
+    }
     function bindEvent() {
-      els.back.on(tap, Core.Router.back);
+
     }//end bindEvent
 
     this.show = function () {

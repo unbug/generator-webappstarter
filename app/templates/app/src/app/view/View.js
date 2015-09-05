@@ -45,6 +45,24 @@ define(function(require, exports, module) {
     this.getEls = function(){
       return els;
     }
+    this.getView = function(viewCls){
+      viewCls = '.'+viewCls;
+      return els.views.filter(viewCls);
+    }
+    this.getTemplates = function(viewCls){
+      var el = this.getView(viewCls);
+      if(el.$Templates){return el.$Templates;}
+      var Templates = {};
+      el.find('*[data-template]').each(function(){
+        var key = $(this),
+          name = key.attr('data-template');
+        if(name){
+          Templates[name] = Core.microTmpl(key.text());
+        }
+      });
+      el.$Templates = Templates;
+      return Templates;
+    }
     function bindEvent(){
       document.addEventListener('touchmove', function (e) {
         VIEW.GlobalTouch.preventMove && e.preventDefault();
@@ -94,11 +112,8 @@ define(function(require, exports, module) {
     this.show = function(viewCls){
       this.hide();
 
-      els.views.each(function(){
-        var view = $(this);
-        view.hasClass(viewCls) && view.addClass('show');
-      });
-      $('.footer-section').removeClass('hide');
+      var view = this.getView(viewCls);
+      view.hasClass(viewCls) && view.addClass('show');
       return this;
     }
     this.hide = function(){

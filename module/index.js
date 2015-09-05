@@ -51,12 +51,6 @@ module.exports = yeoman.generators.Base.extend({
       file = htmlWiring.readFileAsString('src/app/App.js');
       file = file.replace('//__INSERT_POINT__',["var "+this.moduleName+"Controller = require('./Controller/"+this.moduleName+"Controller');",'\n  //__INSERT_POINT__'].join(''));
       htmlWiring.writeFileFromString(file, 'src/app/App.js');
-
-      //make module template js and add toTemplates.js
-      this.template('TemplateModule.js', 'src/app/resources/Template' + this.moduleName + '.js');
-      file = htmlWiring.readFileAsString('src/app/resources/Templates.js');
-      file = file.replace('//__INSERT_POINT__',["Templates."+this.moduleName+" = require('./Template"+this.moduleName+"');",'\n  //__INSERT_POINT__'].join(''));
-      htmlWiring.writeFileFromString(file, 'src/app/resources/Templates.js');
     }
   }
 });

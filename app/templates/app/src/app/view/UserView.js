@@ -1,5 +1,4 @@
 define(function (require, exports, module) {
-  var Templates = require('app/resources/Templates');
   var BasicView = require('app/view/View');
   var BasicModel = require('app/model/Model');
   var UserModel = require('app/model/UserModel');
@@ -21,12 +20,9 @@ define(function (require, exports, module) {
     VIEW.models.User.user.updated(render);
 
     function initEls() {
-      if (els) {
-        return;
-      }
-      var main = $('.view-user');
+      if(els){return;}
+      var main = VIEW._BasicView.getView(VIEW.viewCls);;
       els = {
-        //body: $('body'),
         main: main,
 
         list: main.find('.list'),
@@ -34,13 +30,21 @@ define(function (require, exports, module) {
       }
       bindEvent();
     }//end initEls
-    function initResources() {
-      Tpl = new Templates.User;
-      initEls();
+    function initTpls(){
+      if(Tpl){return;}
+      Tpl = Tpl || VIEW._BasicView.getTemplates(VIEW.viewCls);
     }
-
+    function initResources() {
+      initEls();
+      initTpls();
+    }
     this.getEls = function () {
+      initEls();
       return els;
+    }
+    this.getTpls = function(){
+      initTpls();
+      return Tpl;
     }
     function bindEvent() {
       els.back.on(tap, Core.Router.back);
@@ -67,7 +71,7 @@ define(function (require, exports, module) {
 
       var list = [];
       data.forEach(function (key, index) {
-        list.push(Tpl.list.item(key));
+        list.push(Tpl.listItem(key));
       });
       els.list.html(list.join(''));
       list = null;
