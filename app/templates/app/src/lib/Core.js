@@ -1,6 +1,8 @@
 define(function (require, exports, module) {
   require('util/RequestAnimationFrame');
   require('util/Easing');
+  require('util/Unveil');
+  require('util/VirtualDOMLite');
   //require('util/AppCache');
 
   var Navigator = require('core/Navigator');
@@ -23,36 +25,32 @@ define(function (require, exports, module) {
   var Num = require('util/Number');
   var DateHandler = require('util/DateHandler');
 
-  function Core() {
-    var _Core = {
-      localStorage: localStorage,
-      localHost: LocalHost,
-      localParam: localParam,
-      Navigator: Navigator,
-      MetaHandler: MetaHandler,
-      Subject: Subject,
-      microTmpl: MicroTmpl(),
-      Class: Class,
-      extend: Class.extend,
-      HashHandler: HashHandler,
-      RequestHandler: RequestHandler,
-      NativeBridge: NativeBridge,
-      versionCompare: versionCompare,
-      Event: Event,
-      Router: Router,
+  var Core = {
+    localStorage: localStorage,
+    localHost: LocalHost,
+    localParam: localParam,
+    Navigator: Navigator,
+    MetaHandler: MetaHandler,
+    Subject: Subject,
+    microTmpl: MicroTmpl(),
+    Class: Class,
+    extend: Class.extend,
+    HashHandler: HashHandler,
+    RequestHandler: RequestHandler,
+    NativeBridge: NativeBridge,
+    versionCompare: versionCompare,
+    Event: Event,
+    Router: Router,
 
-      Num: Num,
-      randomList: randomList,
-      DateHandler: DateHandler
-    }
-
-    return _Core;
+    Num: Num,
+    randomList: randomList,
+    DateHandler: DateHandler
   };
-  window.Core = new Core();
 
   //开启客户端调试,无需客户端环境模拟客户端接口
   if (localParam().search['debug'] == 1) {
-    window.Core.NativeBridge.enableDebug();
+    Core.NativeBridge.enableDebug();
   }
-  return window.Core;
+  window.Core = Core;
+  return Core;
 });
