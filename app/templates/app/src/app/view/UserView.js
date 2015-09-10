@@ -16,7 +16,7 @@ define(function (require, exports, module) {
       Tpl, els,
       tap = VIEW._BasicView.tapEvent;
 
-    //注册model观察者
+    //model listeners
     VIEW.models.User.user.updated(render);
 
     function initEls() {
