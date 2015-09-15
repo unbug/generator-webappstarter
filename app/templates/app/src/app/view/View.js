@@ -3,7 +3,6 @@ define(function(require, exports, module) {
   var Msgbox = require('widget/Msgbox');
   var WechatShare = require('util/WechatShare');
   var YiXinShare = require('util/YiXinShare');
-  //var FacebookShare = require('util/FacebookShare');
 
   var BasicModel = require('app/model/Model');
 
@@ -23,8 +22,8 @@ define(function(require, exports, module) {
       Core.MetaHandler.fixViewportWidth();
       initEls();
       bindEvent();
-      els.body.css({'visibility': 'visible'});
       VIEW.hide();
+      els.body.css({'visibility': 'visible'});
     };//end init
 
     function initEls(){
@@ -46,8 +45,7 @@ define(function(require, exports, module) {
       return els;
     }
     this.getView = function(viewCls){
-      viewCls = '.'+viewCls;
-      return els.views.filter(viewCls);
+      return els.views.filter('.'+viewCls);
     }
     this.getTemplates = function(viewCls){
       var el = this.getView(viewCls);
@@ -110,14 +108,14 @@ define(function(require, exports, module) {
       });
     }
     this.show = function(viewCls){
-      this.hide();
+      this.hide(viewCls);
 
       var view = this.getView(viewCls);
-      view.hasClass(viewCls) && view.addClass('show');
+      !view.hasClass('show') && view.addClass('show');
       return this;
     }
-    this.hide = function(){
-      els.views.removeClass('show');
+    this.hide = function(notCls){
+      (notCls?els.views.not('.'+notCls):els.views).removeClass('show');
       return this;
     }
 
@@ -146,7 +144,6 @@ define(function(require, exports, module) {
 
       updateWechatShareMeta(option.title,option.summary,option.thumburl || option.imageurl);
       updateYiXinShareMeta(option.summary,option.thumburl || option.imageurl);
-      //updateFacebookShareMeta(option.link,option.title,option.text, option.imageurl);
       return this;
     }
 
@@ -169,21 +166,17 @@ define(function(require, exports, module) {
         img: img||Actions.dejaShareLogo
       });
     }
-    //function updateFacebookShareMeta( url, title, description, image){
-    //  FacebookShare({
-    //    url: url,
-    //    title: title,
-    //    description: description,
-    //    image: image ||Actions.dejaShareLogo
-    //  });
-    //}
 
     this.lazyLoadImg = function (el){
-      el && el.find("img").unveil( 200,function() {
-        this.onload = function() {
-          this.style.opacity = 1;
-        };
-      } );
+      el && setTimeout(function(){
+        el.find("img").unveil( 200,function() {
+          this.onload = function() {
+            if(/lazy/.test(this.className)){
+              this.style.opacity = 1;
+            }
+          }
+        } );
+      },0);
     }
 
     init();

@@ -85,6 +85,7 @@ a {
 .fix-break-word, p {
   @include blank-bg;
   background-color: transparent;
+  word-break: break-word;
 }
 
 .hide {
@@ -97,6 +98,9 @@ a {
 .lazy{
   opacity: 0;
   transition: opacity .3s ease-in;
+}
+.lazy[src]{
+  opacity: 1;
 }
 
 .default-active {
