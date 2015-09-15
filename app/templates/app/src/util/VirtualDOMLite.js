@@ -21,7 +21,9 @@ define(function (require, exports, module) {
         return applyDiff.call(this);
       }else{
         this._VDOM = 1;
-        return this.superHtml.apply(this,arguments);
+        var res = this.superHtml.apply(this,arguments);
+        this.eq(0).trigger('virtualdomrendered');
+        return res;
       }
     }
 
