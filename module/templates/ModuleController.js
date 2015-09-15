@@ -21,8 +21,7 @@ define(function (require, exports, module) {
     viewNames = {
       '<%=lmoduleName%>': '<%=moduleName%>'
     }
-    Core.Router.onChanged(onViewChanged)
-      .subscribe('/<%=lmoduleName%>/', onView<%=moduleName%>);
+    Core.Router.subscribe('/<%=lmoduleName%>/', onView<%=moduleName%>, unView<%=moduleName%>);
 
     //统计视图
     Core.Event.on('analyticsCurView', analyticsCurView);
@@ -30,10 +29,8 @@ define(function (require, exports, module) {
     Core.Event.on('forward<%=moduleName%>', forward<%=moduleName%>);
 
 
-    function onViewChanged() {
-      if (!Core.Router.currentMatch('/<%=lmoduleName%>/')) {
-        CTRL.views.<%=moduleName%>.hide();
-      }
+    function unView<%=moduleName%>() {
+      CTRL.views.<%=moduleName%>.hide();
     }
 
     function onView<%=moduleName%>(param, req){

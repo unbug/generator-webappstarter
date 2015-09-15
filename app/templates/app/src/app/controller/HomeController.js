@@ -21,19 +21,17 @@ define(function (require, exports, module) {
     viewNames = {
       'home': 'Home'
     }
-    Core.Router.onChanged(onViewChanged)
+    Core.Router
       .onUnsubscribed(onViewUnnamed)
-      .subscribe('/home/', onViewHome);
+      .subscribe('/home/', onViewHome, unViewHome);
 
     //统计视图
     Core.Event.on('analyticsCurView', analyticsCurView);
     //forwardHome
     Core.Event.on('forwardHome', forwardHome);
 
-    function onViewChanged() {
-      if (!Core.Router.currentMatch('/home/')) {
-        CTRL.views.Home.hide();
-      }
+    function unViewHome() {
+      CTRL.views.Home.hide();
     }
 
     function onViewUnnamed(param,req) {

@@ -29,12 +29,16 @@ define(function (require, exports, module) {
    */
   function Router(Pubsub, HashHandler) {
     var _Router = this,
+      subscribe = Pubsub.subscribe,
       android = /Android/gi.test(navigator.userAgent),
       iOS = /(iPad|iPhone|iPod)/gi.test(navigator.userAgent) && !android,
       UN_SUB_NAME = '__UN_SUBSCRIBED_ACTION',
       INIT_HASH_STR = formatHash(HashHandler.get()),
-      currentAction = INIT_HASH_STR,
+      currentHash,
+      currentHashStr = INIT_HASH_STR,
       currentQureyStr = '',
+      lastActionKey,
+      leavePrefix = '__',
       _isFroward = true,
       actionsHistory = [INIT_HASH_STR],
       isReady = false,
@@ -88,7 +92,8 @@ define(function (require, exports, module) {
         newHash: formatHash(HashHandler.getByURL(args.newURL)),
         oldHash: formatHash(HashHandler.getByURL(args.oldURL))
       }
-      currentAction = hash.curHash;
+      currentHash = hash;
+      currentHashStr = hash.curHash;
       setLastAction(hash.curHash);
       initCallback && initCallback(hash.curHash, hash);
       if (isReady) {
@@ -109,6 +114,7 @@ define(function (require, exports, module) {
             hash.curHash.replace(new RegExp('^'+key + '(.*)', 'g'), function ($1, $2) {
               if ($1) {
                 published = true;
+                lastActionKey = key;
                 Pubsub.publish(key, $2, {
                   action: key,
                   value: $2,
@@ -168,12 +174,22 @@ define(function (require, exports, module) {
 
     /**
      * 强制刷新
-     * 在无需引起 hash 变化情况下，强制执行与当前 hash 联调的所有主题一次
+     * 在无需引起 hash 变化情况下，强制执行与当前 hash 关联的所有主题一次
      * 流程：
      * 执行 onChanged 注册的所有事件 --> 执行 subscribe 注册的与 Hash 关联的所有事件
+     * 如果：action 不为空，则仅执行 subscribe 注册的与 action 关联的所有事件
+     * @param action {Array}|{String}
+     * @returns {Pubsub}
      */
-    function run() {
-      locationHashChanged();
+    function run(action) {
+      action?
+        Pubsub.publish(action, currentQureyStr, {
+          action: action,
+          value: currentQureyStr,
+          hash: currentHash,
+          query: getQuery()
+        })
+        :locationHashChanged();
       return Pubsub;
     }
 
@@ -182,7 +198,18 @@ define(function (require, exports, module) {
      * @param {Object} observer
      */
     function onUnsubscribed(observer) {
-      Pubsub.subscribe(UN_SUB_NAME, observer);
+      subscribe(UN_SUB_NAME, observer);
+      return Pubsub;
+    }
+    /**
+     * 订阅所有没有被注册的主题
+     * @param action {Array}|{String}
+     * @param {Object} observer
+     * @param {Object} observer
+     */
+    function onSubscribe(action,enterObserver,leaveObserver) {
+      subscribe(action, enterObserver);
+      leaveObserver && subscribe(leavePrefix+action, leaveObserver);
       return Pubsub;
     }
 
@@ -223,10 +250,12 @@ define(function (require, exports, module) {
     }
 
     function doChanged() {
-      var i = 0, l = changedCallbacks.length;
+      var i = 0,
+        l = changedCallbacks.length;
       for (; i < l; i++) {
         changedCallbacks[i].apply(undefined, arguments);
       }
+      lastActionKey && Pubsub.publish(leavePrefix+lastActionKey);
     }
 
     /**
@@ -270,11 +299,10 @@ define(function (require, exports, module) {
     }
 
     function setLastAction(action) {
-      var ac = actionsHistory.pop();
-      if (ac !== undefined && ac !== action) {
-        actionsHistory.push(ac);
+      var ac = [].concat.call(actionsHistory).pop();
+      if (ac != action) {
+        actionsHistory.push(action);
       }
-      actionsHistory.push(action);
     }
 
     function getLastAction() {
@@ -284,11 +312,10 @@ define(function (require, exports, module) {
     }
 
     function setFirstAction(action) {
-      var ac = actionsHistory.shift();
-      if (ac !== undefined && ac !== action) {
-        actionsHistory.unshift(ac);
+      var ac = [].concat.call(actionsHistory).shift();
+      if (ac != action) {
+        actionsHistory.unshift(action);
       }
-      actionsHistory.unshift(action);
     }
 
     function getFirstAction() {
@@ -320,21 +347,38 @@ define(function (require, exports, module) {
      * @param action {Array}|{String}
      * @returns {boolean}
      */
-    function currentMatch(action) {
+    function actionMatch(expected, actual) {
       var ac = [], i = 0, l;
-      if (typeof action === 'string') {
-        ac.push(action)
-      } else if (toString.call(action) == '[object Array]') {
-        ac = ac.concat(action)
+      if (typeof expected === 'string') {
+        ac.push(expected)
+      } else if (toString.call(expected) == '[object Array]') {
+        ac = ac.concat(expected)
       }
       l = ac.length;
       for (; i < l; i++) {
-        if ((new RegExp('^' + ac[i] + '(.*)', 'i')).test(currentAction || UN_SUB_NAME)) {
+        if ((new RegExp('^' + ac[i] + '(.*)', 'i')).test(actual)) {
           return true;
         }
-        ;
       }
       return false;
+    }
+    /**
+     * 校验是否存在与当前的 action 匹配的 action
+     * @param action {Array}|{String}
+     * @returns {boolean}
+     */
+    function currentMatch(action) {
+      return actionMatch(action,currentHashStr || UN_SUB_NAME);
+    }
+    /**
+     * 校验是否存在与上一个 action 匹配的 action
+     * @param action {Array}|{String}
+     * @returns {boolean}
+     */
+    function lastMatch(action) {
+      var last = [].concat.call(actionsHistory);
+      last.pop();
+      return actionMatch(action,last.pop() || UN_SUB_NAME);
     }
 
     Pubsub.initHash = INIT_HASH_STR;
@@ -344,8 +388,10 @@ define(function (require, exports, module) {
     Pubsub.back = back;
     Pubsub.isFroward = isFroward;
     Pubsub.currentMatch = currentMatch;
+    Pubsub.lastMatch = lastMatch;
     Pubsub.onReady = onReady;
     Pubsub.onChanged = onChanged;
+    Pubsub.subscribe = onSubscribe;
     Pubsub.onUnsubscribed = onUnsubscribed;
     Pubsub.getQuery = getQuery;
     Pubsub.getUnsubscribedAction = function () {

@@ -23,8 +23,7 @@ define(function (require, exports, module) {
     viewNames = {
       'user': 'User'
     }
-    Core.Router.onChanged(onViewChanged)
-      .subscribe('/user/', onViewUser);
+    Core.Router.subscribe('/user/', onViewUser, unViewUser);
 
     //统计视图
     Core.Event.on('analyticsCurView', analyticsCurView);
@@ -32,10 +31,8 @@ define(function (require, exports, module) {
     Core.Event.on('forwardUser', forwardUser);
 
 
-    function onViewChanged() {
-      if (!Core.Router.currentMatch('/user/')) {
-        CTRL.views.User.hide();
-      }
+    function unViewUser() {
+      CTRL.views.User.hide();
     }
 
     function onViewUser(param,req) {
