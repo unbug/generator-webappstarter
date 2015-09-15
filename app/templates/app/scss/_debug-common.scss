@@ -85,7 +85,11 @@ a {
 .fix-break-word, p {
   @include blank-bg;
   background-color: transparent;
+  word-break: break-all;
+  // Non standard for webkit
   word-break: break-word;
+  -webkit-hyphens: auto;
+  hyphens: auto;
 }
 
 .hide {
