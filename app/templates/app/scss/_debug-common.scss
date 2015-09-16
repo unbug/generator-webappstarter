@@ -102,6 +102,8 @@ a {
 .lazy{
   opacity: 0;
   transition: opacity .3s ease-in;
+  min-height: 1px;
+  min-width: 1px;
 }
 .lazy[src]{
   opacity: 1;
