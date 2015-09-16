@@ -26,10 +26,40 @@
       -webkit-box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.3);
       -webkit-border-radius: 5px;
       @include gpu-accelerate;
-      &.fadeIn{
+      &.fadeIn,&.flipInY,&.flipInX,&.slideInUp,&.slideInDown,&.zoomIn,&.fadeInLeft,&.fadeInRight,&.fadeInUp,&.fadeInDown{
         @include animated-1s;
         -webkit-animation-name: fadeIn;
         -webkit-animation-duration: 350ms;
+      }
+      &.fadeIn{
+        -webkit-animation-name: fadeIn;
+      }
+      &.flipInY{
+        -webkit-animation-name: flipInY;
+      }
+      &.flipInX{
+        -webkit-animation-name: flipInX;
+      }
+      &.slideInUp{
+        -webkit-animation-name: slideInUp;
+      }
+      &.slideInDown{
+        -webkit-animation-name: slideInDown;
+      }
+      &.zoomIn{
+        -webkit-animation-name: zoomIn;
+      }
+      &.fadeInLeft{
+        -webkit-animation-name: fadeInLeft;
+      }
+      &.fadeInRight{
+        -webkit-animation-name: fadeInRight;
+      }
+      &.fadeInUp{
+        -webkit-animation-name: fadeInUp;
+      }
+      &.fadeInDown{
+        -webkit-animation-name: fadeInDown;
       }
       >.arrow{
         position: absolute;
