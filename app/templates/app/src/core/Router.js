@@ -159,7 +159,7 @@ define(function (require, exports, module) {
               initCallback = null;
               setTimeout(function () {
                 ready();
-              });
+              },0);
             } else if (curHash === withAction) {
               forward(INIT_HASH_STR);
             }
@@ -198,7 +198,7 @@ define(function (require, exports, module) {
      * @param {Object} observer
      */
     function onUnsubscribed(observer) {
-      subscribe(UN_SUB_NAME, observer);
+      subscribe.call(Pubsub,UN_SUB_NAME, observer);
       return Pubsub;
     }
     /**
@@ -208,8 +208,8 @@ define(function (require, exports, module) {
      * @param {Object} observer
      */
     function onSubscribe(action,enterObserver,leaveObserver) {
-      subscribe(action, enterObserver);
-      leaveObserver && subscribe(leavePrefix+action, leaveObserver);
+      subscribe.call(Pubsub,action, enterObserver);
+      leaveObserver && subscribe.call(Pubsub,leavePrefix+action, leaveObserver);
       return Pubsub;
     }
 
