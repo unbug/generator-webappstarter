@@ -4,7 +4,7 @@ define(function (require, exports, module) {
 
     function getByURL(url) {
       var hash;
-      url && url.replace(new RegExp('#(.*)', 'g'), function ($1, $2) {
+      url && decodeURIComponent(url).replace(new RegExp('#(.*)', 'g'), function ($1, $2) {
         hash = $2;
       });
       return hash;
