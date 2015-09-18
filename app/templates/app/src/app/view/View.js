@@ -87,8 +87,8 @@ define(function(require, exports, module) {
       els.body.on(VIEW.tapEvent,'* [data-fake-link]',function(){
         Core.Event.trigger('redirect',this.getAttribute('data-fake-link'));
       });
-      els.body.on(VIEW.tapEvent,'* [data-analytics]',function(){
-        Core.Event.trigger('analyticsCurView',this.getAttribute('data-analytics'));
+      els.body.on(VIEW.tapEvent=='tap'?'touchstart':VIEW.tapEvent,'* [data-analytics]',function(){
+        Core.Event.trigger(this.getAttribute('data-analytics-global')?'analytics':'analyticsCurView',this.getAttribute('data-analytics'));
       });
       els.body.on(VIEW.tapEvent,'* [data-eventname]',function(){
         var ename = this.getAttribute('data-eventname'),
