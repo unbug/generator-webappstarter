@@ -129,13 +129,28 @@ define(function (require, exports, module) {
   }
 
   Class.extend(Subject, Model);
-  Model.prototype.set = function (data) {
+  Model.prototype.store = function(storeid,data){
+    this._storeCache = this._storeCache || {};
+    if(data && storeid){
+      if(typeof data == 'object' && toString.call(data) != '[object Array]'){
+        data.__STORE_ID = storeid;
+      }
+      this._storeCache[storeid] = data;
+    }
+  }
+  Model.prototype.set = function (data,storeid) {
     this.data = data;
+    if(storeid){
+      this.store(storeid,data);
+    }
     this.refresh();
     this.timer.update();
   }
   Model.prototype.get = function () {
     return this.data;
+  }
+  Model.prototype.getFromStoreById = function(storeid){
+    return storeid && this._storeCache && this._storeCache[storeid];
   }
   Class.Model = Model;
 
