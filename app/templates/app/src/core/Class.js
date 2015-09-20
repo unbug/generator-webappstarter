@@ -1,7 +1,12 @@
 define(function (require, exports, module) {
   var Subject = require('./Subject');
-  var Class = {};
+  var Class;
 
+  /**
+   * @param obj
+   * @param config
+   * @param promise
+   */
   function apply(obj, config, promise) {
     if (config) {
       var attr;
@@ -11,6 +16,12 @@ define(function (require, exports, module) {
     }
   }
 
+  /**
+   *
+   * @param obj
+   * @param config
+   * @param promise
+   */
   function applyIf(obj, config, promise) {
     if (config) {
       var attr;
@@ -22,9 +33,37 @@ define(function (require, exports, module) {
     }
   }
 
-  Class.apply = apply;
+  //http://stackoverflow.com/a/16788517/479039
+  function objectEquals(x, y) {
+    if (x === null || x === undefined || y === null || y === undefined) { return x === y; }
+    // after this just checking type of one would be enough
+    if (x.constructor !== y.constructor) { return false; }
+    // if they are functions, they should exactly refer to same one (because of closures)
+    if (x instanceof Function) { return x === y; }
+    // if they are regexps, they should exactly refer to same one (it is hard to better equality check on current ES)
+    if (x instanceof RegExp) { return x === y; }
+    if (x === y || x.valueOf() === y.valueOf()) { return true; }
+    if (Array.isArray(x) && x.length !== y.length) { return false; }
 
-  function extend() {
+    // if they are dates, they must had equal valueOf
+    if (x instanceof Date) { return false; }
+
+    // if they are strictly equal, they both need to be object at least
+    if (!(x instanceof Object)) { return false; }
+    if (!(y instanceof Object)) { return false; }
+
+    // recursive object equality check
+    var p = Object.keys(x);
+    return Object.keys(y).every(function (i) { return p.indexOf(i) !== -1; }) &&
+      p.every(function (i) { return objectEquals(x[i], y[i]); });
+  }
+
+  /**
+   *
+   * @param superClass
+   * @param subClass
+   */
+  var extend = (function() {
     var F = function () {
     };
     return function (superClass, subClass) {
@@ -38,10 +77,7 @@ define(function (require, exports, module) {
       }
       return subClass;
     }
-  }
-
-  Class.extend = extend();
-
+  })();
   /**
    *
    * Model
@@ -77,12 +113,7 @@ define(function (require, exports, module) {
     this.updated = this.register;
     this.refresh = this.notify;
     this.data;
-    if (option) {
-      var attr;
-      for (attr in option) {
-        this[attr] = option[attr];
-      }
-    }
+    apply(this,option);
 
     //数据缓存更新
     this.updateFactory = function () {
@@ -127,8 +158,7 @@ define(function (require, exports, module) {
     }
     this.timer = new this.updateFactory;
   }
-
-  Class.extend(Subject, Model);
+  extend(Subject, Model);
   Model.prototype.store = function(storeid,data){
     this._storeCache = this._storeCache || {};
     if(data && storeid){
@@ -138,21 +168,52 @@ define(function (require, exports, module) {
       this._storeCache[storeid] = data;
     }
   }
-  Model.prototype.set = function (data,storeid) {
+  /**
+   *
+   * @param data
+   * @param storeid ,will cache in store,use getFromStoreById(storeid) to get access it
+   * @param diff ,if true,and nothing changed between the new data in the old data,data observers will not got notify
+   */
+  Model.prototype.set = function (data,storeid,diff) {
+    diff = diff && objectEquals(this.data,data);
     this.data = data;
     if(storeid){
       this.store(storeid,data);
     }
-    this.refresh();
+    !diff && this.refresh();
     this.timer.update();
   }
-  Model.prototype.get = function () {
-    return this.data;
+  /**
+   *
+   * @param clone will return a copy of the data
+   * @returns {*}
+   */
+  Model.prototype.get = function (clone) {
+    return (clone && typeof this.data=='object')?JSON.parse(JSON.stringify(this.data)):this.data;
   }
-  Model.prototype.getFromStoreById = function(storeid){
-    return storeid && this._storeCache && this._storeCache[storeid];
+  /**
+   *
+   * @param storeid
+   * @param clone ,will return a copy of the data
+   * @returns {*|{}}
+   */
+  Model.prototype.getFromStoreById = function(storeid,clone){
+    return storeid
+      && this._storeCache
+      && ( (clone && typeof this._storeCache[storeid]=='object')
+      ?JSON.parse(JSON.stringify(this._storeCache[storeid]))
+      :this._storeCache[storeid]);
   }
-  Class.Model = Model;
+  //end Model
 
+  Class = {
+    objectEquals: objectEquals,
+    apply: apply,
+    applyIf: applyIf,
+    extend: extend,
+    Model: Model
+  }
+  //end Class
+  
   return Class;
 });
