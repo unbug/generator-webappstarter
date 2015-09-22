@@ -305,10 +305,10 @@ define(function (require, exports, module) {
     function appUpdateProfile(subProtocol){
       appAPI('updateProfile',null,null,subProtocol);
     }
-    function appAPI(name, data, callback, subProtocol){
+    function appAPI(name, data, callback, subProtocol,redirect){
       if (isApp) {
         Core.NativeBridge.trigger.apply(null,arguments);
-      }else{
+      }else if(redirect){
         var proto = [name];
         subProtocol && proto.push(subProtocol);
         redirectToDownload(null,true,Actions.dejafashionSchema+proto.join('/'));
