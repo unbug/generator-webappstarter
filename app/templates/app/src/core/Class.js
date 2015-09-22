@@ -33,6 +33,47 @@ define(function (require, exports, module) {
     }
   }
 
+  // From https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys
+  if (!Object.keys) {
+    Object.keys = (function() {
+      'use strict';
+      var hasOwnProperty = Object.prototype.hasOwnProperty,
+        hasDontEnumBug = !({ toString: null }).propertyIsEnumerable('toString'),
+        dontEnums = [
+          'toString',
+          'toLocaleString',
+          'valueOf',
+          'hasOwnProperty',
+          'isPrototypeOf',
+          'propertyIsEnumerable',
+          'constructor'
+        ],
+        dontEnumsLength = dontEnums.length;
+
+      return function(obj) {
+        if (typeof obj !== 'object' && (typeof obj !== 'function' || obj === null)) {
+          throw new TypeError('Object.keys called on non-object');
+        }
+
+        var result = [], prop, i;
+
+        for (prop in obj) {
+          if (hasOwnProperty.call(obj, prop)) {
+            result.push(prop);
+          }
+        }
+
+        if (hasDontEnumBug) {
+          for (i = 0; i < dontEnumsLength; i++) {
+            if (hasOwnProperty.call(obj, dontEnums[i])) {
+              result.push(dontEnums[i]);
+            }
+          }
+        }
+        return result;
+      };
+    }());
+  }
   //http://stackoverflow.com/a/16788517/479039
   function objectEquals(x, y) {
     if (x === null || x === undefined || y === null || y === undefined) { return x === y; }
@@ -78,6 +119,46 @@ define(function (require, exports, module) {
       return subClass;
     }
   })();
+
+  function updateFactory(){
+    var lastUpdate = 0,
+      _timeout = 1000 * 60 * 5,
+      names = {};
+    /**
+     *
+     * @param timeout 时间倍数，默认是1
+     * @param name
+     * @returns {boolean}
+     */
+    this.isTimeout = function (timeout,name) {
+      timeout = _timeout * (timeout || 1);
+      name = name !== undefined?names[name]:lastUpdate;
+      return !name || ( (new Date().getTime()) - name > timeout );
+    }
+    this.update = function (name) {
+      var now = new Date().getTime();
+      if(name !== undefined){
+        if(names[name] === undefined){
+          this.reset(name);
+        }else{
+          names[name] = now;
+        }
+      }else{
+        lastUpdate = now;
+      }
+    }
+    this.reset = function (name) {
+      if(name !== undefined){
+        names[name] = 0;
+      }else{
+        lastUpdate = 0;
+      }
+    }
+    this.resetAll = function () {
+      names = {};
+      lastUpdate = 0;
+    }
+  }
   /**
    *
    * Model
@@ -116,47 +197,8 @@ define(function (require, exports, module) {
     apply(this,option);
 
     //数据缓存更新
-    this.updateFactory = function () {
-      var lastUpdate = 0,
-        _timeout = 1000 * 60 * 5,
-        names = {};
-      /**
-       *
-       * @param timeout 时间倍数，默认是1
-       * @param name
-       * @returns {boolean}
-       */
-      this.isTimeout = function (timeout,name) {
-        timeout = _timeout * (timeout || 1);
-        name = name !== undefined?names[name]:lastUpdate;
-        return !name || ( (new Date().getTime()) - name > timeout );
-      }
-      this.update = function (name) {
-        var now = new Date().getTime();
-        if(name !== undefined){
-          if(names[name] === undefined){
-            this.reset(name);
-          }else{
-            names[name] = now;
-          }
-        }else{
-          lastUpdate = now;
-        }
-      }
-      this.reset = function (name) {
-        if(name !== undefined){
-          names[name] = 0;
-        }else{
-          lastUpdate = 0;
-        }
-      }
-      this.resetAll = function () {
-        names = {};
-        lastUpdate = 0;
-      }
-      //end 数据缓存更新
-    }
-    this.timer = new this.updateFactory;
+    this.updateFactory = updateFactory;
+    this.timer = new updateFactory;
   }
   extend(Subject, Model);
   Model.prototype.store = function(storeid,data){
@@ -201,8 +243,8 @@ define(function (require, exports, module) {
     return storeid
       && this._storeCache
       && ( (clone && typeof this._storeCache[storeid]=='object')
-      ?JSON.parse(JSON.stringify(this._storeCache[storeid]))
-      :this._storeCache[storeid]);
+        ?JSON.parse(JSON.stringify(this._storeCache[storeid]))
+        :this._storeCache[storeid]);
   }
   //end Model
 
@@ -214,6 +256,6 @@ define(function (require, exports, module) {
     Model: Model
   }
   //end Class
-  
+
   return Class;
 });
