@@ -202,12 +202,12 @@ define(function (require, exports, module) {
   }
   extend(Subject, Model);
   Model.prototype.store = function(storeid,data){
-    this._storeCache = this._storeCache || {};
+    this._cacheStore = this._cacheStore || {};
     if(data && storeid){
       if(typeof data == 'object' && toString.call(data) != '[object Array]'){
         data.__STORE_ID = storeid;
       }
-      this._storeCache[storeid] = data;
+      this._cacheStore[storeid] = data;
     }
   }
   /**
@@ -241,10 +241,10 @@ define(function (require, exports, module) {
    */
   Model.prototype.getFromStoreById = function(storeid,clone){
     return storeid
-      && this._storeCache
-      && ( (clone && typeof this._storeCache[storeid]=='object')
-        ?JSON.parse(JSON.stringify(this._storeCache[storeid]))
-        :this._storeCache[storeid]);
+      && this._cacheStore
+      && ( (clone && typeof this._cacheStore[storeid]=='object')
+        ?JSON.parse(JSON.stringify(this._cacheStore[storeid]))
+        :this._cacheStore[storeid]);
   }
   //end Model
 
