@@ -60,6 +60,9 @@ module.exports = yeoman.generators.Base.extend({
     },
     html: function(){
       this.log('updating some files in "./html/" directory');
+      this.copy('../../app/templates/app/html/site/debug/index.html','./html/site/debug/index.html');
+      this.copy('../../app/templates/app/html/site/official/index.html','./html/site/official/index.html');
+      this.copy('../../app/templates/app/html/site/include/cache.manifest','./html/site/include/cache.manifest');
       this.copy('../../app/templates/app/html/site/include/msgbox.html','./html/site/include/msgbox.html');
       this.copy('../../app/templates/app/html/site/include/tooltip.html','./html/site/include/tooltip.html');
       this.copy('../../app/templates/app/html/site/include/components.html','./html/site/include/components.html');

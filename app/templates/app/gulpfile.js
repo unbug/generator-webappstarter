@@ -56,7 +56,7 @@ gulp.task('copy:source_imgs', function () {
     .pipe($.size({title: 'copy source images'}));
 });
 
-// generate sprites.png and _debug-sprites.scss
+//generate sprites.png and _debug-sprites.scss
 gulp.task('sprites', function () {
   return gulp.src(sourceSprites)
     .pipe(sprite({
@@ -107,6 +107,7 @@ gulp.task('watch', function () {
     else if (/.*\.html$/.test(event.path)) {
       runSequence('include:debug');
     }
+    runSequence('build_version','manifest');
   });
 
 });
@@ -206,6 +207,29 @@ gulp.task('uglifyjs', function () {
     .pipe($.size({title: 'uglifyjs'}));
 });
 
+//generate cache.manifest
+gulp.task('manifest', function (cb) {
+  var resources = ['src/app.js'];
+  gulp.src(['./resources/**/*.*'])
+    .pipe(through2.obj(function (file, enc, next) {
+      this.push(file.path.replace(__dirname+'/',''));
+      next();
+    }))
+    .on('data', function (data) {
+      resources.push(data)
+    })
+    .on('end', function () {
+      gulp.src(['./html/site/include/cache.manifest'])
+        .pipe($.replace(/_BUILD_VERSION_/g, buildVersion))
+        .pipe($.replace(/_GLOBAL_VERSION_/g, globalVersion))
+        .pipe($.replace(/_FILES_/g, resources.join('\n')))
+        .pipe(gulp.dest('./'))
+        .on('end', function () {
+          cb();
+        });
+    });
+});
+
 //compile html files
 gulp.task('include:debug', function () {
   return gulp.src(['./html/site/debug/*.html'])
@@ -219,6 +243,7 @@ gulp.task('include:debug', function () {
     .pipe($.replace(/_GLOBAL_VERSION_/g, globalVersion))
     .pipe($.replace(/_VIEWPORT_WIDTH_/g, viewport))
     .pipe($.replace(/_TITLE_/g, title))
+    .pipe($.replace(/_MANIFEST_/g, conf.project.manifest?'manifest="cache.manifest"':''))
     .pipe(gulp.dest('./'));
 });
 //compress html to dist
@@ -231,6 +256,7 @@ gulp.task('includes:official', function () {
     .pipe($.replace(/_GLOBAL_VERSION_/g, globalVersion))
     .pipe($.replace(/_VIEWPORT_WIDTH_/g, viewport))
     .pipe($.replace(/_TITLE_/g, title))
+    .pipe($.replace(/_MANIFEST_/g, conf.project.manifest?'manifest="cache.manifest"':''))
     .pipe(cachebust.references())
     .pipe($.minifyHtml({
       empty: true,
@@ -260,7 +286,13 @@ gulp.task('dist:images', function (cb) {
     .pipe(gulp.dest(distProjectPath + '/resources/'))
     .pipe($.size({title: 'images'}));
 });
-
+//copy cache.manifest to dist
+gulp.task('dist:manifest', function () {
+  return gulp.src('./cache.manifest')
+    .pipe(cachebust.references())
+    .pipe(gulp.dest(distProjectPath + '/'))
+    .pipe($.size({title: 'manifest'}));
+});
 //deploy to test server
 //view http://office.mozat.com:8081/m/PROJECTNAME/
 gulp.task('deploy:test', function (cb) {
@@ -318,7 +350,6 @@ gulp.task('_deploy:offical', function (cb) {
   });
 });
 
-
 // Lint JavaScript
 gulp.task('jshint', function () {
   return gulp.src(['./src/**/*.js', '!./src/*.js', '!./src/lib/zepto.js'])
@@ -334,6 +365,7 @@ gulp.task('serve', function () {
   browserSync(browserSyncOptions);
 
   gulp.watch(['./*.html'], reload);
+  gulp.watch(['./*.manifest'], reload);
   gulp.watch(['./src/*.js'], reload);
   gulp.watch(['./resources/**/*.css'], reload);
   gulp.watch(['./resources/**/*.*g'], reload);
@@ -372,10 +404,10 @@ gulp.task('prepare', function (cb) {
   runSequence('build_version', cb);
 });
 gulp.task('compile', function (cb) {
-  runSequence(['sass', 'requirejs', 'include:debug'], cb);
+  runSequence(['sass', 'requirejs', 'manifest', 'include:debug'], cb);
 });
 gulp.task('dist', function (cb) {
-  runSequence('clean:dist', 'build_version', 'dist:resources', 'dist:images', 'cssmin', 'uglifyjs', 'includes:official', '_endlog', cb);
+  runSequence('clean:dist', 'build_version', 'dist:resources', 'dist:images', 'cssmin', 'uglifyjs', 'manifest', 'dist:manifest','includes:official', '_endlog', cb);
 });
 gulp.task('default', function (cb) {
   runSequence('prepare', 'compile', 'watch', 'serve', cb);
