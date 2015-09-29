@@ -5,10 +5,10 @@ define(function (require, exports, module) {
   ;(function ($) {
     $.fn.superHtml = $.fn.html;
     $.fn.html = diffDOM
-      ?function (html,diff,diffOptions) {
+      ?function (html,diff) {
         if(diff && this._diffdom){
           var VDOM = this[0].cloneNode(),
-            VDD = new diffDOM(diffOptions),
+            VDD = new diffDOM(diff),
             VDiff;
           VDOM.innerHTML = html;
           VDiff = VDD.diff(this[0], VDOM);
