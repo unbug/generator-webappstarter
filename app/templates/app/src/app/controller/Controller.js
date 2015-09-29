@@ -94,6 +94,8 @@ define(function (require, exports, module) {
         if(CTRL.models.Basic.isLogined()){
           url += '&logined';
         }
+        url += '&t='+(new Date().getTime());
+
         Core.Navigator.protocol(url, true);
       }, 0);
     }
@@ -339,6 +341,12 @@ define(function (require, exports, module) {
       }
     }
 
+    /**
+     * open a web site in app,or just op
+     * @param link
+     * @param autoopen
+     * @param schema
+     */
     function redirectToDownload(link, autoopen, schema) {
       link = !!link && link!='0'? ('#url=dejafashion://web/' + link) : '';
       link = !!schema?('#url='+schema): link;
