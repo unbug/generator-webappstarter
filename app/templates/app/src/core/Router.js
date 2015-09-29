@@ -44,7 +44,9 @@ define(function (require, exports, module) {
       isReady = false,
       initCallback,
       readyCallbacks = [],
-      changedCallbacks = [];
+      changedCallbacks = [],
+      historyPositions = {},
+      anchorEl;
 
     //iOS使用pushstate,解决iOS7没有历史的问题
     if (iOS) {
@@ -52,14 +54,6 @@ define(function (require, exports, module) {
     } else {
       window.addEventListener('hashchange', locationHashChanged, false);
     }
-
-    //开启锚点，解决页面自动滚动的问题
-    var _st = document.createElement('style'),
-      _div = document.createElement('div');
-    _st.innerText = '.Router-anchor{position: fixed; top: 0; left: 0;}';
-    _div.className = 'Router-anchor';
-    document.body.appendChild(_st);
-    document.body.appendChild(_div);
 
     function getQuery(search) {
       search = search || currentQureyStr || '';
@@ -92,6 +86,7 @@ define(function (require, exports, module) {
         newHash: formatHash(HashHandler.getByURL(args.newURL)),
         oldHash: formatHash(HashHandler.getByURL(args.oldURL))
       }
+      setHistoryPosition();
       currentHash = hash;
       currentHashStr = hash.curHash;
       setLastAction(hash.curHash);
@@ -331,14 +326,23 @@ define(function (require, exports, module) {
      * @param id
      */
     function addAnchor(id) {
-      return;//暂时停用此功能
+      return;//暂停使用
+      
+      if(!anchorEl){
+        var st = document.createElement('style');
+        anchorEl = document.createElement('div');
+        st.innerText = '.Router-anchor{position: fixed; top: 0; left: 0;}';
+        anchorEl.className = 'Router-anchor';
+        document.body.appendChild(st);
+        document.body.appendChild(anchorEl);
+      }
 
-      var _d = document.createElement('div'), __d;
-      _d.id = id;
-      _div.appendChild(_d);
-      __d = document.getElementById(id);
-      if (__d && __d !== _d) {
-        _div.removeChild(_d);
+      var cd = document.createElement('div'),
+        od = document.getElementById(id);
+      cd.id = id;
+      anchorEl.appendChild(cd);
+      if (od) {
+        anchorEl.removeChild(od);
       }
     }
 
@@ -381,6 +385,23 @@ define(function (require, exports, module) {
       return actionMatch(action,last.pop() || UN_SUB_NAME);
     }
 
+    function setHistoryPosition(id,position){
+      id = id || currentHashStr;
+      if(id){
+        historyPositions[id] = position || window.pageYOffset || window.scrollY || document.body.scrollTop;
+      }
+    }
+
+    function getHistoryPosition(id){
+      id = id || currentHashStr;
+      return id && historyPositions[id];
+    }
+
+    function scrollToHistoryPosition(id){
+      window.scrollTo(0,getHistoryPosition(id)||1);
+      setHistoryPosition(id,0);
+    }
+
     Pubsub.initHash = INIT_HASH_STR;
     Pubsub.init = init;
     Pubsub.run = run;
@@ -394,6 +415,8 @@ define(function (require, exports, module) {
     Pubsub.subscribe = onSubscribe;
     Pubsub.onUnsubscribed = onUnsubscribed;
     Pubsub.getQuery = getQuery;
+    Pubsub.getHistoryPosition = getHistoryPosition;
+    Pubsub.scrollToHistoryPosition = scrollToHistoryPosition;
     Pubsub.getUnsubscribedAction = function () {
       return UN_SUB_NAME;
     };
