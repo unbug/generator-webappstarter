@@ -61,6 +61,7 @@ define(function(require, exports, module) {
       el.$Templates = Templates;
       return Templates;
     }
+
     function bindEvent(){
       document.addEventListener('touchmove', function (e) {
         VIEW.GlobalTouch.preventMove && e.preventDefault();
@@ -107,11 +108,13 @@ define(function(require, exports, module) {
         }
       });
     }
-    this.show = function(viewCls){
+    this.show = function(viewCls,autoRevert){
       this.hide(viewCls);
 
       var view = this.getView(viewCls);
       !view.hasClass('show') && view.addClass('show');
+      //auto scroll to history position
+      (autoRevert==undefined || autoRevert) && setTimeout(Core.Router.scrollToHistoryPosition,100);
       return this;
     }
     this.hide = function(notCls){
