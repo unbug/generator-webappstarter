@@ -110,9 +110,9 @@ define(function (require, exports, module) {
               if ($1) {
                 published = true;
                 lastActionKey = key;
-                Pubsub.publish(key, $2, {
+                Pubsub.publish(key, {
                   action: key,
-                  value: $2,
+                  param: $2,
                   hash: hash,
                   query: getQuery($2)
                 });
@@ -123,9 +123,9 @@ define(function (require, exports, module) {
         }
       }
       if (!published) {
-        Pubsub.publish(UN_SUB_NAME, hash.curHash, {
+        Pubsub.publish(UN_SUB_NAME, {
           action: hash.curHash,
-          value: hash.curHash,
+          param: hash.curHash,
           hash: hash,
           query: getQuery(hash.curHash)
         });
@@ -178,9 +178,9 @@ define(function (require, exports, module) {
      */
     function run(action) {
       action?
-        Pubsub.publish(action, currentQureyStr, {
+        Pubsub.publish(action, {
           action: action,
-          value: currentQureyStr,
+          param: currentQureyStr,
           hash: currentHash,
           query: getQuery()
         })
@@ -327,7 +327,7 @@ define(function (require, exports, module) {
      */
     function addAnchor(id) {
       return;//暂停使用
-      
+
       if(!anchorEl){
         var st = document.createElement('style');
         anchorEl = document.createElement('div');

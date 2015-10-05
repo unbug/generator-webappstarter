@@ -34,12 +34,12 @@ define(function (require, exports, module) {
       CTRL.views.Home.hide();
     }
 
-    function onViewUnnamed(param,req) {
-      onViewHome(param,req);
+    function onViewUnnamed(req) {
+      onViewHome(req);
       Core.Event.trigger('analytics');
     }
 
-    function onViewHome(param,req) {
+    function onViewHome(req) {
       curViewId = 'home';
       viewHomeQuery = req.query;
       CTRL.views.Home.show();

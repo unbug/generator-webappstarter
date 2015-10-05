@@ -35,7 +35,7 @@ define(function (require, exports, module) {
       CTRL.views.User.hide();
     }
 
-    function onViewUser(param,req) {
+    function onViewUser(req) {
       curViewId = 'user';
       viewUserQuery = req.query;
       CTRL.views.User.show();

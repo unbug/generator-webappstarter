@@ -33,7 +33,7 @@ define(function (require, exports, module) {
       CTRL.views.<%=moduleName%>.hide();
     }
 
-    function onView<%=moduleName%>(param, req){
+    function onView<%=moduleName%>(req){
       curViewId = '<%=lmoduleName%>';
       view<%=moduleName%>Query = req.query;
       CTRL.views.<%=moduleName%>.show();
