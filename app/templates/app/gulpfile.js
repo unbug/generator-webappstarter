@@ -424,9 +424,13 @@ gulp.task('deploy', function (cb) {
 //deploy to offical server
 gulp.task('deployrc', function (cb) {
   distProjectPath = distProjectPath +'_rc';
-  runSequence('dist', 'deploy:offical', cb);
+  runSequence('deploy', cb);
 });
 //deploy to offical server from home
 gulp.task('_deploy', function (cb) {
   runSequence('dist', '_deploy:offical', cb);
+});
+gulp.task('_deployrc', function (cb) {
+  distProjectPath = distProjectPath +'_rc';
+  runSequence('_deploy', cb);
 });
