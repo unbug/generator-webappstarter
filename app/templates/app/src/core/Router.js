@@ -108,6 +108,7 @@ define(function (require, exports, module) {
           if (key !== UN_SUB_NAME) {
             hash.curHash.replace(new RegExp('^'+key + '(.*)', 'g'), function ($1, $2) {
               if ($1) {
+                currentQureyStr = $2;
                 published = true;
                 lastActionKey = key;
                 Pubsub.publish(key, {
@@ -116,7 +117,6 @@ define(function (require, exports, module) {
                   hash: hash,
                   query: getQuery($2)
                 });
-                currentQureyStr = $2;
               }
             });
           }
