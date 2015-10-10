@@ -1,7 +1,6 @@
 define(function (require, exports, module) {
   require('lib/zepto');
   require('lib/Core');
-  //require('util/AppCache');
 
   var BasicController = require('./Controller/Controller');
   var HomeController = require('./Controller/HomeController');

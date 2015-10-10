@@ -3,7 +3,6 @@ define(function (require, exports, module) {
   require('util/Easing');
   require('util/Unveil');
   require('util/VirtualDOMLite');
-  //require('util/AppCache');
 
   var Navigator = require('core/Navigator');
   var Subject = require('core/Subject');

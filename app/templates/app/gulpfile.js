@@ -10,7 +10,7 @@ var del = require('del');
 var pem = require('pem');
 var rsync = require('rsync');
 var pngquant = require('imagemin-pngquant');
-var sprite = require('css-sprite').stream;
+var sprite = require('sprity');
 var runSequence = require('run-sequence');
 var browserSync = require('browser-sync');//http://www.browsersync.io/docs/gulp/
 var reload = browserSync.reload;
@@ -58,13 +58,12 @@ gulp.task('copy:source_imgs', function () {
 
 //generate sprites.png and _debug-sprites.scss
 gulp.task('sprites', function () {
-  return gulp.src(sourceSprites)
-    .pipe(sprite({
-      name: 'sprites',
-      style: '_debug-sprites.scss',
-      cssPath: '../images/',
-      processor: 'css'
-    }))
+  return sprite.src({
+    src: sourceSprites,
+    style: '_debug-sprites.scss',
+    cssPath: '../images/',
+    processor: 'css'
+  })
     .pipe($.if('*.png', gulp.dest('./resources/images/'), gulp.dest('./scss/')))
     .pipe($.size({title: 'sprites'}));
 });
@@ -159,9 +158,15 @@ gulp.task('cssmin', function () {
 //https://github.com/RobinThrift/gulp-requirejs/issues/5
 //npm install git://github.com/bleadof/gulp-requirejs#end-stream-and-emit-error --save-dev
 gulp.task('requirejs', function (cb) {
+  var files = [];
+  //enable manifest
+  if(conf.project.manifest){
+    files.push('util/AppCache.js');
+  }
+  files.push('app/App.js');
   return $.requirejs({
     baseUrl: './src',
-    include: ['app/App.js'],
+    include: files,
     insertRequire: ['app/App.js'],
     out: 'app.js',
     optimize: 'none',
@@ -181,9 +186,15 @@ gulp.task('requirejs', function (cb) {
 
 //compress js to dist
 gulp.task('uglifyjs', function () {
+  var files = [];
+  //enable manifest
+  if(conf.project.manifest){
+    files.push('util/AppCache.js');
+  }
+  files.push('app/App.js');
   return $.requirejs({
     baseUrl: './src',
-    include: ['app/App.js'],
+    include: files,
     out: 'app.js',
     optimize: 'none',
     wrap: true
@@ -206,6 +217,7 @@ gulp.task('uglifyjs', function () {
     .pipe(gulp.dest(distProjectPath + '/src/'))
     .pipe($.size({title: 'uglifyjs'}));
 });
+
 
 //generate cache.manifest
 gulp.task('manifest', function (cb) {
