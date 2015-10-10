@@ -75,6 +75,7 @@ yo webappstarter:update
  
 
 More configurations,please take a look at "project" property of "package.json" file after the generator is done.
+Run ```gulp``` to re-build project is required after change the "package.json" file.
 
 Project commands
 =================
