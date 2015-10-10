@@ -53,6 +53,7 @@ define(function (require, exports, module) {
     this.show = function () {
       initResources();
 
+      Core.Event.trigger('trigerAnimate',els.main);
       VIEW._BasicView.show(VIEW.viewCls);
     }
     this.hide = function () {

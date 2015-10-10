@@ -50,9 +50,8 @@ define(function (require, exports, module) {
       initResources();
 
       if (!els.main.hasClass('show')) {
-        VIEW._BasicView.show(VIEW.viewCls);
-
         Core.Event.trigger('trigerAnimate', els.main);
+        VIEW._BasicView.show(VIEW.viewCls);
       }
     }
     this.hide = function () {
