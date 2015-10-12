@@ -10,7 +10,7 @@ var del = require('del');
 var pem = require('pem');
 var rsync = require('rsync');
 var pngquant = require('imagemin-pngquant');
-var sprite = require('sprity');
+var sprite = require('css-sprite').stream;
 var runSequence = require('run-sequence');
 var browserSync = require('browser-sync');//http://www.browsersync.io/docs/gulp/
 var reload = browserSync.reload;
@@ -58,12 +58,13 @@ gulp.task('copy:source_imgs', function () {
 
 //generate sprites.png and _debug-sprites.scss
 gulp.task('sprites', function () {
-  return sprite.src({
-    src: sourceSprites,
-    style: '_debug-sprites.scss',
-    cssPath: '../images/',
-    processor: 'css'
-  })
+  return gulp.src(sourceSprites)
+    .pipe(sprite({
+      name: 'sprites',
+      style: '_debug-sprites.scss',
+      cssPath: '../images/',
+      processor: 'css'
+    }))
     .pipe($.if('*.png', gulp.dest('./resources/images/'), gulp.dest('./scss/')))
     .pipe($.size({title: 'sprites'}));
 });
