@@ -23,15 +23,15 @@ define(function (require, exports, module) {
         var source = this.getAttribute(attrib);
         source = source || this.getAttribute("data-src");
         if (source) {
-          this.setAttribute("src", source);
           if (typeof callback === "function") callback.call(this);
+          this.setAttribute("src", source);
         }
       });
 
       function unveil() {
         var inview = images.filter(function () {
           var $e = $(this);
-          if ($e.is(":hidden")) return;
+          //if ($e.is(":hidden")) return;
 
           var wt = $w.scrollTop(),
             wb = wt + $w.height(),
