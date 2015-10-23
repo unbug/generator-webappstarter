@@ -22,7 +22,7 @@ define(function (require, exports, module) {
       'home': 'Home'
     }
     Core.Router
-      .onUnsubscribed(onViewUnnamed)
+      .onUnsubscribed(onViewUnnamed,unViewUnnamed)
       .subscribe('/home/', onViewHome, unViewHome);
 
     //统计视图
@@ -30,6 +30,10 @@ define(function (require, exports, module) {
     //forwardHome
     Core.Event.on('forwardHome', forwardHome);
 
+    function unViewUnnamed() {
+      unViewHome();
+    }
+    
     function unViewHome() {
       CTRL.views.Home.hide();
     }

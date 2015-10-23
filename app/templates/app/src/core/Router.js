@@ -35,7 +35,7 @@ define(function (require, exports, module) {
       UN_SUB_NAME = '__UN_SUBSCRIBED_ACTION',
       INIT_HASH_STR = formatHash(HashHandler.get()),
       currentHash,
-      currentHashStr = INIT_HASH_STR,
+      currentHashStr = INIT_HASH_STR || UN_SUB_NAME,
       currentQureyStr = '',
       lastActionKey,
       leavePrefix = '__',
@@ -88,7 +88,7 @@ define(function (require, exports, module) {
       }
       setHistoryPosition();
       currentHash = hash;
-      currentHashStr = hash.curHash;
+      currentHashStr = hash.curHash || UN_SUB_NAME;
       setLastAction(hash.curHash);
       initCallback && initCallback(hash.curHash, hash);
       if (isReady) {
@@ -123,6 +123,7 @@ define(function (require, exports, module) {
         }
       }
       if (!published) {
+        lastActionKey = UN_SUB_NAME;
         Pubsub.publish(UN_SUB_NAME, {
           action: hash.curHash,
           param: hash.curHash,
@@ -192,8 +193,8 @@ define(function (require, exports, module) {
      * 订阅所有没有被注册的主题
      * @param {Object} observer
      */
-    function onUnsubscribed(observer) {
-      subscribe.call(Pubsub,UN_SUB_NAME, observer);
+    function onUnsubscribed(enterObserver,leaveObserver) {
+      onSubscribe(UN_SUB_NAME,enterObserver,leaveObserver);
       return Pubsub;
     }
     /**
