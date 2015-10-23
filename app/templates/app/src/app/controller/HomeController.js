@@ -33,7 +33,7 @@ define(function (require, exports, module) {
     function unViewUnnamed() {
       unViewHome();
     }
-    
+
     function unViewHome() {
       CTRL.views.Home.hide();
     }
