@@ -46,6 +46,7 @@ define(function (require, exports, module) {
       readyCallbacks = [],
       changedCallbacks = [],
       historyPositions = {},
+      historyTitles = {},
       anchorEl;
 
     //iOS使用pushstate,解决iOS7没有历史的问题
@@ -87,6 +88,7 @@ define(function (require, exports, module) {
         oldHash: formatHash(HashHandler.getByURL(args.oldURL))
       }
       setHistoryPosition();
+      setHistoryTitle();
       currentHash = hash;
       currentHashStr = hash.curHash || UN_SUB_NAME;
       setLastAction(hash.curHash);
@@ -117,6 +119,8 @@ define(function (require, exports, module) {
                   hash: hash,
                   query: getQuery($2)
                 });
+
+                restoreHistoryTitle();
               }
             });
           }
@@ -131,6 +135,8 @@ define(function (require, exports, module) {
           query: getQuery(hash.curHash)
         });
         currentQureyStr = hash.curHash;
+
+        restoreHistoryTitle();
       }
     }
 
@@ -403,6 +409,25 @@ define(function (require, exports, module) {
       setHistoryPosition(id,0);
     }
 
+    function setHistoryTitle(id,title){
+      id = id || currentHashStr;
+      if(id){
+        historyTitles[id] = title || document.title;
+      }
+    }
+
+    function getHistoryTitle(id){
+      id = id || currentHashStr;
+      return id && historyTitles[id];
+    }
+
+    function restoreHistoryTitle(id){
+      var title = getHistoryTitle(id);
+      if(title){
+        document.title = title;
+      }
+    }
+
     Pubsub.initHash = INIT_HASH_STR;
     Pubsub.init = init;
     Pubsub.run = run;
@@ -418,6 +443,7 @@ define(function (require, exports, module) {
     Pubsub.getQuery = getQuery;
     Pubsub.getHistoryPosition = getHistoryPosition;
     Pubsub.scrollToHistoryPosition = scrollToHistoryPosition;
+    Pubsub.getHistoryTitle = getHistoryTitle;
     Pubsub.getUnsubscribedAction = function () {
       return UN_SUB_NAME;
     };

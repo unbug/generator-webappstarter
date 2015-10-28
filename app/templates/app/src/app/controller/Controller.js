@@ -12,7 +12,7 @@ define(function (require, exports, module) {
       Basic: BasicView
     };
     //所有视图初始化前，需要获得客户端的用户登录信息
-    //Core.Router.onReady(onUserinfo);
+    Core.Router.onReady(onUserinfo);
 
     Core.Router.onChanged(onViewChanged);
 
@@ -44,6 +44,8 @@ define(function (require, exports, module) {
     Core.Event.on('webLogin', webLogin);
     //去App登录
     Core.Event.on('appLogin', appLogin);
+    //从App获取用户信息
+    Core.Event.on('appUserinfo', onUserinfo);
     //去反馈
     Core.Event.on('feedback', onFeedback);
     //复制文本

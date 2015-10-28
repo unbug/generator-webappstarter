@@ -113,8 +113,11 @@ define(function(require, exports, module) {
 
       var view = this.getView(viewCls);
       !view.hasClass('show') && view.addClass('show');
-      //auto scroll to history position
-      (autoRevert==undefined || autoRevert) && setTimeout(Core.Router.scrollToHistoryPosition,100);
+      //auto scroll to history position,and restore title
+      if(autoRevert==undefined || autoRevert){
+        setTimeout(Core.Router.scrollToHistoryPosition,100);
+        Core.Event.trigger('appModifyTitle');
+      }
       return this;
     }
     this.hide = function(notCls){
