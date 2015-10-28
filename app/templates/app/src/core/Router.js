@@ -113,14 +113,14 @@ define(function (require, exports, module) {
                 currentQureyStr = $2;
                 published = true;
                 lastActionKey = key;
+                restoreHistoryTitle();
+
                 Pubsub.publish(key, {
                   action: key,
                   param: $2,
                   hash: hash,
                   query: getQuery($2)
                 });
-
-                restoreHistoryTitle();
               }
             });
           }
@@ -128,15 +128,15 @@ define(function (require, exports, module) {
       }
       if (!published) {
         lastActionKey = UN_SUB_NAME;
+        currentQureyStr = hash.curHash;
+        restoreHistoryTitle();
+
         Pubsub.publish(UN_SUB_NAME, {
           action: hash.curHash,
           param: hash.curHash,
           hash: hash,
           query: getQuery(hash.curHash)
         });
-        currentQureyStr = hash.curHash;
-
-        restoreHistoryTitle();
       }
     }
 
