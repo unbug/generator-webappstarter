@@ -1,5 +1,7 @@
 @charset "UTF-8";
+$ios-border-radius: 30px;
 
+/* default */
 .msgbox {
   position: fixed;
   z-index: 999;
@@ -40,14 +42,14 @@
     display: -webkit-box;
     -webkit-box-pack: center;
     > .msgbox-bd {
+      position: relative;
+      @include box-v-c-c;
       width: $layout-with;
       height: 100%;
-      position: relative;
       > .box-ct {
         display: -webkit-box;
         font-size: 40px;
         color: #f6f6f6;
-        position: absolute;
         -webkit-animation-name: MicroPopUp;
         @include animated-1s;
         -webkit-animation-duration: 250ms;
@@ -58,23 +60,24 @@
             height: 100%;
           }
         }
+        &.absolute{
+          position: absolute;
+        }
       }
       > .box-ct.dialog {
-        $dialog-w: $layout-with * 0.8;
-        left: ($layout-with - $dialog-w)/2;
-        top: 195px;
+        $dialog-w: $layout-with * 0.72;
         color: #000;
         > .box-bd {
           width: $dialog-w;
           overflow: hidden;
-          -webkit-border-radius: 10px;
+          -webkit-border-radius: $ios-border-radius;
           > div {
             @include box-v;
           }
           .content {
             padding-top: 30px;
             background-color: rgba(225, 225, 225, .9);
-            -webkit-border-radius: 10px 10px 0 0;
+            -webkit-border-radius: $ios-border-radius $ios-border-radius 0 0;
           }
           .title {
             @include box-h-c-c;
@@ -108,17 +111,17 @@
               }
               @include box-h-c-c;
               -webkit-box-flex: 1;
-              font-size: 34px;
+              font-size: 36px;
               color: #007aff;
               margin-top: 1px;
               padding: 20px 0;
-              height: 81px;
+              height: 88px;
               background-color: rgba(225, 225, 225, .9);
               &:first-child {
-                -webkit-border-radius: 0 0 0 10px;
+                -webkit-border-radius: 0 0 0 $ios-border-radius;
               }
               &:last-child {
-                -webkit-border-radius: 0 0 10px 0;
+                -webkit-border-radius: 0 0 $ios-border-radius 0;
               }
               &.no {
                 margin-right: 1px;
@@ -132,6 +135,7 @@
       }
       > .box-ct.menu {
         $dialog-w: $layout-with * 0.95;
+        $option-h: 115px;
         //position: fixed;
         left: ($layout-with - $dialog-w)/2;
         bottom: 0px;
@@ -142,7 +146,7 @@
         }
         > .box-bd {
           width: $dialog-w;
-          padding-bottom: 15px;
+          padding-bottom: 18px;
           > div {
             @include box-v;
           }
@@ -152,14 +156,14 @@
             }
             @include box-h-c-c;
             -webkit-box-flex: 1;
-            font-size: 34px;
+            font-size: 36px;
             color: #007aff;
             padding: 20px 0;
-            height: 81px;
+            height: $option-h;
             background-color: #f6f7f8;
             &.msg{
               height: auto;
-              min-height: 81px;
+              min-height: $option-h;
               padding: 20px;
               color: #8f8f8f;
               font-size: 28px;
@@ -169,9 +173,9 @@
               }
             }
             &.no {
-              margin-top: 15px;
+              margin-top: 18px;
               background-color: #fff;
-              -webkit-border-radius: 10px;
+              -webkit-border-radius: $ios-border-radius;
               font-weight: bold;
               &:active{
                 background-color: #f5f5f5;
@@ -182,18 +186,20 @@
             }
           }
           .options{
-            -webkit-border-radius: 10px;
+            -webkit-border-radius: $ios-border-radius;
             overflow: hidden;
             > div {
               margin-top: 1px;
+              &:first-child{
+                -webkit-border-radius: $ios-border-radius $ios-border-radius 0 0;
+                margin-top: 0;
+              }
             }
           }
         }
       }
       > .box-ct.loading {
         $dialog-w: 240px;
-        left: ($layout-with - $dialog-w)/2;
-        top: 300px;
         > .box-bd {
           padding-top: 50px;
           width: $dialog-w;
@@ -210,44 +216,15 @@
           }
         }
       }
-      > .box-ct.signin {
-        $dialog-w: 620px;
-        left: ($layout-with - $dialog-w)/2;
-        top: 300px;
-        > .box-bd {
-          position: relative;
-          width: $dialog-w;
-          min-height: 340px;
-          background-color: #fff;
-          padding: 30px;
-          > div {
-            @include box-v-c-c;
-          }
-          .msg {
-            font-size: 34px;
-            color: #414141;
-            min-height: 200px;
-            text-align: center;
-            padding-top: 100px;
-          }
-          .plf {
-            .b {
-              @include active-default;
-            }
-          }
-          .no {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 80px;
-            height: 80px;
-            background-color: #e1e1e1;
-            &:active {
-              background-color: #ef533e;
-            }
-          }
-        }
-      }
     }
   }
 }
+/* end default */
+
+/*debug-msgbox-android.scss*/
+@import "debug-msgbox-android.scss";
+/*end debug-msgbox-android.scss*/
+
+/*debug-msgbox-deja.scss*/
+@import "debug-msgbox-deja.scss";
+/*end debug-msgbox-deja.scss*/

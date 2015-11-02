@@ -1,0 +1,96 @@
+@charset "UTF-8";
+/* deja */
+.msgbox {
+  .msgbox-bd.deja{
+    > .box-ct.dialog {
+      $dialog-w: $layout-with * 0.82;
+      color: #414141;
+      > .box-bd {
+        width: $dialog-w;
+        -webkit-border-radius: 0;
+        .content {
+          padding-top: 68px;
+          line-height: 42px;
+          background-color: #fff;
+          -webkit-border-radius: 0;
+        }
+        .msg {
+          color: #414141;
+          padding: 0 30px 68px 30px;
+        }
+        .title {
+          line-height: 60px;
+        }
+        .bbts {
+          background-color: #fff;
+          > div {
+            margin-top: 0;
+            height: 110px;
+            border-top: 1px solid #e1e1e1;
+            font-size: 34px;
+            color: #fff;
+            &:first-child {
+              -webkit-border-radius: 0;
+            }
+            &:last-child {
+              -webkit-border-radius: 0;
+            }
+            &.no {
+              margin-right: 0;
+              color: #414141;
+              background-color: #f6f6f6;
+              &:active{
+                background-color: #fff;
+              }
+            }
+            &.yes {
+              background-color: #f81f34;
+              font-weight: normal;
+              &:active{
+                background-color: rgba(248,31,52,0.5);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    > .box-ct.signin {
+      $dialog-w: 620px;
+      > .box-bd {
+        position: relative;
+        width: $dialog-w;
+        min-height: 340px;
+        background-color: #fff;
+        padding: 30px;
+        > div {
+          @include box-v-c-c;
+        }
+        .msg {
+          font-size: 34px;
+          color: #414141;
+          min-height: 200px;
+          text-align: center;
+          padding-top: 100px;
+        }
+        .plf {
+          .b {
+            @include active-default;
+          }
+        }
+        .no {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 80px;
+          height: 80px;
+          background-color: #e1e1e1;
+          &:active {
+            background-color: #f81f34;
+          }
+        }
+      }
+    }
+  }
+}
+/* end deja */

@@ -1,0 +1,103 @@
+@charset "UTF-8";
+$android-border-radius: 8px;
+/* android */
+.msgbox{
+  .msgbox-bd.android{
+    color: #000;
+    > .box-ct.dialog{
+      $dialog-w: $layout-with * 0.86;
+      > .box-bd {
+        width: $dialog-w;
+        -webkit-border-radius: $android-border-radius;
+        .content {
+          background-color: #fff;
+          -webkit-border-radius: $android-border-radius $android-border-radius 0 0;
+        }
+        .bbts {
+          @include box-h-c-r;
+          width: 100%;
+          background-color: #fff;
+          padding: 14px 30px;
+          > div {
+            display: inline-block;
+            min-width: 172px;
+            height: 76px;
+            padding: 20px 22px;
+            color: #009688;
+            text-align: center;
+            text-transform: uppercase;
+            background-color: #fff;
+            -webkit-border-radius: 0 !important;
+            &:active {
+              background-color: #b6b6b6;
+            }
+            margin-top: 0;
+            &.no {
+              margin-right: 0;
+            }
+          }
+        }
+      }
+    }
+    > .box-ct.menu {
+      $dialog-w: $layout-with * 0.98;
+      $option-h: 120px;
+      //position: fixed;
+      left: ($layout-with - $dialog-w)/2;
+      bottom: 0px;
+      > .box-bd {
+        width: $dialog-w;
+        padding-bottom: 0;
+        > div {
+          @include box-v;
+        }
+        .opt {
+          &:active {
+            background-color: #b6b6b6;
+          }
+          @include box-h-c-c;
+          -webkit-box-flex: 1;
+          padding: 20px 0;
+          height: $option-h;
+          background-color: #fff;
+          text-transform: uppercase;
+          color: #009688;
+          &.msg{
+            height: auto;
+            min-height: $option-h;
+            padding: 20px;
+            color: #7b7b7b;
+            text-transform: none;
+            &:active{
+              background-color: #fff;
+            }
+          }
+          &.no {
+            margin-top: 20px;
+            background-color: #fff;
+            -webkit-border-radius: 0 !important;
+            font-weight: normal;
+            &:active{
+              background-color: #b6b6b6;
+            }
+          }
+          &.highlight{
+            color: #009688;
+          }
+        }
+        .options{
+          -webkit-border-radius: $android-border-radius;
+          overflow: hidden;
+          > div {
+            margin-top: 0;
+            &:first-child{
+              -webkit-border-radius: $android-border-radius $android-border-radius 0 0;
+              margin-top: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+/* end android */

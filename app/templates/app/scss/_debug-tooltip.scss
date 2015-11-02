@@ -94,18 +94,29 @@
   }
   &.red{
     >.tooltip-ct{
+     >.tooltip-bd{
+       background-color: #f81f34;
+       color: #fff;
+       border: 0;
+       -webkit-box-shadow: none;
+       -webkit-border-radius: 0;
+       >.arrow {
+         background-color: #f81f34;
+         >div {
+           border: 0;
+         }
+       }
+     }
+    }
+  }
+  &.clear{
+    >.tooltip-ct{
       >.tooltip-bd{
-        background-color: #f05c48;
+        background-color: transparent;
         color: #fff;
         border: 0;
         -webkit-box-shadow: none;
         -webkit-border-radius: 0;
-        >.arrow {
-          background-color: #f05c48;
-          >div {
-            border: 0;
-          }
-        }
       }
     }
   }

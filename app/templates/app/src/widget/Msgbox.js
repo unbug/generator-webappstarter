@@ -11,6 +11,7 @@ define(function (require, exports, module) {
       isLoading,
       emptyFn = function () {},
       onBD = emptyFn,
+      themeCls = option.themeCls || ($.os.android?'android':''),
       box = $('.msgbox');
     bEl = {
       box: box,
@@ -19,13 +20,14 @@ define(function (require, exports, module) {
       dialog: box.find('.box-ct.dialog'),
       menu: box.find('.box-ct.menu'),
       loading: box.find('.box-ct.loading'),
-      signin: box.find('.box-ct.signin')
-
+      signin: box.find('.box-ct.signin'),
+      winfaceanalysis: box.find('.box-ct.winfaceanalysis')
     }
     bEl.dialog.hide();
     bEl.menu.hide();
     bEl.loading.hide();
     bEl.signin.hide();
+    bEl.winfaceanalysis.hide();
 
     bEl.box.on('click',function(e){
       if(/msgbox-bd/i.test(e.target.className ) ) {
@@ -216,10 +218,27 @@ define(function (require, exports, module) {
       _this.hide();
       callbackHandler(callback, data);
     }
+
+    //winfaceanalysis
+    bEl.winfaceanalysis.nbt = bEl.winfaceanalysis.find('.no');
+    bEl.winfaceanalysis.nbt.on('click', function () {
+      _this.hideWinfaceanalysis();
+    });
+    this.showWinfaceanalysis = function () {
+      readyToHide = false;
+
+      bEl.winfaceanalysis.show();
+      this.show();
+    }
+    this.hideWinfaceanalysis = function () {
+      readyToHide = true;
+      bEl.winfaceanalysis.hide();
+      _this.hide();
+    }
     this.show = function (el) {
       el = el || bEl.box;
       //setTimeout(function () {
-      //bEl.box.css({height: document.body.scrollHeight + 'px'});
+        //bEl.box.css({height: document.body.scrollHeight + 'px'});
       //}, 500);
       if (el == bEl.box) {
         el.addClass('show');
@@ -260,6 +279,10 @@ define(function (require, exports, module) {
         callback = null;
       }
     }
+    this.setTheme = function(cls){
+      bEl.bd.removeClass([cls,'android'].join(' ')).addClass(cls);
+    }
+    this.setTheme(themeCls);
 
     //MONOSTATE
     Msgbox.prototype.instance = this;
