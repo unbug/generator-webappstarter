@@ -49,6 +49,7 @@ module.exports = yeoman.generators.Base.extend({
       this.log('updating some files in "./scss/" directory');
       this.copy('../../app/templates/app/scss/_debug-common.scss','./scss/_debug-common.scss');
       this.copy('../../app/templates/app/scss/_debug-mixin.scss','./scss/_debug-mixin.scss');
+      this.copy('../../app/templates/app/scss/_debug-value.scss','./scss/_debug-value.scss');
       this.copy('../../app/templates/app/scss/_debug-components.scss','./scss/_debug-components.scss');
       this.copy('../../app/templates/app/scss/_debug-slide.scss','./scss/_debug-slide.scss');
       this.copy('../../app/templates/app/scss/_debug-msgbox.scss','./scss/_debug-msgbox.scss');
@@ -69,6 +70,10 @@ module.exports = yeoman.generators.Base.extend({
       this.copy('../../app/templates/app/html/site/include/download.html','./html/site/include/download.html');
       this.copy('../../app/templates/app/html/site/include/scripts-version.html','./html/site/include/scripts-version.html');
       this.copy('../../app/templates/app/html/site/include/styles-version.html','./html/site/include/styles-version.html');
+    },
+    images: function(){
+      this.log('updating "./resources/images" directory');
+      this.directory('../../app/templates/app/resources/images', './resources/images');
     },
     other: function(){
       this.copy('../../app/templates/app/gulpfile.js', './gulpfile.js');

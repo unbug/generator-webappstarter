@@ -44,7 +44,7 @@
               }
             }
             &.yes {
-              background-color: #f81f34;
+              background-color: $primary-color-highlight;
               font-weight: normal;
               &:active{
                 background-color: rgba(248,31,52,0.5);
@@ -86,8 +86,31 @@
           height: 80px;
           background-color: #e1e1e1;
           &:active {
-            background-color: #f81f34;
+            background-color: $primary-color-highlight;
           }
+        }
+      }
+    }
+    > .box-ct.winfaceanalysis {
+      $dialog-w: 536px;
+      > .box-bd {
+        position: relative;
+        width: $dialog-w;
+        > div {
+          @include box-v-c-c;
+          position: absolute;
+        }
+        .no {
+          top: 0;
+          left: 0;
+          width: 100px;
+          height: 100px;
+        }
+        .share{
+          left: 0;
+          bottom: 0;
+          width: 100%;
+          height: 200px;
         }
       }
     }

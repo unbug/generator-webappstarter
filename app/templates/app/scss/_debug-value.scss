@@ -1,4 +1,14 @@
 @charset "UTF-8";
-$layout-with: _VIEWPORT_WIDTH_px;
-/*see viewport:viewport package.json*/
+/*size*/
+$layout-with: _VIEWPORT_WIDTH_px;/*see viewport:viewport package.json*/
+
+$goods-bulletin-w: $layout-with;
+$goods-bulletin-h: 380px;
+/*end size*/
+
+/*color*/
+$primary-color-highlight: #f81f34;
+/*end color*/
+
 $active-opacity: .8;
+

@@ -40,7 +40,7 @@
 .bt-a, .bt-b{
   color: #fff;
   &:active {
-    background-color: #f81f34;
+    background-color: $primary-color-highlight;
   }
 }
 
@@ -62,9 +62,9 @@
   border: 2px solid #b5b7b6;
   color: #818181;
   &:active {
-    border: 2px solid #f81f34;
+    border: 2px solid $primary-color-highlight;
     color: #fff;
-    background-color: #f81f34;
+    background-color: $primary-color-highlight;
   }
   &.disabled{
     color: #cfcfcf;

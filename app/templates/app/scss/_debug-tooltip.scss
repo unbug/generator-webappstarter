@@ -95,13 +95,13 @@
   &.red{
     >.tooltip-ct{
      >.tooltip-bd{
-       background-color: #f81f34;
+       background-color: $primary-color-highlight;
        color: #fff;
        border: 0;
        -webkit-box-shadow: none;
        -webkit-border-radius: 0;
        >.arrow {
-         background-color: #f81f34;
+         background-color: $primary-color-highlight;
          >div {
            border: 0;
          }
