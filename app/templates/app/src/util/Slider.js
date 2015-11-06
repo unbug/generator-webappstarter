@@ -17,7 +17,7 @@ define(function (require, exports, module) {
       orientation = true,
       lastMove = 0,
       autoTimer = 0;
-    var enablePrecess = option.enablePrecess,
+    var enablePrecess = option.enablePrecess || option.enableProcess,
       enableAutorun = option.enableAutorun,
       enableDrag = option.enableDrag;
     var onMove = option.onMove || emptyFn,
