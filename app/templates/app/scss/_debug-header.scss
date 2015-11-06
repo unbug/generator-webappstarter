@@ -106,13 +106,13 @@
     width: 10px;
     height: 10px;
     -webkit-border-radius: 5px;
-    background-color: #818181;
+    background-color: $color-black-third;
   }
   > .title {
     padding-left: 12px;
     font-size: 36px;
     line-height: 38px;
-    color: #818181;
+    color: $color-black-third;
     -webkit-box-flex: 1;
     /*
     &.animated{
@@ -133,11 +133,11 @@
     > .dot {
       width: 4px;
       height: 30px;
-      background-color: $primary-color-highlight;
+      background-color: $color-red;
       -webkit-border-radius: 0;
     }
     > .title {
-      color: #414141;
+      color: $color-black-second;
       padding-left: 20px;
     }
   }
@@ -157,6 +157,6 @@
   padding: 0 40px;
   line-height: 48px;
   font-size: 28px;
-  color: #cecece;
+  color: $color-gray-second;
   background-color: #f9f9f9;
 }

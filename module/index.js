@@ -24,22 +24,22 @@ module.exports = yeoman.generators.Base.extend({
   writing: {
     module: function () {
       //make module html,and add to view.html
-      this.template('module.html', 'html/site/include/' + this.lmoduleName + '.html');
+      this.template('module.html', 'html/site/include/view-' + this.lmoduleName + '.html');
       var file = htmlWiring.readFileAsString('html/site/include/views.html'),
         add = [];
-      add.push('\n<!-- ' + this.lmoduleName + ' -->');
-      add.push('\n@@include("include/' + this.lmoduleName + '.html")');
-      add.push('\n<!-- end ' + this.lmoduleName + ' -->');
+      add.push('\n<!-- view-' + this.lmoduleName + ' -->');
+      add.push('\n@@include("include/view-' + this.lmoduleName + '.html")');
+      add.push('\n<!-- end view-' + this.lmoduleName + ' -->');
       file += add.join('');
       htmlWiring.writeFileFromString(file, 'html/site/include/views.html');
 
       //make module scss and add to _debut-view.scss
-      this.template('module.scss', 'scss/_debug-' + this.lmoduleName + '.scss');
+      this.template('module.scss', 'scss/_debug-view-' + this.lmoduleName + '.scss');
       file = htmlWiring.readFileAsString('scss/_debug-view.scss');
       add = [];
-      add.push('\n\n/*debug-' + this.lmoduleName + '.scss*/');
-      add.push('\n@import "debug-' + this.lmoduleName + '.scss";');
-      add.push('\n/*end debug-' + this.lmoduleName + '.scss*/');
+      add.push('\n\n/*debug-view-' + this.lmoduleName + '.scss*/');
+      add.push('\n@import "debug-view-' + this.lmoduleName + '.scss";');
+      add.push('\n/*end debug-view-' + this.lmoduleName + '.scss*/');
       file += add.join('');
       htmlWiring.writeFileFromString(file, 'scss/_debug-view.scss');
 

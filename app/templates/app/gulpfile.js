@@ -1,6 +1,7 @@
 var spawn = require('child_process').spawn;
 var exec = require('child_process').exec;
 var fs = require('fs');
+var path = require('path');
 
 var gulp = require('gulp');
 var source = require('vinyl-source-stream');
@@ -10,7 +11,6 @@ var del = require('del');
 var pem = require('pem');
 var rsync = require('rsync');
 var pngquant = require('imagemin-pngquant');
-var sprite = require('css-sprite').stream;
 var runSequence = require('run-sequence');
 var browserSync = require('browser-sync');//http://www.browsersync.io/docs/gulp/
 var reload = browserSync.reload;
@@ -58,6 +58,7 @@ gulp.task('copy:source_imgs', function () {
 
 //generate sprites.png and _debug-sprites.scss
 gulp.task('sprites', function () {
+  var sprite = require('css-sprite').stream;
   return gulp.src(sourceSprites)
     .pipe(sprite({
       name: 'sprites',
@@ -166,14 +167,14 @@ gulp.task('requirejs', function (cb) {
   }
   files.push('app/App.js');
   return $.requirejs({
-    baseUrl: './src',
-    include: files,
-    insertRequire: ['app/App.js'],
-    out: 'app.js',
-    optimize: 'none',
-    name: 'almond',
-    wrap: true
-  })
+      baseUrl: './src',
+      include: files,
+      insertRequire: ['app/App.js'],
+      out: 'app.js',
+      optimize: 'none',
+      name: 'almond',
+      wrap: true
+    })
     .pipe(through2.obj(function (file, enc, next) {
       this.push(file);
       this.end();
@@ -194,12 +195,12 @@ gulp.task('uglifyjs', function () {
   }
   files.push('app/App.js');
   return $.requirejs({
-    baseUrl: './src',
-    include: files,
-    out: 'app.js',
-    optimize: 'none',
-    wrap: true
-  })
+      baseUrl: './src',
+      include: files,
+      out: 'app.js',
+      optimize: 'none',
+      wrap: true
+    })
     .pipe(through2.obj(function (file, enc, next) {
       this.push(file);
       this.end();
@@ -218,7 +219,6 @@ gulp.task('uglifyjs', function () {
     .pipe(gulp.dest(distProjectPath + '/src/'))
     .pipe($.size({title: 'uglifyjs'}));
 });
-
 
 //generate cache.manifest
 gulp.task('manifest', function (cb) {
@@ -404,6 +404,35 @@ gulp.task('_endlog', function (cb) {
   cb();
 });
 
+//test
+function getProtractorBinary(binaryName){
+  var winExt = /^win/.test(process.platform)? '.cmd' : '';
+  var pkgPath = require.resolve('protractor');
+  var protractorDir = path.resolve(path.join(path.dirname(pkgPath), '..', 'bin'));
+  return path.join(protractorDir, '/'+binaryName+winExt);
+}
+
+gulp.task('protractor-install', function(done){
+  spawn(getProtractorBinary('webdriver-manager'), ['update'], {
+    stdio: 'inherit'
+  }).once('close', done);
+});
+
+gulp.task('wd', function(done){
+  spawn(getProtractorBinary('webdriver-manager'), ['start'], {
+    stdio: 'inherit'
+  }).once('close', done);
+});
+
+gulp.task('scenario', function (done) {
+  var argv = process.argv.slice(3); // forward args to protractor
+  argv.push('test/protractor.conf.js');
+  spawn(getProtractorBinary('protractor'), argv, {
+    stdio: 'inherit'
+  }).once('close', done);
+});
+//end test
+
 function handleError(err) {
   console.log(err.toString());
   this.emit('end');
@@ -446,4 +475,7 @@ gulp.task('_deploy', function (cb) {
 gulp.task('_deployrc', function (cb) {
   distProjectPath = distProjectPath +'_rc';
   runSequence('_deploy', cb);
+});
+gulp.task('test', function (done) {
+  runSequence('scenario',done);
 });

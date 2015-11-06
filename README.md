@@ -49,8 +49,8 @@ install dependencies manually with `npm install` or just copy `node_modules` fol
 
 ```shell
 //this command will do:
-//add "html/site/include/modulename.html" and inlude it to "html/site/include/views.html"
-//add "scss/_debug-modulename.scss" and import it to "scss/_debug-view.scss"
+//add "html/site/include/view-modulename.html" and inlude it to "html/site/include/views.html"
+//add "scss/_debug-view-modulename.scss" and import it to "scss/_debug-view.scss"
 //add "src/app/view/ModuleNameView.js"
 //add "src/app/controller/ModuleNameController.js" and require it in src/app/App.js
 

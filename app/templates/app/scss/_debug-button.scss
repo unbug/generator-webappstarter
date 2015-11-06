@@ -22,9 +22,21 @@
       }
     }
   }
+  &.dis-active{
+    &:active{
+      i {
+        &:nth-child(1), &.normal {
+          display: inline-block;
+        }
+        &:nth-child(2), &.active {
+          display: none;
+        }
+      }
+    }
+  }
 }
 
-.bt-a, .bt-b,.bt-c {
+.bt-primary,.bt-default {
   height: 100px;
   line-height: 98px;
   font-size: 38px;
@@ -37,39 +49,35 @@
     line-height: 58px;
   }
 }
-.bt-a, .bt-b{
+.bt-primary{
   color: #fff;
   &:active {
-    background-color: $primary-color-highlight;
+    background-color: $color-red;
   }
 }
 
-.bt-a {
-  border: 2px solid #fff;
-}
-
-.bt-b {
-  background-color: #2f2f2f;
+.bt-primary {
+  background-color: $color-black;
   &.disabled{
-    background-color: #aeaeae;
+    background-color: $color-gray-third;
     &:active{
-      background-color: #aeaeae;
+      background-color: $color-gray-third;
     }
   }
 }
 
-.bt-c {
-  border: 2px solid #b5b7b6;
-  color: #818181;
+.bt-default {
+  border: 2px solid $color-gray;
+  color: $color-black-third;
   &:active {
-    border: 2px solid $primary-color-highlight;
+    border: 2px solid $color-red;
     color: #fff;
-    background-color: $primary-color-highlight;
+    background-color: $color-red;
   }
   &.disabled{
     color: #cfcfcf;
     &:active{
-      border: 2px solid #b5b7b6;
+      border: 2px solid $color-gray;
       color: #f1f1f1;
       background-color: inherit;
     }

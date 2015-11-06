@@ -4,7 +4,7 @@
   .msgbox-bd.deja{
     > .box-ct.dialog {
       $dialog-w: $layout-with * 0.82;
-      color: #414141;
+      color: $color-black-second;
       > .box-bd {
         width: $dialog-w;
         -webkit-border-radius: 0;
@@ -15,7 +15,7 @@
           -webkit-border-radius: 0;
         }
         .msg {
-          color: #414141;
+          color: $color-black-second;
           padding: 0 30px 68px 30px;
         }
         .title {
@@ -37,14 +37,14 @@
             }
             &.no {
               margin-right: 0;
-              color: #414141;
+              color: $color-black-second;
               background-color: #f6f6f6;
               &:active{
                 background-color: #fff;
               }
             }
             &.yes {
-              background-color: $primary-color-highlight;
+              background-color: $color-red;
               font-weight: normal;
               &:active{
                 background-color: rgba(248,31,52,0.5);
@@ -68,7 +68,7 @@
         }
         .msg {
           font-size: 34px;
-          color: #414141;
+          color: $color-black-second;
           min-height: 200px;
           text-align: center;
           padding-top: 100px;
@@ -86,7 +86,7 @@
           height: 80px;
           background-color: #e1e1e1;
           &:active {
-            background-color: $primary-color-highlight;
+            background-color: $color-red;
           }
         }
       }

@@ -1,13 +1,17 @@
 @charset "UTF-8";
 /*size*/
 $layout-with: _VIEWPORT_WIDTH_px;/*see viewport:viewport package.json*/
-
-$goods-bulletin-w: $layout-with;
-$goods-bulletin-h: 380px;
 /*end size*/
 
 /*color*/
-$primary-color-highlight: #f81f34;
+$color-black: #2f2f2f;
+$color-black-second: #414141;
+$color-black-third: #818181;
+$color-gray: #b5b7b6;
+$color-gray-second: #cecece;
+$color-gray-third: #eaeaea;
+$color-red: #f81f34;
+$color-blue: #71b0ea;
 /*end color*/
 
 $active-opacity: .8;

@@ -21,7 +21,7 @@
       padding: 20px;
       background-color: #fff;
       font-size: 30px;
-      color: #414141;
+      color: $color-black-second;
       border: 1px solid rgba(0, 0, 0, 0.3);
       -webkit-box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.3);
       -webkit-border-radius: 5px;
@@ -95,13 +95,13 @@
   &.red{
     >.tooltip-ct{
      >.tooltip-bd{
-       background-color: $primary-color-highlight;
+       background-color: $color-red;
        color: #fff;
        border: 0;
        -webkit-box-shadow: none;
        -webkit-border-radius: 0;
        >.arrow {
-         background-color: $primary-color-highlight;
+         background-color: $color-red;
          >div {
            border: 0;
          }
