@@ -20,14 +20,12 @@ define(function (require, exports, module) {
       dialog: box.find('.box-ct.dialog'),
       menu: box.find('.box-ct.menu'),
       loading: box.find('.box-ct.loading'),
-      signin: box.find('.box-ct.signin'),
-      winfaceanalysis: box.find('.box-ct.winfaceanalysis')
+      signin: box.find('.box-ct.signin')
     }
     bEl.dialog.hide();
     bEl.menu.hide();
     bEl.loading.hide();
     bEl.signin.hide();
-    bEl.winfaceanalysis.hide();
 
     bEl.box.on('click',function(e){
       if(/msgbox-bd/i.test(e.target.className ) ) {
@@ -219,22 +217,6 @@ define(function (require, exports, module) {
       callbackHandler(callback, data);
     }
 
-    //winfaceanalysis
-    bEl.winfaceanalysis.nbt = bEl.winfaceanalysis.find('.no');
-    bEl.winfaceanalysis.nbt.on('click', function () {
-      _this.hideWinfaceanalysis();
-    });
-    this.showWinfaceanalysis = function () {
-      readyToHide = false;
-
-      bEl.winfaceanalysis.show();
-      this.show();
-    }
-    this.hideWinfaceanalysis = function () {
-      readyToHide = true;
-      bEl.winfaceanalysis.hide();
-      _this.hide();
-    }
     this.show = function (el) {
       el = el || bEl.box;
       //setTimeout(function () {
