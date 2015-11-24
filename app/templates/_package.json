@@ -7,8 +7,8 @@
     "title": "Title - <%=projectName%>",
     "viewport": 750,
     "manifest": false,
-    "sourceImg": "../../../../../Mozat/Deja/<%=projectName%>/UI/build/img/**/*.{png,jpg}",
-    "sourceSprites": "../../../../../Mozat/Deja/<%=projectName%>/UI/build/assets/*.png",
+    "sourceImg": "statics/UI/build/img/**/*.{png,jpg}",
+    "sourceSprites": "statics/UI/build/assets/*.png",
     "watchJshint": true,
     "watchScsslint": false,
     "browserSync": {
