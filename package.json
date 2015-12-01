@@ -16,7 +16,8 @@
   "files": [
     "app",
     "module",
-    "update"
+    "update",
+    "model"
   ],
   "keywords": [
     "yeoman-generator",

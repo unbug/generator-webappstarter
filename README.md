@@ -56,7 +56,15 @@ install dependencies manually with `npm install` or just copy `node_modules` fol
 
 yo webappstarter:module ModuleName
 ```
-3.update your project's boilerplate and structure
+3.generate a new model,run
+
+```shell
+//this command will do:
+//add "src/app/model/ModelNameModel.js"
+
+yo webappstarter:model ModelName
+```
+4.update your project's boilerplate and structure
 
 ```shell
 //this command will update
