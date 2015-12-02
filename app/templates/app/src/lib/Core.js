@@ -19,6 +19,7 @@ define(function (require, exports, module) {
   var MetaHandler = require('util/MetaHandler');
   var RequestHandler = require('util/RequestHandler');
   var versionCompare = require('util/versionCompare');
+  var FormHandler = require('util/FormHandler');
 
   var randomList = require('util/RandomList');
   var Num = require('util/Number');
@@ -38,6 +39,7 @@ define(function (require, exports, module) {
     RequestHandler: RequestHandler,
     NativeBridge: NativeBridge,
     versionCompare: versionCompare,
+    FormHandler: FormHandler,
     Event: Event,
     Router: Router,
 
@@ -46,7 +48,7 @@ define(function (require, exports, module) {
     DateHandler: DateHandler
   };
 
-  //开启客户端调试,无需客户端环境模拟客户端接口
+  //enable debug model
   if (localParam().search['debug'] == 1) {
     Core.NativeBridge.enableDebug();
   }

@@ -17,25 +17,34 @@ define(function(require, exports, module) {
     }
 
     this.asyncSubmit = function(action,data){
-      var target = '__formhandler_'+new Date().getTime(),
-        frame = Navigator.getFrame(null,target),
+      this.submit(action,data,true);
+    }
+
+    this.submit = function(action,data,async){
+      var target,
+        frame,
         form = getForm(),
         inputs = [],
         itpl = '<input type="text" name="{N}" value="{V}" />';
-      form.setAttribute('target', target);
+
+      if(async){
+        target = '__formhandler_'+new Date().getTime();
+        frame = Navigator.getFrame(null,target);
+        form.setAttribute('target', target);
+        setTimeout(function(){
+          Navigator.removeFrame(frame);
+        },120000);
+      }
+
       form.setAttribute('action', action);
       data = data || {};
       for(var key in data){
         inputs.push( itpl.replace('{N}',key).replace('{V}',data[key]) );
       }
       form.innerHTML = inputs.join('');
-
       action && setTimeout(function(){
         form.submit();
       },100);
-      setTimeout(function(){
-        Navigator.removeFrame(frame);
-      },30000);
     }
 
     //MONOSTATE
