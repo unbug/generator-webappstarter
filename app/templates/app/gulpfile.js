@@ -133,11 +133,11 @@ gulp.task('sass', function (cb) {
       gulp.src(['./.scss/*.scss'], {buffer: true})
         .pipe($.sourcemaps.init())
         .pipe($.sass({errLogToConsole: true}))
+        .pipe($.autoprefixer({browsers: AUTOPREFIXER_BROWSERS}))
         .pipe($.sourcemaps.write())
         .pipe($.cached('build-cache', {
           optimizeMemory: true
         }))
-        .pipe($.autoprefixer({browsers: AUTOPREFIXER_BROWSERS}))
         .pipe(gulp.dest('./resources/css/'))
         .on('end', function () {
           del(['./.scss'], {force: true});
