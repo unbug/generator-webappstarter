@@ -3,13 +3,14 @@ define(function (require, exports, module) {
     postJSON = Core.RequestHandler.postJSON,
     JSONP = Core.RequestHandler.JSONP;
 
-  function request(action,data,callback,scope) {
-    var __STORE_ID;
-    if(data){
-      __STORE_ID = data.__STORE_ID;
-      delete data.__STORE_ID;
-    }
-    getJSON({
+  function request(action,data,callback,scope,options) {
+    options = options || {};
+    var __STORE_ID,conf;
+    data = data || {};
+    data._t = new Date().getTime();
+    __STORE_ID = data.__STORE_ID;
+    delete data.__STORE_ID;
+    conf = {
       action: action,
       data: data,
       complete: function (data) {
@@ -18,11 +19,15 @@ define(function (require, exports, module) {
         }
         callback && callback(data.success);
       }
-    });
+    };
+    for(var name in options) conf[name]=options[name];
+    conf.action = action;
+    conf.data = data;
+    getJSON(conf);
   }
   function post(action,data,callback,scope,options) {
     options = options || {};
-    postJSON({
+    var conf = {
       action: action,
       data: data,
       contentType: options.contentType||"application/json;charset=utf-8",
@@ -32,7 +37,11 @@ define(function (require, exports, module) {
         }
         callback && callback(data.success);
       }
-    });
+    };
+    for(var name in options) conf[name]=options[name];
+    conf.action = action;
+    conf.data = data;
+    postJSON(conf);
   }
 
   return {

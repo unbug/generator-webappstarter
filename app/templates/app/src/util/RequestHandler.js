@@ -17,29 +17,28 @@ define(function (require, exports, module) {
       if (!option) {
         return;
       }
-      $.ajax({
-        headers: {"cache-control": "no-cache"},
-        type: option.type,
-        url: option.action,
-        dataType: option.dataType,
-        contentType: option.contentType,
-        data: option.data || null,//空值设置null避免向后端发送undefined无用参数
-        success: function (data, status, xhr) {
-          if (option.complete && typeof option.complete === 'function') {
-            option.complete({
-              data: data,
-              success: true
-            });
-          }
-        },
-        error: function (xhr, errorType, error) {
-          if (option.complete && typeof option.complete === 'function') {
-            option.complete({
-              success: false
-            });
-          }
+      var conf = {};
+      for(var name in option) conf[name]=option[name];
+      conf.url = conf.action || conf.url;
+      conf.data = conf.data || null;
+      delete conf.complete;
+      delete conf.action;
+      conf.success = function (data, status, xhr) {
+        if (option.complete && typeof option.complete === 'function') {
+          option.complete({
+            data: data,
+            success: true
+          });
         }
-      });
+      };
+      conf.error = function (xhr, errorType, error) {
+        if (option.complete && typeof option.complete === 'function') {
+          option.complete({
+            success: false
+          });
+        }
+      };
+      $.ajax(conf);
     }//end AJAXHandler
     function JSONP(option) {
       if (!option) {
@@ -47,7 +46,7 @@ define(function (require, exports, module) {
       }
       $.ajax({
         type: 'GET',
-        url: option.action,
+        url: option.action||option.url,
         dataType: 'jsonp',
         jsonp: false,
         jsonpCallback: false,
