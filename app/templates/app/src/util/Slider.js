@@ -16,7 +16,7 @@ define(function (require, exports, module) {
    *
    * enableDrag, //[optional]enable drag to move,default false
    * enableLoop, //[optional]enable infinite loop,default false
-   * enableAutorun, //[optional]enable auto move,default false
+   * enableAutorun, //[optional]enable auto play,default false
    * enableProcess, //[optional]enable default navigation process UI,default false
    *
    * moveTimeout, //[optional]time out for next move,default 100ms
@@ -33,6 +33,14 @@ define(function (require, exports, module) {
    * onTouchend, //[optional]on touchend  event listener
    * onTouchmove //[optional]on touchmove  event listener
    * }
+   *
+   * @method next() //move to next slide
+   * @method pre() //move to pre slide
+   * @method moveTo(index) //move to specified index slide,start from 0
+   * @method reset() //reset to default state
+   * @method refresh() //refresh for content changed
+   * @method startAutoRun() //start to auto play
+   * @method stopAutoRun() //stop auto play
    * @constructor Slider
    */
   function Slider(option) {
@@ -195,20 +203,6 @@ define(function (require, exports, module) {
       el.on('touchend', el.touchend);
     }
 
-    this.next = function () {
-      if (isMoving) {
-        return;
-      }
-      index++;
-      move();
-    }
-    this.pre = function () {
-      if (isMoving) {
-        return;
-      }
-      index--;
-      move();
-    }
     function move() {
       if (isMoving) {
         return;
@@ -276,6 +270,27 @@ define(function (require, exports, module) {
       });
     }
 
+    this.next = function () {
+      if (isMoving) {
+        return;
+      }
+      index++;
+      move();
+    }
+
+    this.pre = function () {
+      if (isMoving) {
+        return;
+      }
+      index--;
+      move();
+    }
+
+    this.moveTo = function(idx){
+      index = idx;
+      move();
+    }
+
     this.reset = function () {
       index = 0;
       orientation = true;
@@ -290,6 +305,7 @@ define(function (require, exports, module) {
       renderProcess();
       me.startAutoRun();
     }
+
     this.refresh = function(){
       me.stopAutoRun();
       pEl.hide();
@@ -299,13 +315,27 @@ define(function (require, exports, module) {
       renderProcess();
       me.startAutoRun();
     }
+
+    this.startAutoRun = function () {
+      if (enableAutorun && itemCount > 1) {
+        autoTimer = setInterval(function () {
+          if (drag.moved) {
+            return;
+          }//如果拖动就停止
+          moveOrientation();
+        }, 3000);
+      }
+    }
+
     this.stopAutoRun = function () {
       autoTimer && clearInterval(autoTimer);
       stopLoopHelper();
     }
+
     function stopLoopHelper(){
       loopTimer && clearInterval(loopTimer);
     }
+
     function moveOrientation() {
       calculateSize();
       if (!enableLoop && index == itemCount - 1) {
@@ -320,16 +350,6 @@ define(function (require, exports, module) {
       }
     }
 
-    this.startAutoRun = function () {
-      if (enableAutorun && itemCount > 1) {
-        autoTimer = setInterval(function () {
-          if (drag.moved) {
-            return;
-          }//如果拖动就停止
-          moveOrientation();
-        }, 3000);
-      }
-    }
     function renderProcess() {
       if (enableProcess && itemCount > 1) {
         var tmp = [];
