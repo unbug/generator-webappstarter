@@ -11,15 +11,19 @@ define(function (require, exports, module) {
       moveDuration = option.moveDuration || 640,
       moveRate = option.moveRate || 1.3,
       index = 0,
-      totalWidth = el.width(),
-      itemLength = el.children().length,
-      itemWidth = totalWidth / itemLength,
+      totalWidth,
+      itemLength,
+      itemWidth,
       orientation = true,
       lastMove = 0,
-      autoTimer = 0;
+      autoTimer = 0,
+      loopTimer = 0,
+      loopCls = 'slider-duplicate';
+    calculateSize();
     var enablePrecess = option.enablePrecess || option.enableProcess,
       enableAutorun = option.enableAutorun,
-      enableDrag = option.enableDrag;
+      enableDrag = option.enableDrag,
+      enableLoop = option.enableLoop;
     var onMove = option.onMove || emptyFn,
       onFirst = option.onFirst || emptyFn,
       onLast = option.onLast || emptyFn,
@@ -55,7 +59,7 @@ define(function (require, exports, module) {
         if (!drag.moved) {
           return;
         }
-        var mX = -index * itemWidth,
+        var mX = -(index+(enableLoop?1:0)) * itemWidth,
           dx = Math.round(Math.abs(drag.distX) / moveRate);
         drag.moveDistX = dx;
         if (dx > itemWidth * 9 / 10) {
@@ -67,10 +71,7 @@ define(function (require, exports, module) {
           mX -= dx;
         }
 
-        el.css({
-          '-webkit-transform': 'translate3d(' + mX + 'px,0,0)',
-          '-webkit-transition': '-webkit-transform 0ms ' + bezier
-        });
+        moveToX(mX,0,bezier);
         lastMove = -mX;
       },
       endDrag: function () {
@@ -103,7 +104,7 @@ define(function (require, exports, module) {
       }
       drag.startTime = new Date().getTime();
       onTouchstart();
-      autoTimer && clearInterval(autoTimer);
+      me.stopAutoRun();
       totalWidth = totalWidth || el.width();
       itemWidth = itemWidth || (totalWidth / itemLength);
       drag.resetMaxMove();
@@ -150,6 +151,7 @@ define(function (require, exports, module) {
       el.on('touchmove', el.touchmove);
       el.on('touchend', el.touchend);
     }
+
     this.next = function () {
       if (isMoving) {
         return;
@@ -172,58 +174,92 @@ define(function (require, exports, module) {
       setTimeout(function () {
         isMoving = false;
       }, moveTimeout);
-      itemLength = el.children().length;
-      if (index > itemLength - 1) {
-        index = itemLength - 1;
-        onLast(index);
-      } else if (index < 0) {
-        index = 0;
-        onFirst(index);
+      if(!enableLoop){
+        if (index > itemLength - 1) {
+          index = itemLength - 1;
+          onLast(index);
+        } else if (index < 0) {
+          index = 0;
+          onFirst(index);
+        }
       }
-      var _m = index * itemWidth,
-        _absm = Math.abs(lastMove - _m),
-        _t = (moveDuration / itemWidth) * _absm,
+      var mx = (index+(enableLoop?1:0)) * itemWidth,
+        absm = Math.abs(lastMove - mx),
+        mtime = Math.min(moveDuration,(moveDuration / itemWidth) * absm),
         animate = 'ease';
 
       if (drag.isSwipe) {
         var velocity = drag.moveDistX * moveRate / (drag.endTime - drag.startTime);
-        _t = velocity * _absm;
+        mtime = velocity * absm;
         animate = bezier;
       }
 
-      lastMove = _m;
+      lastMove = mx;
       //修正android差1px的问题
-      //_m = (_m>0&&$.os.android)?(_m+1):_m;
-      el.css({
-        '-webkit-transform': 'translate3d(-' + _m + 'px,0,0)',
-        '-webkit-transition': '-webkit-transform ' + _t + 'ms ' + animate
-      });
+      //mx = (mx>0&&$.os.android)?(mx+1):mx;
+      moveToX(-mx,mtime,animate);
+
+      stopLoopHelper();
+      if(enableLoop){
+        var loopm;
+        if (index > itemLength - 1) {
+          loopm = itemWidth;
+          index = 0;
+          lastMove = itemWidth;
+          onLast(index);
+        } else if (index < 0) {
+          loopm = itemWidth*itemLength;
+          index = itemLength - 1;
+          onFirst(index);
+        }
+        loopTimer = loopm!==undefined && setTimeout(function(){
+          moveToX(-loopm);
+        },mtime);
+      }
       runProcess();
       onMove(index);
+    }
+
+    function moveToX(x,time,anim){
+      el.css({
+        '-webkit-transform': 'translate3d('+(x||0)+'px'+',0,0)',
+        '-webkit-transition': '-webkit-transform '+(time||0)+'ms ' + (anim||bezier)
+      });
     }
 
     this.reset = function () {
       index = 0;
       orientation = true;
-      totalWidth = totalWidth || el.width();
-      itemLength = el.children().length;
-      itemWidth = itemWidth || (totalWidth / itemLength);
       me.stopAutoRun();
-      el.css({'-webkit-transform': 'translate3d(0,0,0)'});
-      lastMove = 0;
-      drag.reset();
       pEl.hide();
+      resetSize();
+      calculateSize();
+      renderLoop();
+      lastMove = enableLoop?itemWidth:0;
+      moveToX();
+      drag.reset();
+      renderProcess();
+      me.startAutoRun();
+    }
+    this.refresh = function(){
+      me.stopAutoRun();
+      pEl.hide();
+      resetSize();
+      calculateSize();
+      renderLoop();
       renderProcess();
       me.startAutoRun();
     }
     this.stopAutoRun = function () {
       autoTimer && clearInterval(autoTimer);
+      stopLoopHelper();
+    }
+    function stopLoopHelper(){
+      loopTimer && clearInterval(loopTimer);
     }
     function moveOrientation() {
-      totalWidth = totalWidth || el.width();
-      itemLength = el.children().length;
-      itemWidth = itemWidth || (totalWidth / itemLength);
-      if (index == itemLength - 1) {
+      calculateSize();
+      if (!enableLoop && index == itemLength - 1) {
         orientation = false;
       } else if (index == 0) {
         orientation = true;
@@ -257,6 +293,19 @@ define(function (require, exports, module) {
       }
     }
 
+    function renderLoop(){
+      if (enableLoop){
+        el.find('.'+loopCls).remove();
+        var cels = [].slice.call(el.children()),
+          first = cels.pop().cloneNode(true),
+          last = cels.shift().cloneNode(true);
+        first.classList.add(loopCls);
+        last.classList.add(loopCls);
+        el.prepend(first);
+        el.append(last);
+      }
+    }
+
     function runProcess() {
       if (!enablePrecess) {
         return;
@@ -264,6 +313,18 @@ define(function (require, exports, module) {
       var processChild = pEl.find('div');
       processChild.removeClass('on');
       $(processChild[index]).addClass('on');
+    }
+
+    function resetSize(){
+      el.find('.'+loopCls).remove();
+      totalWidth = 0;
+      itemLength = 0;
+      itemWidth = 0;
+    }
+    function calculateSize(){
+      totalWidth = totalWidth || el.width();
+      itemLength = itemLength || el.children().length;
+      itemWidth = itemWidth || (totalWidth / itemLength);
     }
 
     this.reset();
