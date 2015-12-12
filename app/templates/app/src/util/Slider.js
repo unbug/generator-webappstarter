@@ -25,7 +25,6 @@ define(function (require, exports, module) {
    * dragAnim, //[optional]drag move animation timing function,default 'cubic-bezier(0.075, 0.82, 0.165, 1)'
    * moveAnim, //[optional]auto move animation timing function,default 'ease'
    *
-   *
    * onMove, //[optional]on moving event listener
    * onFirst, //[optional]on first slide event listener
    * onLast, //[optional]on last slide event listener
@@ -64,7 +63,7 @@ define(function (require, exports, module) {
       autoTimer = 0,
       loopTimer = 0,
       loopCls = 'slider-duplicate',
-      moveToFn = vertical?moveToY:moveToX;
+      moveToFn = vertical ? moveToY : moveToX;
     resetSize();
     calculateSize();
     var enableProcess = option.enableProcess,
@@ -77,8 +76,8 @@ define(function (require, exports, module) {
       onTouchstart = option.onTouchstart || emptyFn,
       onTouchend = option.onTouchend || emptyFn,
       onTouchmove = option.onTouchmove || emptyFn;
-    var dragAnim = option.dragAnim||'cubic-bezier(0.075, 0.82, 0.165, 1)',//'cubic-bezier(0.1, 0.57, 0.1, 1)';
-      moveAnim = option.moveAnim||'ease';
+    var dragAnim = option.dragAnim || 'cubic-bezier(0.075, 0.82, 0.165, 1)',//'cubic-bezier(0.1, 0.57, 0.1, 1)';
+      moveAnim = option.moveAnim || 'ease';
     var drag = {
       moved: false,
       timer: 0,
@@ -93,8 +92,8 @@ define(function (require, exports, module) {
       resetMaxMove: function () {
         drag.maxMove = itemLen / 2;
       },
-      distPos: function(){
-        return drag[vertical?'distY':'distX'];
+      distPos: function () {
+        return drag[vertical ? 'distY' : 'distX'];
       },
       reset: function () {
         drag.moved = false;
@@ -110,7 +109,7 @@ define(function (require, exports, module) {
         if (!drag.moved) {
           return;
         }
-        var mX = -(index+(enableLoop?1:0)) * itemLen,
+        var mX = -(index + (enableLoop ? 1 : 0)) * itemLen,
           dx = Math.round(Math.abs(drag.distPos()) / moveRate);
         drag.moveDistX = dx;
         if (dx > itemLen * 9 / 10) {
@@ -122,7 +121,7 @@ define(function (require, exports, module) {
           mX -= dx;
         }
 
-        moveToFn(mX,0,dragAnim);
+        moveToFn(mX, 0, dragAnim);
         lastMove = -mX;
       },
       endDrag: function () {
@@ -211,7 +210,7 @@ define(function (require, exports, module) {
       setTimeout(function () {
         isMoving = false;
       }, moveTimeout);
-      if(!enableLoop){
+      if (!enableLoop) {
         if (index > itemCount - 1) {
           index = itemCount - 1;
           onLast(index);
@@ -220,9 +219,9 @@ define(function (require, exports, module) {
           onFirst(index);
         }
       }
-      var mx = (index+(enableLoop?1:0)) * itemLen,
+      var mx = (index + (enableLoop ? 1 : 0)) * itemLen,
         absm = Math.abs(lastMove - mx),
-        mtime = Math.min(moveDuration,(moveDuration / itemLen) * absm),
+        mtime = Math.min(moveDuration, (moveDuration / itemLen) * absm),
         animate = moveAnim;
 
       if (drag.isSwipe) {
@@ -234,10 +233,10 @@ define(function (require, exports, module) {
       lastMove = mx;
       //修正android差1px的问题
       //mx = (mx>0&&$.os.android)?(mx+1):mx;
-      moveToFn(-mx,mtime,animate);
+      moveToFn(-mx, mtime, animate);
 
       stopLoopHelper();
-      if(enableLoop){
+      if (enableLoop) {
         var loopm;
         if (index > itemCount - 1) {
           loopm = itemLen;
@@ -245,94 +244,34 @@ define(function (require, exports, module) {
           lastMove = itemLen;
           onLast(index);
         } else if (index < 0) {
-          loopm = itemLen*itemCount;
+          loopm = itemLen * itemCount;
           index = itemCount - 1;
           onFirst(index);
         }
-        loopTimer = loopm!==undefined && setTimeout(function(){
+        loopTimer = loopm !== undefined && setTimeout(function () {
             moveToFn(-loopm);
-        },mtime);
+          }, mtime);
       }
       runProcess();
       onMove(index);
     }
 
-    function moveToX(x,time,anim){
-      moveTo(x,0,time,anim);
+    function moveToX(x, time, anim) {
+      moveTo(x, 0, time, anim);
     }
-    function moveToY(x,time,anim){
-      moveTo(0,x,time,anim);
+
+    function moveToY(x, time, anim) {
+      moveTo(0, x, time, anim);
     }
-    function moveTo(x,y,time,anim){
+
+    function moveTo(x, y, time, anim) {
       el.css({
-        '-webkit-transform': 'translate3d('+(x||0)+'px'+','+(y||0)+'px,0)',
-        '-webkit-transition': '-webkit-transform '+(time||0)+'ms ' + (anim||moveAnim)
+        '-webkit-transform': 'translate3d(' + (x || 0) + 'px' + ',' + (y || 0) + 'px,0)',
+        '-webkit-transition': '-webkit-transform ' + (time || 0) + 'ms ' + (anim || moveAnim)
       });
     }
 
-    this.next = function () {
-      if (isMoving) {
-        return;
-      }
-      index++;
-      move();
-    }
-
-    this.pre = function () {
-      if (isMoving) {
-        return;
-      }
-      index--;
-      move();
-    }
-
-    this.moveTo = function(idx){
-      index = idx;
-      move();
-    }
-
-    this.reset = function () {
-      index = 0;
-      orientation = true;
-      me.stopAutoRun();
-      pEl.hide();
-      resetSize();
-      calculateSize();
-      renderLoop();
-      lastMove = enableLoop?itemLen:0;
-      moveToFn(-lastMove);
-      drag.reset();
-      renderProcess();
-      me.startAutoRun();
-    }
-
-    this.refresh = function(){
-      me.stopAutoRun();
-      pEl.hide();
-      resetSize();
-      calculateSize();
-      renderLoop();
-      renderProcess();
-      me.startAutoRun();
-    }
-
-    this.startAutoRun = function () {
-      if (enableAutorun && itemCount > 1) {
-        autoTimer = setInterval(function () {
-          if (drag.moved) {
-            return;
-          }//如果拖动就停止
-          moveOrientation();
-        }, 3000);
-      }
-    }
-
-    this.stopAutoRun = function () {
-      autoTimer && clearInterval(autoTimer);
-      stopLoopHelper();
-    }
-
-    function stopLoopHelper(){
+    function stopLoopHelper() {
       loopTimer && clearInterval(loopTimer);
     }
 
@@ -362,9 +301,9 @@ define(function (require, exports, module) {
       }
     }
 
-    function renderLoop(){
-      if (enableLoop){
-        el.find('.'+loopCls).remove();
+    function renderLoop() {
+      if (enableLoop) {
+        el.find('.' + loopCls).remove();
         var cels = [].slice.call(el.children()),
           first = cels.pop().cloneNode(true),
           last = cels.shift().cloneNode(true);
@@ -384,17 +323,80 @@ define(function (require, exports, module) {
       $(processChild[index]).addClass('on');
     }
 
-    function resetSize(){
-      el.find('.'+loopCls).remove();
+    function resetSize() {
+      el.find('.' + loopCls).remove();
       itemLen = option.itemLen || 0;
       itemCount = option.itemCount || 0;
-      totalLen = option.totalLen || (itemCount*itemLen) || 0;
+      totalLen = option.totalLen || (itemCount * itemLen) || 0;
     }
-    function calculateSize(){
+
+    function calculateSize() {
       var child = el.children();
-      itemLen = itemLen || child.eq(0)[vertical?'height':'width']();
+      itemLen = itemLen || child.eq(0)[vertical ? 'height' : 'width']();
       itemCount = itemCount || child.length;
-      totalLen = totalLen || (itemLen*itemCount);
+      totalLen = totalLen || (itemLen * itemCount);
+    }
+
+    this.next = function () {
+      if (isMoving) {
+        return;
+      }
+      index++;
+      move();
+    }
+
+    this.pre = function () {
+      if (isMoving) {
+        return;
+      }
+      index--;
+      move();
+    }
+
+    this.moveTo = function (idx) {
+      index = idx;
+      move();
+    }
+
+    this.reset = function () {
+      index = 0;
+      orientation = true;
+      me.stopAutoRun();
+      pEl.hide();
+      resetSize();
+      calculateSize();
+      renderLoop();
+      lastMove = enableLoop ? itemLen : 0;
+      moveToFn(-lastMove);
+      drag.reset();
+      renderProcess();
+      me.startAutoRun();
+    }
+
+    this.refresh = function () {
+      me.stopAutoRun();
+      pEl.hide();
+      resetSize();
+      calculateSize();
+      renderLoop();
+      renderProcess();
+      me.startAutoRun();
+    }
+
+    this.startAutoRun = function () {
+      if (enableAutorun && itemCount > 1) {
+        autoTimer = setInterval(function () {
+          if (drag.moved) {
+            return;
+          }//如果拖动就停止
+          moveOrientation();
+        }, 3000);
+      }
+    }
+
+    this.stopAutoRun = function () {
+      autoTimer && clearInterval(autoTimer);
+      stopLoopHelper();
     }
 
     this.reset();
