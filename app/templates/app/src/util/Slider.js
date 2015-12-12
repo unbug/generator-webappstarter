@@ -1,26 +1,65 @@
 define(function (require, exports, module) {
+  /**
+   *
+   * @param option
+   * {
+   * el, //list wrap element,optional if listEl is specified
+   * listEl,// list element,optional if el is specified
+   * processEl,//process element,optional if el is specified
+   * listCls, //[optional]css class to find the slide list,default ".list"
+   * processCls, //[optional]css class to find the slide process,default ".process"
+   *
+   * vertical, //[optional]slide direction,default horizontal(false)
+   * itemLen, //[optional]width(or height) for each item
+   * itemCount,//[optional]total item length for the list
+   * totalLen,//[optional]total width(or height) for the list
+   *
+   * enableDrag, //[optional]enable drag to move,default false
+   * enableLoop, //[optional]enable infinite loop,default false
+   * enableAutorun, //[optional]enable auto move,default false
+   * enableProcess, //[optional]enable default navigation process UI,default false
+   *
+   * moveTimeout, //[optional]time out for next move,default 100ms
+   * moveDuration, //[optional]time out for one move duration,default 640
+   * moveRate, //[optional]speed for animate one move,default 1.3
+   * dragAnim, //[optional]drag move animation timing function,default 'cubic-bezier(0.075, 0.82, 0.165, 1)'
+   * moveAnim, //[optional]auto move animation timing function,default 'ease'
+   *
+   *
+   * onMove, //[optional]on moving event listener
+   * onFirst, //[optional]on first slide event listener
+   * onLast, //[optional]on last slide event listener
+   * onTouchstart, //[optional]on touchstart event listener
+   * onTouchend, //[optional]on touchend  event listener
+   * onTouchmove //[optional]on touchmove  event listener
+   * }
+   * @constructor Slider
+   */
   function Slider(option) {
     option = option || {};
     var me = this,
       emptyFn = function () {
       },
-      el = option.el.find('.' + (option.listCls || 'list')),
-      pEl = option.el.find('.' + (option.processCls || 'process')),
+      el = option.listEl || option.el.find(option.listCls || '.list'),
+      pEl = option.processEl || el.siblings(option.processCls || '.process'),
       isMoving = false,
       moveTimeout = option.moveTimeout || 100,
       moveDuration = option.moveDuration || 640,
       moveRate = option.moveRate || 1.3,
+      vertical = option.vertical,
       index = 0,
-      totalWidth,
-      itemLength,
-      itemWidth,
+      totalLen,
+      itemCount,
+      itemLen,
       orientation = true,
       lastMove = 0,
       autoTimer = 0,
       loopTimer = 0,
-      loopCls = 'slider-duplicate';
+      loopCls = 'slider-duplicate',
+      moveToFn = vertical?moveToY:moveToX;
+    resetSize();
     calculateSize();
-    var enablePrecess = option.enablePrecess || option.enableProcess,
+    var enableProcess = option.enableProcess,
       enableAutorun = option.enableAutorun,
       enableDrag = option.enableDrag,
       enableLoop = option.enableLoop;
@@ -30,7 +69,8 @@ define(function (require, exports, module) {
       onTouchstart = option.onTouchstart || emptyFn,
       onTouchend = option.onTouchend || emptyFn,
       onTouchmove = option.onTouchmove || emptyFn;
-    var bezier = 'cubic-bezier(0.075, 0.82, 0.165, 1)';//'cubic-bezier(0.1, 0.57, 0.1, 1)';
+    var dragAnim = option.dragAnim||'cubic-bezier(0.075, 0.82, 0.165, 1)',//'cubic-bezier(0.1, 0.57, 0.1, 1)';
+      moveAnim = option.moveAnim||'ease';
     var drag = {
       moved: false,
       timer: 0,
@@ -39,11 +79,14 @@ define(function (require, exports, module) {
       dirY: 0,
       distY: 0,
       moveDistX: 0,
-      maxMove: itemWidth / 2,
+      maxMove: itemLen / 2,
       startTime: 0,
       endTime: 0,
       resetMaxMove: function () {
-        drag.maxMove = itemWidth / 2;
+        drag.maxMove = itemLen / 2;
+      },
+      distPos: function(){
+        return drag[vertical?'distY':'distX'];
       },
       reset: function () {
         drag.moved = false;
@@ -59,37 +102,37 @@ define(function (require, exports, module) {
         if (!drag.moved) {
           return;
         }
-        var mX = -(index+(enableLoop?1:0)) * itemWidth,
-          dx = Math.round(Math.abs(drag.distX) / moveRate);
+        var mX = -(index+(enableLoop?1:0)) * itemLen,
+          dx = Math.round(Math.abs(drag.distPos()) / moveRate);
         drag.moveDistX = dx;
-        if (dx > itemWidth * 9 / 10) {
+        if (dx > itemLen * 9 / 10) {
           drag.endDrag();
           return;
-        } else if (drag.distX > 0) {
+        } else if (drag.distPos() > 0) {
           mX += dx;
         } else {
           mX -= dx;
         }
 
-        moveToX(mX,0,bezier);
+        moveToFn(mX,0,dragAnim);
         lastMove = -mX;
       },
       endDrag: function () {
         drag.moved = false;
-        var mX = -index * itemWidth,
+        var mX = -index * itemLen,
           dx = drag.moveDistX;
         if (drag.isSwipe) {
-          drag.distX > 0 ? me.pre() : me.next();
+          drag.distPos() > 0 ? me.pre() : me.next();
         } else {
-          if (drag.distX > 0) {
+          if (drag.distPos() > 0) {
             mX += dx;
           } else {
             mX -= dx;
           }
-          if (mX >= 0 || mX <= -(totalWidth - itemWidth) || dx < drag.maxMove) {
+          if (mX >= 0 || mX <= -(totalLen - itemLen) || dx < drag.maxMove) {
             move();
           } else {
-            drag.distX > 0 ? me.pre() : me.next();
+            drag.distPos() > 0 ? me.pre() : me.next();
           }
         }
 
@@ -99,14 +142,14 @@ define(function (require, exports, module) {
     };
 
     function touchStart(e) {
-      if (itemLength < 2 || isMoving) {
+      if (itemCount < 2 || isMoving) {
         return;
       }
       drag.startTime = new Date().getTime();
       onTouchstart();
       me.stopAutoRun();
-      totalWidth = totalWidth || el.width();
-      itemWidth = itemWidth || (totalWidth / itemLength);
+      totalLen = totalLen || el.width();
+      itemLen = itemLen || (totalLen / itemCount);
       drag.resetMaxMove();
       var touch = e.touches[0];
       drag.moved = true;
@@ -134,7 +177,7 @@ define(function (require, exports, module) {
     function touchEnd(e) {
       drag.endTime = new Date().getTime();
       if (drag.moved) {
-        drag.isSwipe = drag.endTime - drag.startTime <= 200 && Math.abs(drag.distX) > 30;
+        drag.isSwipe = drag.endTime - drag.startTime <= 200 && Math.abs(drag.distPos()) > 30;
         drag.endDrag();
       }
       onTouchend(Math.abs(drag.distX), Math.abs(drag.distY));
@@ -175,45 +218,45 @@ define(function (require, exports, module) {
         isMoving = false;
       }, moveTimeout);
       if(!enableLoop){
-        if (index > itemLength - 1) {
-          index = itemLength - 1;
+        if (index > itemCount - 1) {
+          index = itemCount - 1;
           onLast(index);
         } else if (index < 0) {
           index = 0;
           onFirst(index);
         }
       }
-      var mx = (index+(enableLoop?1:0)) * itemWidth,
+      var mx = (index+(enableLoop?1:0)) * itemLen,
         absm = Math.abs(lastMove - mx),
-        mtime = Math.min(moveDuration,(moveDuration / itemWidth) * absm),
-        animate = 'ease';
+        mtime = Math.min(moveDuration,(moveDuration / itemLen) * absm),
+        animate = moveAnim;
 
       if (drag.isSwipe) {
         var velocity = drag.moveDistX * moveRate / (drag.endTime - drag.startTime);
         mtime = velocity * absm;
-        animate = bezier;
+        animate = dragAnim;
       }
 
       lastMove = mx;
       //修正android差1px的问题
       //mx = (mx>0&&$.os.android)?(mx+1):mx;
-      moveToX(-mx,mtime,animate);
+      moveToFn(-mx,mtime,animate);
 
       stopLoopHelper();
       if(enableLoop){
         var loopm;
-        if (index > itemLength - 1) {
-          loopm = itemWidth;
+        if (index > itemCount - 1) {
+          loopm = itemLen;
           index = 0;
-          lastMove = itemWidth;
+          lastMove = itemLen;
           onLast(index);
         } else if (index < 0) {
-          loopm = itemWidth*itemLength;
-          index = itemLength - 1;
+          loopm = itemLen*itemCount;
+          index = itemCount - 1;
           onFirst(index);
         }
         loopTimer = loopm!==undefined && setTimeout(function(){
-          moveToX(-loopm);
+            moveToFn(-loopm);
         },mtime);
       }
       runProcess();
@@ -221,9 +264,15 @@ define(function (require, exports, module) {
     }
 
     function moveToX(x,time,anim){
+      moveTo(x,0,time,anim);
+    }
+    function moveToY(x,time,anim){
+      moveTo(0,x,time,anim);
+    }
+    function moveTo(x,y,time,anim){
       el.css({
-        '-webkit-transform': 'translate3d('+(x||0)+'px'+',0,0)',
-        '-webkit-transition': '-webkit-transform '+(time||0)+'ms ' + (anim||bezier)
+        '-webkit-transform': 'translate3d('+(x||0)+'px'+','+(y||0)+'px,0)',
+        '-webkit-transition': '-webkit-transform '+(time||0)+'ms ' + (anim||moveAnim)
       });
     }
 
@@ -235,8 +284,8 @@ define(function (require, exports, module) {
       resetSize();
       calculateSize();
       renderLoop();
-      lastMove = enableLoop?itemWidth:0;
-      moveToX();
+      lastMove = enableLoop?itemLen:0;
+      moveToFn(-lastMove);
       drag.reset();
       renderProcess();
       me.startAutoRun();
@@ -259,7 +308,7 @@ define(function (require, exports, module) {
     }
     function moveOrientation() {
       calculateSize();
-      if (!enableLoop && index == itemLength - 1) {
+      if (!enableLoop && index == itemCount - 1) {
         orientation = false;
       } else if (index == 0) {
         orientation = true;
@@ -272,7 +321,7 @@ define(function (require, exports, module) {
     }
 
     this.startAutoRun = function () {
-      if (enableAutorun && itemLength > 1) {
+      if (enableAutorun && itemCount > 1) {
         autoTimer = setInterval(function () {
           if (drag.moved) {
             return;
@@ -282,9 +331,9 @@ define(function (require, exports, module) {
       }
     }
     function renderProcess() {
-      if (enablePrecess && itemLength > 1) {
+      if (enableProcess && itemCount > 1) {
         var tmp = [];
-        for (var i = 0; i < itemLength; i++) {
+        for (var i = 0; i < itemCount; i++) {
           tmp.push('<div></div>');
         }
         pEl.html(tmp.join(''));
@@ -307,7 +356,7 @@ define(function (require, exports, module) {
     }
 
     function runProcess() {
-      if (!enablePrecess) {
+      if (!enableProcess) {
         return;
       }
       var processChild = pEl.find('div');
@@ -317,14 +366,15 @@ define(function (require, exports, module) {
 
     function resetSize(){
       el.find('.'+loopCls).remove();
-      totalWidth = 0;
-      itemLength = 0;
-      itemWidth = 0;
+      itemLen = option.itemLen || 0;
+      itemCount = option.itemCount || 0;
+      totalLen = option.totalLen || (itemCount*itemLen) || 0;
     }
     function calculateSize(){
-      totalWidth = totalWidth || el.width();
-      itemLength = itemLength || el.children().length;
-      itemWidth = itemWidth || (totalWidth / itemLength);
+      var child = el.children();
+      itemLen = itemLen || child.eq(0)[vertical?'height':'width']();
+      itemCount = itemCount || child.length;
+      totalLen = totalLen || (itemLen*itemCount);
     }
 
     this.reset();
