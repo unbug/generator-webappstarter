@@ -63,6 +63,7 @@ define(function (require, exports, module) {
       autoTimer = 0,
       loopTimer = 0,
       loopCls = 'slider-duplicate',
+      currentCls = 'slider-current',
       moveToFn = vertical ? moveToY : moveToX;
     resetSize();
     calculateSize();
@@ -253,6 +254,7 @@ define(function (require, exports, module) {
           }, mtime);
       }
       runProcess();
+      addClasses(index);
       onMove(index);
     }
 
@@ -371,6 +373,9 @@ define(function (require, exports, module) {
       drag.reset();
       renderProcess();
       me.startAutoRun();
+      addClasses(index);
+      onFirst(index);
+      onMove(index);
     }
 
     this.refresh = function () {
@@ -397,6 +402,12 @@ define(function (require, exports, module) {
     this.stopAutoRun = function () {
       autoTimer && clearInterval(autoTimer);
       stopLoopHelper();
+    }
+
+    function addClasses(idx){
+      idx = enableLoop?(idx+1):idx;
+      el.find('.'+currentCls).removeClass(currentCls);
+      el.children().eq(idx).addClass(currentCls);
     }
 
     this.reset();
