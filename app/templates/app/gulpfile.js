@@ -378,7 +378,6 @@ gulp.task('serve', function () {
   browserSync(browserSyncOptions);
 
   gulp.watch(['./*.html'], reload);
-  gulp.watch(['./*.manifest'], reload);
   gulp.watch(['./src/*.js'], reload);
   gulp.watch(['./resources/**/*.css'], reload);
   gulp.watch(['./resources/**/*.*g'], reload);
