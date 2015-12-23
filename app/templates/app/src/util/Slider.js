@@ -386,6 +386,8 @@ define(function (require, exports, module) {
       renderLoop();
       renderProcess();
       me.startAutoRun();
+      addClasses(index);
+      onMove(index);
     }
 
     this.startAutoRun = function () {
