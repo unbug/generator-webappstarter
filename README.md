@@ -1,3 +1,4 @@
+[![NPM](https://nodei.co/npm/generator-webappstarter.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/generator-webappstarter/)
   
   >Note: This generator is supporting a very early stage app,things gonna change very frequently,so please do not fork it or do any pull request.
   
