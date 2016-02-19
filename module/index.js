@@ -33,15 +33,15 @@ module.exports = yeoman.generators.Base.extend({
       file += add.join('');
       htmlWiring.writeFileFromString(file, 'html/site/include/views.html');
 
-      //make module scss and add to _debut-view.scss
-      this.template('module.scss', 'scss/_debug-view-' + this.lmoduleName + '.scss');
-      file = htmlWiring.readFileAsString('scss/_debug-view.scss');
+      //make module scss and add to _view.scss
+      this.template('module.scss', 'scss/_view-' + this.lmoduleName + '.scss');
+      file = htmlWiring.readFileAsString('scss/_view.scss');
       add = [];
-      add.push('\n\n/*debug-view-' + this.lmoduleName + '.scss*/');
-      add.push('\n@import "debug-view-' + this.lmoduleName + '.scss";');
-      add.push('\n/*end debug-view-' + this.lmoduleName + '.scss*/');
+      add.push('\n\n/*view-' + this.lmoduleName + '.scss*/');
+      add.push('\n@import "view-' + this.lmoduleName + '.scss";');
+      add.push('\n/*end view-' + this.lmoduleName + '.scss*/');
       file += add.join('');
-      htmlWiring.writeFileFromString(file, 'scss/_debug-view.scss');
+      htmlWiring.writeFileFromString(file, 'scss/_view.scss');
 
       //make module view js
       this.template('ModuleView.js', 'src/app/view/' + this.moduleName + 'View.js');

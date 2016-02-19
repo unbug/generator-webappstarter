@@ -16,6 +16,7 @@ var browserSync = require('browser-sync');//http://www.browsersync.io/docs/gulp/
 var reload = browserSync.reload;
 var pagespeed = require('psi');
 var cachebust = new $.cachebust();
+var webpack = require("webpack-stream");
 require('date-utils');
 
 //values
@@ -94,7 +95,7 @@ gulp.task('watch', function () {
         .pipe($.jshint())
         .pipe($.jshint.reporter('jshint-stylish'));
 
-      runSequence('requirejs');
+      runSequence('webpackjs');
     }
     else if (/.*\.scss$/.test(event.path)) {
       //scsslint
@@ -156,59 +157,26 @@ gulp.task('cssmin', function () {
     .pipe($.size({title: 'cssmin'}));
 });
 
-//compile requirejs modules
-//https://github.com/RobinThrift/gulp-requirejs/issues/5
-//npm install git://github.com/bleadof/gulp-requirejs#end-stream-and-emit-error --save-dev
-gulp.task('requirejs', function (cb) {
-  var files = [];
-  //enable manifest
-  if(conf.project.manifest){
-    files.push('util/AppCache.js');
-  }
-  files.push('app/App.js');
-  return $.requirejs({
-      baseUrl: './src',
-      include: files,
-      insertRequire: ['app/App.js'],
-      out: 'app.js',
-      optimize: 'none',
-      name: 'almond',
-      wrap: true
-    })
-    .pipe(through2.obj(function (file, enc, next) {
-      this.push(file);
-      this.end();
-      next();
+gulp.task('webpackjs', function() {
+  return gulp.src(['./src/app/App.js'])
+    .pipe(webpack({
+      resolve: {
+        root: [
+          path.resolve('./src')
+        ]
+      },
+      output: {
+        filename: "app.js",
+        sourceMapFilename: 'app.map'
+      },
+      devtool: 'source-map'
     }))
-    .pipe($.cached('build-cache', {
-      optimizeMemory: true
-    }))
-    .pipe(gulp.dest('./src/'));
+    .pipe(gulp.dest('./src'));
 });
 
 //compress js to dist
 gulp.task('uglifyjs', function () {
-  var files = [];
-  //enable manifest
-  if(conf.project.manifest){
-    files.push('util/AppCache.js');
-  }
-  files.push('app/App.js');
-  return $.requirejs({
-      baseUrl: './src',
-      include: files,
-      out: 'app.js',
-      optimize: 'none',
-      wrap: true
-    })
-    .pipe(through2.obj(function (file, enc, next) {
-      this.push(file);
-      this.end();
-      next();
-    }))
-    .pipe($.amdclean.gulp({
-      'prefixMode': 'standard'
-    }))
+  gulp.src(['./src/app.js'])
     //remove //_DEBUG_ in files,
     //such as: "///_DEBUG_*Todo: debug actions //*/ "
     //will become "/*Todo: debug actions //*/",so uglify could remove all comments
@@ -445,7 +413,7 @@ gulp.task('prepare', function (cb) {
   runSequence('build_version', cb);
 });
 gulp.task('compile', function (cb) {
-  runSequence(['sass', 'requirejs', 'manifest', 'include:debug'], cb);
+  runSequence(['sass', 'webpackjs', 'manifest', 'include:debug'], cb);
 });
 gulp.task('dist', function (cb) {
   runSequence('clean:dist', 'build_version', 'dist:resources', 'dist:images', 'cssmin', 'uglifyjs', 'manifest', 'dist:manifest','includes:official', '_endlog', cb);

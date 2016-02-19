@@ -3,9 +3,9 @@ define(function (require, exports, module) {
     postJSON = Core.RequestHandler.postJSON,
     JSONP = Core.RequestHandler.JSONP;
 
-  function request(action,data,callback,scope,options) {
+  function request(action, data, callback, scope, options) {
     options = options || {};
-    var __STORE_ID,conf;
+    var __STORE_ID, conf;
     data = data || {};
     data._t = new Date().getTime();
     __STORE_ID = data.__STORE_ID;
@@ -15,22 +15,23 @@ define(function (require, exports, module) {
       data: data,
       complete: function (data) {
         if (data.success) {
-          scope && scope.set && scope.set(data.data,__STORE_ID);
+          scope && scope.set && scope.set(data.data, __STORE_ID);
         }
         callback && callback(data.success);
       }
     };
-    for(var name in options) conf[name]=options[name];
+    for (var name in options) conf[name] = options[name];
     conf.action = action;
     conf.data = data;
     getJSON(conf);
   }
-  function post(action,data,callback,scope,options) {
+
+  function post(action, data, callback, scope, options) {
     options = options || {};
     var conf = {
       action: action,
       data: data,
-      contentType: options.contentType||"application/json;charset=utf-8",
+      contentType: options.contentType || "application/json;charset=utf-8",
       complete: function (data) {
         if (data.success) {
           scope && scope.set && scope.set(data.data);
@@ -38,13 +39,13 @@ define(function (require, exports, module) {
         callback && callback(data.success);
       }
     };
-    for(var name in options) conf[name]=options[name];
+    for (var name in options) conf[name] = options[name];
     conf.action = action;
     conf.data = data;
     postJSON(conf);
   }
 
-  return {
+  module.exports = {
     getJSON: getJSON,
     postJSON: postJSON,
     JSONP: JSONP,

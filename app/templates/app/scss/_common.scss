@@ -1,0 +1,68 @@
+@charset "UTF-8";
+/* http://css-tricks.com/poll-results-how-do-you-order-your-css-properties/ */
+body, html {
+  text-align: left;
+  height: 100%; /*高度必须为100%*/
+  width: 100%;
+  font-family: Roboto, HelveticaNeue, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  font-weight: normal;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: center;
+}
+
+body {
+  width: $layout-with;
+  min-height: 100%;
+  height: auto;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  -webkit-user-select: text;
+  word-break: normal;
+}
+
+*, :after, :before {
+  -webkit-box-sizing: border-box; /*高宽不算padding,margin*/
+  -webkit-text-size-adjust: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+a, img {
+  -webkit-touch-callout: none; /*禁用长按弹出系统菜单*/
+}
+
+a {
+  text-decoration: none;
+}
+
+section, p, div {
+  max-height: 999999px;
+}
+
+textarea, input[type="password"], input[type="text"] {
+  resize: none; /*禁用可缩放*/
+  outline: none; /*禁用发光效果*/
+  -webkit-appearance: none; /*禁用增加外观效果*/
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  background: #fff;
+  overflow: scroll;
+}
+
+audio {
+  width: 0;
+  height: 0;
+  padding: 0;
+  margin: 0;
+  opacity: 0;
+  visibility: hidden;
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+}

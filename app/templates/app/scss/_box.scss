@@ -1,0 +1,63 @@
+@charset "UTF-8";
+
+.box-h{
+  @include box-h;
+}
+.box-h-c-c{
+  @include box-h-c-c;
+}
+.box-h-c-r{
+  @include box-h-c-r;
+}
+.box-h-c-l{
+  @include box-h-c-l;
+}
+.box-h-t-c{
+  @include box-h-t-c;
+}
+.box-h-t-l{
+  @include box-h-t-l;
+}
+.box-h-t-r{
+  @include box-h-t-r;
+}
+.box-h-b-c{
+  @include box-h-b-c;
+}
+.box-h-b-l{
+  @include box-h-b-l;
+}
+.box-h-b-r{
+  @include box-h-b-r;
+}
+
+.box-v{
+  @include box-v;
+}
+.box-v-c-c{
+  @include box-v-c-c;
+}
+.box-v-c-l{
+  @include box-v-c-l;
+}
+.box-v-c-r{
+  @include box-v-c-r;
+}
+.box-v-t-c{
+  @include box-v-t-c;
+}
+.box-v-t-l{
+  @include box-v-t-l;
+}
+.box-v-t-r{
+  @include box-v-t-r;
+}
+.box-v-b-c{
+  @include box-v-b-c;
+}
+.box-v-b-l{
+  @include box-v-b-l;
+}
+.box-v-b-r{
+  @include box-v-b-r;
+}

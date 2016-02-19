@@ -41,23 +41,20 @@
   line-height: 98px;
   font-size: 38px;
   padding: 0 30px;
-  -webkit-border-radius: 8px;
+  text-transform: uppercase;
   &.size-s{
     padding: 0 20px;
-    font-size: 26px;
-    height: 60px;
-    line-height: 58px;
+    font-size: 28px;
+    height: 70px;
+    line-height: 68px;
   }
 }
 .bt-primary{
   color: #fff;
+  background-color: $color-black-fourth;
   &:active {
     background-color: $color-red;
   }
-}
-
-.bt-primary {
-  background-color: $color-black;
   &.disabled{
     background-color: $color-gray-third;
     &:active{
@@ -67,8 +64,9 @@
 }
 
 .bt-default {
-  border: 2px solid $color-gray;
-  color: $color-black-third;
+  border: 2px solid $color-black-second;
+  color: $color-black-fourth;
+  background: #fff;
   &:active {
     border: 2px solid $color-red;
     color: #fff;

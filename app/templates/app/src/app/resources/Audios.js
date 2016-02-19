@@ -1,4 +1,2 @@
-define(function (require, exports, module) {
-  var Audios = {}
-  return Audios;
-});
+var Audios = {}
+module.exports = Audios;

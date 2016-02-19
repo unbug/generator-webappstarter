@@ -29,12 +29,6 @@ module.exports = yeoman.generators.Base.extend({
       this.log('updating "./src/widget" directory');
       this.directory('../../app/templates/app/src/widget', './src/widget');
     },
-    reqirejs: function () {
-      this.log('updating reqirejs files');
-      this.copy('../../app/templates/app/src/almond.js', './src/almond.js');
-      this.copy('../../app/templates/app/src/require.js', './src/require.js');
-      this.copy('../../app/templates/app/src/require-config.js', './src/require-config.js');
-    },
     app: function(){
       this.log('updating some files in "./src/app/" directory');
       //copy Basic Controller.js
@@ -47,17 +41,21 @@ module.exports = yeoman.generators.Base.extend({
     },
     scss: function(){
       this.log('updating some files in "./scss/" directory');
-      this.copy('../../app/templates/app/scss/_debug-common.scss','./scss/_debug-common.scss');
-      this.copy('../../app/templates/app/scss/_debug-mixin.scss','./scss/_debug-mixin.scss');
-      this.copy('../../app/templates/app/scss/_debug-value.scss','./scss/_debug-value.scss');
-      this.copy('../../app/templates/app/scss/_debug-components.scss','./scss/_debug-components.scss');
-      this.copy('../../app/templates/app/scss/_debug-slide.scss','./scss/_debug-slide.scss');
-      this.copy('../../app/templates/app/scss/_debug-msgbox.scss','./scss/_debug-msgbox.scss');
-      this.copy('../../app/templates/app/scss/_debug-tooltip.scss','./scss/_debug-tooltip.scss');
-      this.copy('../../app/templates/app/scss/_debug-loading-spinner.scss','./scss/_debug-loading-spinner.scss');
-      this.copy('../../app/templates/app/scss/_debug-section-download.scss','./scss/_debug-section-download.scss');
-      this.copy('../../app/templates/app/scss/_debug-animate.scss','./scss/_debug-animate.scss');
-      this.copy('../../app/templates/app/scss/_debug-button.scss','./scss/_debug-button.scss');
+      this.copy('../../app/templates/app/scss/_common.scss','./scss/_common.scss');
+      this.copy('../../app/templates/app/scss/_mixin.scss','./scss/_mixin.scss');
+      this.copy('../../app/templates/app/scss/_value.scss','./scss/_value.scss');
+      this.copy('../../app/templates/app/scss/_box.scss','./scss/_box.scss');
+      this.copy('../../app/templates/app/scss/_util.scss','./scss/_util.scss');
+      this.copy('../../app/templates/app/scss/_components.scss','./scss/_components.scss');
+      this.copy('../../app/templates/app/scss/_slide.scss','./scss/_slide.scss');
+      this.copy('../../app/templates/app/scss/_msgbox.scss','./scss/_msgbox.scss');
+      this.copy('../../app/templates/app/scss/_msgbox-android.scss','./scss/_msgbox-android.scss');
+      this.copy('../../app/templates/app/scss/_msgbox-deja.scss','./scss/_msgbox-deja.scss');
+      this.copy('../../app/templates/app/scss/_tooltip.scss','./scss/_tooltip.scss');
+      this.copy('../../app/templates/app/scss/_loading-spinner.scss','./scss/_loading-spinner.scss');
+      this.copy('../../app/templates/app/scss/_section-download.scss','./scss/_section-download.scss');
+      this.copy('../../app/templates/app/scss/_animate.scss','./scss/_animate.scss');
+      this.copy('../../app/templates/app/scss/_button.scss','./scss/_button.scss');
     },
     html: function(){
       this.log('updating some files in "./html/" directory');
