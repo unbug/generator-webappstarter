@@ -63,7 +63,7 @@ gulp.task('sprites', function () {
   return gulp.src(sourceSprites)
     .pipe(sprite({
       name: 'sprites',
-      style: '_debug-sprites.scss',
+      style: '_sprites.scss',
       cssPath: '../images/',
       processor: 'css'
     }))

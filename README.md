@@ -123,7 +123,7 @@ View the page on offical server [http://m.deja.me/PROJECTNAME/](http://m.deja.me
 This command require [rsync](https://rsync.samba.org/).
 For windows,unzip  /tools/rsync.zip to a local path and add the path to classpath.
 
-4.run this command to copy source images to project's `resources/images/` path,then generate `scss/_dubug-sprites.csss` and `resources/images/sprites.png` for sourceSprites in `package.json`.
+4.run this command to copy source images to project's `resources/images/` path,then generate `scss/_sprites.csss` and `resources/images/sprites.png` for sourceSprites in `package.json`.
 
 ```shell
 gulp copy
