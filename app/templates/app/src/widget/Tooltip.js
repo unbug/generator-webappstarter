@@ -9,6 +9,8 @@ var _body = $('body');
    * rootCls: css class for the root container
    * renderTo: element for root container to render,
    * bodyCls: css class for the body container,
+   * bodyStyle: css style for body container,
+   * theme: UI theme,see in _tooltip.css
    * zIndex: z-index for root container,
    * top: top position,
    * left: left position,
@@ -22,8 +24,8 @@ var _body = $('body');
    * onShow: event for show,
    * onHide: event for hide,
    * arrow: {
-   *  tyle: left|right|top|bottom,
-   *  positon: top position for left|right,left position for top|bottom
+   *  type: left|right|top|bottom,
+   *  position: top position for left|right,left position for top|bottom
    * }
    * }
  * @constructor
@@ -42,6 +44,7 @@ function Tooltip(options) {
     rootId = options.rootId || prefix + '_rootid_' + new Date().getTime(),
     renderTo = options.renderTo || _body,
     showAnimCls = options.showAnimCls || 'fadeIn',
+    target = options.target!=undefined && (/string/i.test(typeof options.target)?$(options.target):options.target),
     els,
     destoryed = false;
 
@@ -65,6 +68,7 @@ function Tooltip(options) {
     }
     renderTo.append(tpl({
       rootId: rootId,
+      theme: options.theme || '',
       rootCls: options.rootCls || '',
       bodyCls: options.bodyCls || '',
       body: options.body || '',
@@ -76,9 +80,10 @@ function Tooltip(options) {
     var main = $('#' + rootId);
     els = {
       main: main,
-      ct: main.find('.tooltip-ct'),
-      bd: main.find('.tooltip-bd'),
-      arrow: main.find('.arrow')
+      ct: main.find('.tooltip__ct'),
+      bd: main.find('.tooltip__bd'),
+      content: main.find('.tooltip__content'),
+      arrow: main.find('.tooltip__arrow')
     }
   }
 
@@ -91,6 +96,7 @@ function Tooltip(options) {
     els.ct.css({
       'padding-left': options.left != undefined ? (options.left + 'px') : 'auto'
     });
+    els.content.css(options.bodyStyle||{});
   }
 
   this.show = function () {
