@@ -73,7 +73,6 @@ yo webappstarter:model ModelName
 //"./src/lib" directory
 //"./src/util" directory
 //"./src/widget" directory
-//reqirejs files
 //some files in "./src/app/" directory
 //some files in "./scss/" directory
 //some files in "./html/" directory
