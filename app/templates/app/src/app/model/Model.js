@@ -6,7 +6,7 @@ var Mdl = Core.Class.Model,
 
 function Model() {
   var MODEL = this,
-    userId, udid, appUserMeta,
+    userId, udid, appUserMeta,sig,
     loginCookieTimerPrefix = 'loginCookieTimer_';
 
   this.getCookie = function (sKey) {
@@ -58,7 +58,10 @@ function Model() {
     appUserMeta = data;
   }
   this.getUserSig = function () {
-    return (appUserMeta && appUserMeta.sig) || this.getCookie('sig');
+    return sig || (appUserMeta && appUserMeta.sig) || this.getCookie('sig');
+  }
+  this.setUserSig = function (val) {
+    sig = val;
   }
   this.isLogined = function () {
     return !!this.getUserId() && !!this.getUserSig();

@@ -1,7 +1,7 @@
 {
   "name": "generator-webappstarter",
-  "version": "2.0.3",
-  "description": "Quick start a web app for mobile",
+  "version": "2.0.4",
+  "description": "Quick start a web app for mobile.Automatically adjusts according to a device’s screen size without any extra work.",
   "license": "MIT",
   "main": "app/index.js",
   "repository": "unbug/generator-webappstarter",
@@ -23,7 +23,8 @@
     "yeoman-generator",
     "mobile web app",
     "MVC",
-    "gulp"
+    "gulp",
+    "webpack"
   ],
   "dependencies": {
     "chalk": "^1.0.0",

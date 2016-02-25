@@ -18,9 +18,11 @@ function Controller() {
   var CTRL = this,
     isApp = Core.NativeBridge.isApp(),
     params = Core.localParam(),
-    _userid = params.search['userid'];
+    _userid = params.search['userid'],
+    _sig = params.search['sig'];
   ///*Todo: debug user
   _userid && CTRL.models.Basic.setUserId(_userid);
+  _sig && CTRL.models.Basic.setUserSig(_sig);
   //*/
 
   //更新数据缓存时间
