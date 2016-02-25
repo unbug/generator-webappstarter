@@ -60,6 +60,9 @@ $tooltip-color-default: #fff;
         &.fadeInDown{
           -webkit-animation-name: fadeInDown;
         }
+        &.fadeOut{
+          -webkit-animation-name: fadeOut;
+        }
       }
       >.tooltip__content{
         text-align: center;
@@ -128,6 +131,7 @@ $tooltip-color-default: #fff;
     }
   }
   &.black{
+    font-family: "Segoe Print",Roboto, HelveticaNeue, Helvetica, Arial, sans-serif;
     >.tooltip__ct{
       >.tooltip__bd{
         //background-color: rgba(38,39,41,0.9);

@@ -16,11 +16,12 @@ var _body = $('body');
    * left: left position,
    * bottom: bottom position,
    * autoShow: auto show,
-   * showAnimCls: show animation class,
+   * showDelay: delay time for autoShow,default is 0,
+   * showAnimCls: show animation class,see in _tooltip.css,
    * autoHide: auto hide,
-   * hideDelay: delay time for aotuhide,default is 3500ms
-   * hideAnimCls: hide animation class,
-   * hideAnimDuration: duration time for hide animation,after that the element will be destoried,default is 15000ms;
+   * hideDelay: delay time for autoHide,default is 3500ms
+   * hideAnimCls: hide animation class,see in _tooltip.css,
+   * hideAnimDuration: duration time for hide animation,after that the element will be destroyed,default is 1000ms,
    * onShow: event for show,
    * onHide: event for hide,
    * arrow: {
@@ -44,6 +45,7 @@ function Tooltip(options) {
     rootId = options.rootId || prefix + '_rootid_' + new Date().getTime(),
     renderTo = options.renderTo || _body,
     showAnimCls = options.showAnimCls || 'fadeIn',
+    hideAnimCls = options.hideAnimCls||'fadeOut',
     target = options.target!=undefined && (/string/i.test(typeof options.target)?$(options.target):options.target),
     els,
     destoryed = false;
@@ -101,7 +103,9 @@ function Tooltip(options) {
 
   this.show = function () {
     els.bd.addClass(showAnimCls);
-    els.main.addClass('show');
+    setTimeout(function(){
+      els.main.addClass('show');
+    },options.showDelay||0);
     onShow();
 
     options.autoHide && setTimeout(function () {
@@ -110,11 +114,11 @@ function Tooltip(options) {
   }
   this.hide = function () {
     els.bd.removeClass(showAnimCls);
-    options.hideAnimCls && els.bd.removeClass(options.hideAnimCls);
+    els.bd.addClass(hideAnimCls);
     setTimeout(function () {
       els.main.removeClass('show');
       onHide();
-    }, options.hideAnimDuration || 0);
+    }, options.hideAnimDuration || 1000);
 
     single && setTimeout(function () {
       destory();

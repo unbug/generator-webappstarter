@@ -24,7 +24,8 @@
     "mobile web app",
     "MVC",
     "gulp",
-    "webpack"
+    "webpack",
+    "responsive"
   ],
   "dependencies": {
     "chalk": "^1.0.0",
