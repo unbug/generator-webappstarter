@@ -7,10 +7,11 @@ var Class;
  * @param promise
  */
 function apply(obj, config, promise) {
-  if (config) {
+  var conf = typeof config=='function'?config.call(obj):config;
+  if (conf) {
     var attr;
-    for (attr in config) {
-      obj[attr] = promise ? promise(config[attr]) : config[attr];
+    for (attr in conf) {
+      obj[attr] = promise ? promise(conf[attr]) : conf[attr];
     }
   }
 }
@@ -22,11 +23,12 @@ function apply(obj, config, promise) {
  * @param promise
  */
 function applyIf(obj, config, promise) {
-  if (config) {
+  var conf = typeof config=='function'?config.call(obj):config;
+  if (conf) {
     var attr;
-    for (attr in config) {
+    for (attr in conf) {
       if (!obj[attr]) {
-        obj[attr] = promise ? promise(config[attr]) : config[attr];
+        obj[attr] = promise ? promise(conf[attr]) : conf[attr];
       }
     }
   }

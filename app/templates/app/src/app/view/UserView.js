@@ -20,13 +20,11 @@ function UserView() {
 
   function initEls() {
     if(els){return;}
-    var main = VIEW._BasicView.getView(VIEW.viewCls);;
-    els = {
-      main: main,
-
-      list: main.find('.list'),
-      back: main.find('.back')
-    }
+    els = VIEW._BasicView.getElements(VIEW.viewCls,function(){
+      return {
+        back: this.main.find('.back')
+      }
+    });
     bindEvent();
   }//end initEls
   function initTpls(){

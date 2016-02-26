@@ -18,11 +18,7 @@ function HomeView() {
 
   function initEls() {
     if(els){return;}
-    var main = VIEW._BasicView.getView(VIEW.viewCls);
-    els = {
-      main: main
-
-    }
+    els = VIEW._BasicView.getElements(VIEW.viewCls);
     bindEvent();
   }//end initEls
   function initTpls(){

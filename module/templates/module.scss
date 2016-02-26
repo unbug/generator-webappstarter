@@ -5,7 +5,7 @@
   min-height: 100%;
   background-color: #fff;
   font-size: 32px;
-  > .main {
+  > .<%=lmoduleName%> {
     @include box-h-c-c;
     height: 100%;
   }

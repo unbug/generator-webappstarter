@@ -49,6 +49,7 @@ function View() {
   this.getView = function (viewCls) {
     return els.views.filter('.' + viewCls);
   }
+  //parse elements have "data-template" into templates
   this.getTemplates = function (viewCls) {
     var el = this.getView(viewCls);
     if (el.$Templates) {
@@ -64,6 +65,30 @@ function View() {
     });
     el.$Templates = Templates;
     return Templates;
+  }
+  //find all elements have "data-element"
+  this.getElements = function (viewCls,extra) {
+    var el = this.getView(viewCls);
+    if (el.$Elements) {
+      return el.$Elements;
+    }
+    var Elements = {
+      window: els.window,
+      body: els.body,
+      main: el,
+      apply: function(conf){
+        Core.Class.apply(Elements,conf);
+      }
+    };
+    el.find('*[data-element]').each(function () {
+      var name = $(this).attr('data-element');
+      if (name) {
+        Elements[name] = Elements[name] || el.find('*[data-element="'+name+'"]');
+      }
+    });
+    Elements.apply(extra);
+    el.$Elements = Elements;
+    return Elements;
   }
 
   this.resizeCalculateWindow = function () {
@@ -86,10 +111,10 @@ function View() {
     document.addEventListener('touchmove', function (e) {
       VIEW.GlobalTouch.preventMove && e.preventDefault();
     }, false);
-    document.addEventListener('touchstart', function (e) {
+    document.addEventListener('touchstart', function () {
       VIEW.GlobalTouch.touched = true;
     }, false);
-    document.addEventListener('touchend', function (e) {
+    document.addEventListener('touchend', function () {
       VIEW.GlobalTouch.touched = false;
     }, false);
     //data-prevent-move="start" prevent document to move ontouchstart and cancel ontouchend,

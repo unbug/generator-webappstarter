@@ -1,5 +1,9 @@
 @charset "UTF-8";
 @mixin animated-1s {
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+  animation-fill-mode: both;
+  animation-timing-function: ease-in-out;
   -webkit-animation-duration: 1s;
   -webkit-animation-iteration-count: 1;
   -webkit-animation-fill-mode: both;
@@ -144,6 +148,33 @@
 @mixin active-default {
   &:active {
     opacity: $active-opacity;
+  }
+}
+@mixin active-ripple {
+  position: relative;
+  overflow: hidden;
+  &:after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    display: inherit;
+    padding-top: $layout-with;
+    padding-left: $layout-with;
+    margin-top: -$layout-with/2;
+    margin-left: -$layout-with/2;
+    border-radius: 50%;
+    opacity: 0;
+    background: rgba(255,255,255,0.5);
+    transition: all 1s;
+  }
+  &:active:after {
+    padding-top: 0;
+    padding-left: 0;
+    margin-top: 0;
+    margin-left: 0;
+    opacity: 1;
+    transition: 0s;
   }
 }
 
