@@ -2,9 +2,9 @@
 require('lib/zepto');
 require('lib/Core');
 
-var BasicController = require('./Controller/Controller');
-var HomeController = require('./Controller/HomeController');
-var UserController = require('./Controller/UserController');
+var BasicController = require('app/controller/Controller');
+var HomeController = require('app/controller/HomeController');
+var UserController = require('app/controller/UserController');
 //__INSERT_POINT__ Don't delete!!
 
 function App() {
@@ -13,7 +13,7 @@ function App() {
   setTimeout(function () {
     //Core.Router.init(standalone?'':'/home/');
     Core.Router.init();
-  }, 250);
+  }, 50);
 }
 
 window.App = new App;

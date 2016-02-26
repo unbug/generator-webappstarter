@@ -49,7 +49,7 @@ module.exports = yeoman.generators.Base.extend({
       //make module controller js App.js
       this.template('ModuleController.js', 'src/app/controller/' + this.moduleName + 'Controller.js');
       file = htmlWiring.readFileAsString('src/app/App.js');
-      file = file.replace('//__INSERT_POINT__',["var "+this.moduleName+"Controller = require('./Controller/"+this.moduleName+"Controller');",'\n  //__INSERT_POINT__'].join(''));
+      file = file.replace('//__INSERT_POINT__',["var "+this.moduleName+"Controller = require('app/controller/"+this.moduleName+"Controller');",'\n  //__INSERT_POINT__'].join(''));
       htmlWiring.writeFileFromString(file, 'src/app/App.js');
     }
   }
