@@ -16,7 +16,8 @@ var browserSync = require('browser-sync');//http://www.browsersync.io/docs/gulp/
 var reload = browserSync.reload;
 var pagespeed = require('psi');
 var cachebust = new $.cachebust();
-var webpack = require("webpack-stream");
+var webpack = require("webpack");
+var webpackStream = require("webpack-stream");
 require('date-utils');
 
 //values
@@ -159,7 +160,7 @@ gulp.task('cssmin', function () {
 
 gulp.task('webpackjs', function() {
   return gulp.src(['./src/app/App.js'])
-    .pipe(webpack({
+    .pipe(webpackStream({
       resolve: {
         root: [
           path.resolve('./src')
@@ -169,6 +170,13 @@ gulp.task('webpackjs', function() {
         filename: "app.js",
         sourceMapFilename: 'app.map'
       },
+      plugins: [
+        new webpack.DefinePlugin({
+          "process.env": {
+            NODE_ENV: JSON.stringify("production")
+          }
+        })
+      ],
       devtool: 'source-map'
     }))
     .pipe(gulp.dest('./src'));
