@@ -89,6 +89,7 @@ gulp.task('watch', function () {
     'scss/**/*.scss',
     'html/site/**/*.html'
   ], function (event) {
+    var tasks = ['build_version'];
     console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
     if (/.*\.js$/.test(event.path)) {
       //jshint
@@ -96,7 +97,7 @@ gulp.task('watch', function () {
         .pipe($.jshint())
         .pipe($.jshint.reporter('jshint-stylish'));
 
-      runSequence('webpackjs');
+      tasks.push('webpackjs');
     }
     else if (/.*\.scss$/.test(event.path)) {
       //scsslint
@@ -105,14 +106,14 @@ gulp.task('watch', function () {
         .pipe($.scsslint())
         .pipe($.scsslint.reporter());
 
-      runSequence('sass');
+      tasks.push('sass');
     }
     else if (/.*\.html$/.test(event.path)) {
-      runSequence('include:debug');
+      tasks.push('include:debug');
     }
-    runSequence('build_version','manifest');
+    tasks.push('manifest');
+    runSequence.apply(null,tasks);
   });
-
 });
 
 //compile sass files
@@ -421,7 +422,7 @@ gulp.task('prepare', function (cb) {
   runSequence('build_version', cb);
 });
 gulp.task('compile', function (cb) {
-  runSequence(['sass', 'webpackjs', 'manifest', 'include:debug'], cb);
+  runSequence('sass', 'webpackjs', 'manifest', 'include:debug', cb);
 });
 gulp.task('dist', function (cb) {
   runSequence('clean:dist', 'build_version', 'dist:resources', 'dist:images', 'cssmin', 'uglifyjs', 'manifest', 'dist:manifest','includes:official', '_endlog', cb);
