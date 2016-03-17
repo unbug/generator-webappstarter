@@ -10,10 +10,10 @@ var $ = require('gulp-load-plugins')();
 var del = require('del');
 var pem = require('pem');
 var rsync = require('rsync');
+var sprity = require('sprity');
 var pngquant = require('imagemin-pngquant');
 var runSequence = require('run-sequence');
-var browserSync = require('browser-sync');//http://www.browsersync.io/docs/gulp/
-var reload = browserSync.reload;
+var browserSync = require('browser-sync').create();//http://www.browsersync.io/docs/gulp/
 var pagespeed = require('psi');
 var cachebust = new $.cachebust();
 var webpack = require("webpack");
@@ -36,6 +36,7 @@ var distPath = './dist/';
 var distProjectPath = distPath + projectName;
 var sourceImg = conf.project.sourceImg;//source images path to copy to this project
 var sourceSprites = conf.project.sourceSprites;//source images path to generate sprites
+var isBuild = false;
 
 //build version:
 //script version
@@ -51,6 +52,11 @@ gulp.task('build_version', function (cb) {
   cb();
 });
 
+//clear images
+gulp.task('clean:images', function (cb) {
+  del(['./resources/images/*'], {force: true}, cb);
+});
+
 //copy source images to "/resources/images"
 gulp.task('copy:source_imgs', function () {
   return gulp.src([sourceImg])
@@ -60,37 +66,26 @@ gulp.task('copy:source_imgs', function () {
 
 //generate sprites.png and _debug-sprites.scss
 gulp.task('sprites', function () {
-  var sprite = require('css-sprite').stream;
-  return gulp.src(sourceSprites)
-    .pipe(sprite({
+  return sprity.src({
+      src: sourceSprites,
       name: 'sprites',
       style: '_sprites.scss',
       cssPath: '../images/',
       processor: 'css'
-    }))
+    })
     .pipe($.if('*.png', gulp.dest('./resources/images/'), gulp.dest('./scss/')))
     .pipe($.size({title: 'sprites'}));
-});
-
-//clear
-//clear images
-gulp.task('clean:images', function (cb) {
-  del(['./resources/images/*'], {force: true}, cb);
-});
-//clear dist folder
-gulp.task('clean:dist', function (cb) {
-  del([distPath + '*'], {force: true}, cb);
 });
 
 //watching script change to start default task
 gulp.task('watch', function () {
   return gulp.watch([
-    'gulpfile.js', 'src/**/*.js', '!src/app.js',
+    'src/**/*.js', '!src/app.js',
     'scss/**/*.scss',
     'html/site/**/*.html'
   ], function (event) {
-    var tasks = ['build_version'];
     console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
+    var tasks = ['prepare'];
     if (/.*\.js$/.test(event.path)) {
       //jshint
       conf.project.watchJshint && gulp.src(event.path)
@@ -109,7 +104,7 @@ gulp.task('watch', function () {
       tasks.push('sass');
     }
     else if (/.*\.html$/.test(event.path)) {
-      tasks.push('include:debug');
+      tasks.push('html');
     }
     tasks.push('manifest');
     runSequence.apply(null,tasks);
@@ -136,11 +131,11 @@ gulp.task('sass', function (cb) {
       gulp.src(['./.scss/*.scss'], {buffer: true})
         .pipe($.sourcemaps.init())
         .pipe($.sass({errLogToConsole: true}))
-        .pipe($.autoprefixer({browsers: AUTOPREFIXER_BROWSERS}))
-        .pipe($.sourcemaps.write())
-        .pipe($.cached('build-cache', {
+        .pipe($.cached('sass-cache', {
           optimizeMemory: true
         }))
+        .pipe($.autoprefixer({browsers: AUTOPREFIXER_BROWSERS}))
+        .pipe($.sourcemaps.write())
         .pipe(gulp.dest('./resources/css/'))
         .on('end', function () {
           del(['./.scss'], {force: true});
@@ -149,52 +144,32 @@ gulp.task('sass', function (cb) {
     });
 });
 
-//compress css to dist
-gulp.task('cssmin', function () {
-  return gulp.src('./resources/**/*.css')
-    .pipe(cachebust.references())
-    .pipe($.csso())
-    .pipe(cachebust.resources())
-    .pipe(gulp.dest(distProjectPath + '/resources'))
-    .pipe($.size({title: 'cssmin'}));
-});
-
+//compile js files
+var webpackConfig = require('./webpack.config');
 gulp.task('webpackjs', function() {
-  return gulp.src(['./src/app/App.js'])
-    .pipe(webpackStream({
-      resolve: {
-        root: [
-          path.resolve('./src')
-        ]
-      },
-      output: {
-        filename: "app.js",
-        sourceMapFilename: 'app.map'
-      },
-      plugins: [
-        new webpack.DefinePlugin({
-          "process.env": {
-            NODE_ENV: JSON.stringify("production")
-          }
-        })
-      ],
-      devtool: 'source-map'
+  return gulp.src(['./src/**/*.js'])
+    .pipe($.cached('webpackjs-cache', {
+      optimizeMemory: true
     }))
+    .pipe(webpackStream(webpackConfig[isBuild?'build':'dev']))
     .pipe(gulp.dest('./src'));
 });
 
-//compress js to dist
-gulp.task('uglifyjs', function () {
-  gulp.src(['./src/app.js'])
-    //remove //_DEBUG_ in files,
-    //such as: "///_DEBUG_*Todo: debug actions //*/ "
-    //will become "/*Todo: debug actions //*/",so uglify could remove all comments
-    .pipe($.replace(/\/\/_DEBUG_/g, ''))
-    .pipe(cachebust.references())
-    .pipe($.uglify())
-    .pipe(cachebust.resources())
-    .pipe(gulp.dest(distProjectPath + '/src/'))
-    .pipe($.size({title: 'uglifyjs'}));
+//compile html files
+gulp.task('html', function () {
+  return gulp.src(['./html/site/debug/*.html'])
+    .pipe($.fileInclude({
+      basepath: './html/site/'
+    }))
+    .pipe($.cached('html-cache', {
+      optimizeMemory: true
+    }))
+    .pipe($.replace(/_BUILD_VERSION_/g, buildVersion))
+    .pipe($.replace(/_GLOBAL_VERSION_/g, globalVersion))
+    .pipe($.replace(/_VIEWPORT_WIDTH_/g, viewport))
+    .pipe($.replace(/_TITLE_/g, title))
+    .pipe($.replace(/_MANIFEST_/g, conf.project.manifest?'manifest="cache.manifest"':''))
+    .pipe(gulp.dest('./'));
 });
 
 //generate cache.manifest
@@ -220,24 +195,55 @@ gulp.task('manifest', function (cb) {
     });
 });
 
-//compile html files
-gulp.task('include:debug', function () {
-  return gulp.src(['./html/site/debug/*.html'])
-    .pipe($.fileInclude({
-      basepath: './html/site/'
-    }))
-    .pipe($.cached('build-cache', {
-      optimizeMemory: true
-    }))
-    .pipe($.replace(/_BUILD_VERSION_/g, buildVersion))
-    .pipe($.replace(/_GLOBAL_VERSION_/g, globalVersion))
-    .pipe($.replace(/_VIEWPORT_WIDTH_/g, viewport))
-    .pipe($.replace(/_TITLE_/g, title))
-    .pipe($.replace(/_MANIFEST_/g, conf.project.manifest?'manifest="cache.manifest"':''))
-    .pipe(gulp.dest('./'));
+//clear dist folder
+gulp.task('clean:dist', function (cb) {
+  del([distPath + '*'], {force: true}, cb);
 });
+
+//copy resources to "/dist/resources/"
+gulp.task('dist:resources', function () {
+  return gulp.src('./resources/**/*.*')
+    .pipe(gulp.dest(distProjectPath + '/resources/'))
+    .pipe($.size({title: 'dist:resources'}));
+});
+
+//compress images to dist
+gulp.task('dist:images', function () {
+  return gulp.src(['./resources/**/*.*g'])
+    .pipe($.imagemin({
+      use: [pngquant()]
+    }))
+    .pipe(cachebust.resources())
+    .pipe(gulp.dest(distProjectPath + '/resources/'))
+    .pipe($.size({title: 'dist:images'}));
+});
+
+//compress css to dist
+gulp.task('dist:css', function () {
+  return gulp.src('./resources/**/*.css')
+    .pipe(cachebust.references())
+    .pipe($.csso())
+    .pipe(cachebust.resources())
+    .pipe(gulp.dest(distProjectPath + '/resources'))
+    .pipe($.size({title: 'dist:css'}));
+});
+
+//compress js to dist
+gulp.task('dist:js', function () {
+  return gulp.src(['./src/app.js'])
+    //remove //_DEBUG_ in files,
+    //such as: "///_DEBUG_*Todo: debug actions //*/ "
+    //will become "/*Todo: debug actions //*/",so uglify could remove all comments
+    .pipe($.replace(/\/\/_DEBUG_/g, ''))
+    .pipe(cachebust.references())
+    .pipe($.uglify())
+    .pipe(cachebust.resources())
+    .pipe(gulp.dest(distProjectPath + '/src/'))
+    .pipe($.size({title: 'dist:js'}));
+});
+
 //compress html to dist
-gulp.task('includes:official', function () {
+gulp.task('dist:html', function () {
   return gulp.src(['html/site/official/*.html'])
     .pipe($.fileInclude({
       basepath: './html/site/'
@@ -256,33 +262,17 @@ gulp.task('includes:official', function () {
       quotes: true
     }))
     .pipe(gulp.dest(distProjectPath))
-    .pipe($.size({title: 'html'}));
+    .pipe($.size({title: 'dist:html'}));
 });
 
-//copy resources to "/dist/resources/"
-gulp.task('dist:resources', function () {
-  return gulp.src('./resources/**/*.*')
-    .pipe(gulp.dest(distProjectPath + '/resources/'))
-    .pipe($.size({title: 'copy resources'}));
-});
-
-//compress images to dist
-gulp.task('dist:images', function (cb) {
-  return gulp.src(['./resources/**/*.*g'])
-    .pipe($.imagemin({
-      use: [pngquant()]
-    }))
-    .pipe(cachebust.resources())
-    .pipe(gulp.dest(distProjectPath + '/resources/'))
-    .pipe($.size({title: 'images'}));
-});
 //copy cache.manifest to dist
 gulp.task('dist:manifest', function () {
   return gulp.src('./cache.manifest')
     .pipe(cachebust.references())
     .pipe(gulp.dest(distProjectPath + '/'))
-    .pipe($.size({title: 'manifest'}));
+    .pipe($.size({title: 'dist:manifest'}));
 });
+
 //deploy to test server
 //view http://office.mozat.com:8081/m/PROJECTNAME/
 gulp.task('deploy:test', function (cb) {
@@ -343,7 +333,6 @@ gulp.task('_deploy:offical', function (cb) {
 // Lint JavaScript
 gulp.task('jshint', function () {
   return gulp.src(['./src/**/*.js', '!./src/*.js', '!./src/lib/zepto.js'])
-    .pipe(reload({stream: true, once: true}))
     .pipe($.jshint())
     .pipe($.jshint.reporter('jshint-stylish'))
     .pipe($.if(!browserSync.active, $.jshint.reporter('fail')));
@@ -352,12 +341,12 @@ gulp.task('jshint', function () {
 //browser-sync serve
 var browserSyncOptions = conf.project.browserSync || {};
 gulp.task('serve', function () {
-  browserSync(browserSyncOptions);
+  browserSync.init(browserSyncOptions);
 
-  gulp.watch(['./*.html'], reload);
-  gulp.watch(['./src/*.js'], reload);
-  gulp.watch(['./resources/**/*.css'], reload);
-  gulp.watch(['./resources/**/*.*g'], reload);
+  gulp.watch(['./*.html'], browserSync.reload);
+  gulp.watch(['./src/*.js'], browserSync.reload);
+  gulp.watch(['./resources/**/*.css'], browserSync.reload);
+  gulp.watch(['./resources/**/*.*g'], browserSync.reload);
 });
 
 // Run PageSpeed Insights
@@ -422,10 +411,11 @@ gulp.task('prepare', function (cb) {
   runSequence('build_version', cb);
 });
 gulp.task('compile', function (cb) {
-  runSequence('sass', 'webpackjs', 'manifest', 'include:debug', cb);
+  runSequence('sass', 'webpackjs', 'manifest', 'html', cb);
 });
 gulp.task('dist', function (cb) {
-  runSequence('clean:dist', 'build_version', 'dist:resources', 'dist:images', 'cssmin', 'uglifyjs', 'manifest', 'dist:manifest','includes:official', '_endlog', cb);
+  isBuild = true;
+  runSequence('clean:dist', 'prepare', 'compile','dist:resources', 'dist:images', 'dist:css', 'dist:js', 'dist:manifest','dist:html', '_endlog', cb);
 });
 gulp.task('default', function (cb) {
   runSequence('prepare', 'compile', 'watch', 'serve', cb);

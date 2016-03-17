@@ -49,6 +49,7 @@ function Slider(option) {
     el = option.listEl || option.el.find(option.listCls || '.list'),
     pEl = option.processEl || el.siblings(option.processCls || '.process'),
     isMoving = false,
+    isRemoving = false,
     moveTimeout = option.moveTimeout || 100,
     moveDuration = option.moveDuration || 640,
     moveRate = option.moveRate || 1.3,
@@ -63,6 +64,7 @@ function Slider(option) {
     loopTimer = 0,
     loopCls = 'slider-duplicate',
     currentCls = 'slider-current',
+    removeCls = 'slider-remove',
     moveToFn = vertical ? moveToY : moveToX;
   resetSize();
   calculateSize();
@@ -272,6 +274,31 @@ function Slider(option) {
     });
   }
 
+  function remove(idx,delay,callback){
+    if(isRemoving){return;}
+    isRemoving = true;
+    var reEl = el.children().eq(idx),
+      isNext = idx<itemCount-1;
+    reEl.addClass(removeCls);
+    setTimeout(function(){
+      if(isNext){
+        me.next();
+      }else{
+        me.pre();
+      }
+      setTimeout(function(){
+        isRemoving = false;
+        reEl.remove();
+        if(isNext){
+          index--;
+          lastMove = index*itemLen;
+        }
+        me.refresh();
+        callback && callback(index,itemCount);
+      },itemCount>1?moveDuration:100);
+    },delay||0);
+  }
+
   function stopLoopHelper() {
     loopTimer && clearInterval(loopTimer);
   }
@@ -392,17 +419,29 @@ function Slider(option) {
     onFirst(index);
     onMove(index);
   }
-
   this.refresh = function () {
     me.stopAutoRun();
     pEl.hide();
     resetSize();
     calculateSize();
     renderLoop();
+    moveToFn(-lastMove);
     renderProcess();
     me.startAutoRun();
     addClasses(index);
     onMove(index);
+  }
+
+  this.getIndex = function(){
+    return index;
+  }
+
+  this.getItemCount = function(){
+    return itemCount;
+  }
+
+  this.removeCurrent = function(delay,callback){
+    remove(index,delay,callback);
   }
 
   this.startAutoRun = function () {
