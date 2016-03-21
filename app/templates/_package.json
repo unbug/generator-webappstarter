@@ -16,8 +16,7 @@
       "open": true,
       "server": {
         "baseDir": "./"
-      },
-      "reloadDelay": 350
+      }
     },
     "pagespeed": {
       "url": "http://m.deja.me/<%=projectName%>/",
