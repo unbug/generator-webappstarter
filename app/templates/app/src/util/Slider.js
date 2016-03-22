@@ -39,6 +39,9 @@
  * @method refresh() //refresh for content changed
  * @method startAutoRun() //start to auto play
  * @method stopAutoRun() //stop auto play
+ * @method getIndex() //get current index
+ * @method getItemCount() //get current slides total count
+ * @method removeCurrent(delay,callback) //remove current slide
  * @constructor Slider
  */
 function Slider(option) {
