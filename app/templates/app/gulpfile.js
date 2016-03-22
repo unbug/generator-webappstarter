@@ -82,7 +82,7 @@ gulp.task('watch', function () {
   return gulp.watch([
     'src/**/*.js', '!src/app.js',
     'scss/**/*.scss',
-    'html/site/**/*.html'
+    'html/**/*.html'
   ], function (event) {
     console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
     var tasks = ['prepare'];
@@ -157,9 +157,9 @@ gulp.task('webpackjs', function() {
 
 //compile html files
 gulp.task('html', function () {
-  return gulp.src(['./html/site/debug/*.html'])
+  return gulp.src(['./html/debug/*.html'])
     .pipe($.fileInclude({
-      basepath: './html/site/'
+      basepath: './html/'
     }))
     .pipe($.cached('html-cache', {
       optimizeMemory: true
@@ -184,7 +184,7 @@ gulp.task('manifest', function (cb) {
       resources.push(data)
     })
     .on('end', function () {
-      gulp.src(['./html/site/include/cache.manifest'])
+      gulp.src(['./html/include/cache.manifest'])
         .pipe($.replace(/_BUILD_VERSION_/g, buildVersion))
         .pipe($.replace(/_GLOBAL_VERSION_/g, globalVersion))
         .pipe($.replace(/_FILES_/g, resources.join('\n')))
@@ -244,9 +244,9 @@ gulp.task('dist:js', function () {
 
 //compress html to dist
 gulp.task('dist:html', function () {
-  return gulp.src(['html/site/official/*.html'])
+  return gulp.src(['html/official/*.html'])
     .pipe($.fileInclude({
-      basepath: './html/site/'
+      basepath: './html/'
     }))
     .pipe($.replace(/_BUILD_VERSION_/g, buildVersion))
     .pipe($.replace(/_GLOBAL_VERSION_/g, globalVersion))

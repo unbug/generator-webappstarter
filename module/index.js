@@ -24,14 +24,14 @@ module.exports = yeoman.generators.Base.extend({
   writing: {
     module: function () {
       //make module html,and add to view.html
-      this.template('module.html', 'html/site/include/view-' + this.lmoduleName + '.html');
-      var file = htmlWiring.readFileAsString('html/site/include/views.html'),
+      this.template('module.html', 'html/include/view-' + this.lmoduleName + '.html');
+      var file = htmlWiring.readFileAsString('html/include/views.html'),
         add = [];
       add.push('\n<!-- view-' + this.lmoduleName + ' -->');
       add.push('\n@@include("include/view-' + this.lmoduleName + '.html")');
       add.push('\n<!-- end view-' + this.lmoduleName + ' -->');
       file += add.join('');
-      htmlWiring.writeFileFromString(file, 'html/site/include/views.html');
+      htmlWiring.writeFileFromString(file, 'html/include/views.html');
 
       //make module scss and add to _view.scss
       this.template('module.scss', 'scss/_view-' + this.lmoduleName + '.scss');

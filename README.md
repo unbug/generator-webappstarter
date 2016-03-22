@@ -50,7 +50,7 @@ install dependencies manually with `npm install` or just copy `node_modules` fol
 
 ```shell
 //this command will do:
-//add "html/site/include/view-modulename.html" and inlude it to "html/site/include/views.html"
+//add "html/include/view-modulename.html" and inlude it to "html/include/views.html"
 //add "scss/_view-modulename.scss" and import it to "scss/_view.scss"
 //add "src/app/view/ModuleNameView.js"
 //add "src/app/controller/ModuleNameController.js" and require it in src/app/App.js
@@ -151,7 +151,7 @@ Structure
 The structure is modular design,follow the DOOR-KEY rule you only take minutes to understand it:
   * The DOOR for javascript is in ```/src/app/App.js```,and the KEY is ```require```,see [webpack](https://webpack.github.io/docs/commonjs.html) and [commonjs](http://www.commonjs.org/specs/modules/1.0/)
   * The DOOR for stylesheets is in ```/scss/styles.scss```,and the KEY is ```@import```,see [SASS](http://sass-lang.com/)
-  * The DOOR for HTML is in ```/html/site/debug/index.html```,and the KEY is ```@@include```,see [gulp-file-include](https://www.npmjs.com/package/gulp-file-include)
+  * The DOOR for HTML is in ```/html/debug/index.html```,and the KEY is ```@@include```,see [gulp-file-include](https://www.npmjs.com/package/gulp-file-include)
   
 
 Git
