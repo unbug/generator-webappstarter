@@ -16,7 +16,6 @@ var runSequence = require('run-sequence');
 var browserSync = require('browser-sync').create();//http://www.browsersync.io/docs/gulp/
 var pagespeed = require('psi');
 var cachebust = new $.cachebust();
-var webpack = require("webpack");
 var webpackStream = require("webpack-stream");
 require('date-utils');
 
