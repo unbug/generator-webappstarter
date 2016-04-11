@@ -33,6 +33,8 @@ function Controller() {
   Core.Event.on('share', appShare);
   //去下载
   Core.Event.on('appDownload', redirectToDownload);
+  //直接到Store去下载
+  Core.Event.on('openAppInStore', downloadDejaInApp);
   //去更新
   Core.Event.on('appUpdate', appUpdate);
   //去deja.me
@@ -61,6 +63,8 @@ function Controller() {
   Core.Event.on('appActionShareButton', appActionShareButton);
   //修改右上角功能菜单成Filter
   Core.Event.on('appActionFilterButton', appActionFilterButton);
+  //修改右上角功能菜单成add
+  Core.Event.on('appActionAddButton', appActionAddButton);
   //注册webview关闭事件
   Core.Event.on('appOnUnload', appOnUnload);
   //关闭webview
@@ -281,7 +285,7 @@ function Controller() {
 
   function appActionButton(name, callback) {
     if (isApp) {
-      Core.NativeBridge.updateBarButton(name, callback);
+      Core.NativeBridge.updateBarButton(name, !Core.isDebug && callback);
     }
   }
 
@@ -291,6 +295,10 @@ function Controller() {
 
   function appActionFilterButton(callback) {
     appActionButton('filter', callback);
+  }
+
+  function appActionAddButton(callback) {
+    appActionButton('add', callback);
   }
 
   function appActionDefaultButton() {

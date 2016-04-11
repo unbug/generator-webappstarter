@@ -44,12 +44,13 @@ var Core = {
 
   Num: Num,
   randomList: randomList,
-  DateHandler: DateHandler
+  DateHandler: DateHandler,
+
+  isDebug: localParam().search['debug'] == 1
 };
 
 //enable debug model
-if (localParam().search['debug'] == 1) {
-  Core.NativeBridge.enableDebug();
-}
+Core.isDebug && Core.NativeBridge.enableDebug();
+
 window.Core = Core;
 module.exports = Core;
