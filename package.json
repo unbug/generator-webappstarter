@@ -1,6 +1,6 @@
 {
   "name": "generator-webappstarter",
-  "version": "2.1.5",
+  "version": "2.1.6",
   "description": "Quick start a web app for mobile.Automatically adjusts according to a device’s screen size without any extra work.",
   "license": "MIT",
   "main": "app/index.js",
