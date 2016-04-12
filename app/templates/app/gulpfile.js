@@ -124,7 +124,7 @@ var AUTOPREFIXER_BROWSERS = [
 ];
 gulp.task('sass', function (cb) {
   gulp.src(['./scss/*.scss'], {buffer: true})
-    .pipe($.replace(/_VIEWPORT_WIDTH_/g, conf.project.viewport || 640))
+    .pipe($.replace(/_VIEWPORT_WIDTH_/g, viewport == 'device-width'?'100%': viewport+'px'))
     .pipe(gulp.dest('./.scss'))//fix replace not working
     .on('end', function () {
       gulp.src(['./.scss/*.scss'], {buffer: true})
