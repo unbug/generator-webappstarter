@@ -3,7 +3,7 @@ var DateHandler = (function () {
     var date;
     if (typeof str === 'string') {
       var arr = str.split(/[- :]/);
-      date = new Date(arr[0], arr[1] - 1, arr[2], arr[3] || 00, arr[4] || 00, arr[5] || 00);
+      date = new Date(arr[0], arr[1] - 1, arr[2], arr[3] || 0, arr[4] || 0, arr[5] || 0);
     }
     return date;
   }
