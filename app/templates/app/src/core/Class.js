@@ -268,6 +268,14 @@ Model.prototype.get = function (clone) {
 }
 /**
  *
+ * @param clone will return a copy of the data
+ * @returns {*}
+ */
+Model.prototype.getStore = function (clone) {
+  return (clone && typeof this._cacheStore == 'object') ? JSON.parse(JSON.stringify(this._cacheStore)) : this._cacheStore;
+}
+/**
+ *
  * @param storeid
  * @param clone ,will return a copy of the data
  * @returns {*|{}}
