@@ -25,6 +25,10 @@
     "MVC",
     "gulp",
     "webpack",
+    "react",
+    "es2015",
+    "es6",
+    "es7",
     "responsive"
   ],
   "dependencies": {
