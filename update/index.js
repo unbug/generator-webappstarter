@@ -75,6 +75,7 @@ module.exports = yeoman.generators.Base.extend({
     },
     other: function(){
       this.copy('../../app/templates/app/gulpfile.js', './gulpfile.js');
+      this.copy('../../app/templates/app/.babelrc', './.babelrc');
       this.copy('../../app/templates/app/webpack.config.js', './webpack.config.js');
       this.copy('../../app/templates/app/README.md', './README.md');
     }
