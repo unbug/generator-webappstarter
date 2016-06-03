@@ -38,7 +38,7 @@ function View() {
     }
     window.GlobalTouch = VIEW.GlobalTouch;
     VIEW.msgbox = new Msgbox({
-      //themeCls: 'deja',
+      // themeCls: 'deja',
       GlobalTouch: VIEW.GlobalTouch
     });
   }
@@ -66,7 +66,25 @@ function View() {
     el.$Templates = Templates;
     return Templates;
   }
-  //find all elements have "data-element"
+  /**
+   * find all elements have "data-element"
+   * @param viewCls
+   * @param extra object
+   * e.g.:
+   * //1.  pass an object
+   * {
+   *   defaultUserid: 'user_id_xxxx'
+   * }
+   *
+   * //2. pass a function that return an obeject,"this" is the elements' own object
+   * function(){
+   *  return {
+   *    userList: this.main.find('.list')
+   *  }
+   * }
+   *
+   * @returns {*}
+   */
   this.getElements = function (viewCls,extra) {
     var el = this.getView(viewCls);
     if (el.$Elements) {
@@ -103,7 +121,6 @@ function View() {
   this.isMaxWindowScroll = function (budget) {
     var top = Math.min(Math.min(window.pageYOffset, document.documentElement.scrollTop || document.body.scrollTop), window.scrollY),
       maxScroll = budget ? (els.bodyHeight - budget) : els.windowMaxScroll;
-
     return top > maxScroll;
   }
 
@@ -111,10 +128,10 @@ function View() {
     document.addEventListener('touchmove', function (e) {
       VIEW.GlobalTouch.preventMove && e.preventDefault();
     }, false);
-    document.addEventListener('touchstart', function () {
+    document.addEventListener('touchstart', function (e) {
       VIEW.GlobalTouch.touched = true;
     }, false);
-    document.addEventListener('touchend', function () {
+    document.addEventListener('touchend', function (e) {
       VIEW.GlobalTouch.touched = false;
     }, false);
     //data-prevent-move="start" prevent document to move ontouchstart and cancel ontouchend,
@@ -169,8 +186,8 @@ function View() {
     !view.hasClass('show') && view.addClass('show');
     //auto scroll to history position,and restore title
     if (autoRevert == undefined || autoRevert) {
+      Core.Event.trigger('appModifyTitle', Core.Router.getHistoryTitle());
       setTimeout(Core.Router.scrollToHistoryPosition, 100);
-      Core.Event.trigger('appModifyTitle');
     }
     return this;
   }
