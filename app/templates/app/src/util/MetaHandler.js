@@ -185,7 +185,8 @@ var MetaHandler = function () {
           .setContentProperty('viewport', 'maximum-scale', ratio);
       } else if (os.ios && !os.android) {
         me.setContentProperty('viewport', 'user-scalable', 'no');
-        if (os.ios && parseInt(os.version) < 7) {
+        //scale for UIWebview
+        if ( os.ios && parseInt(os.version) < 7 || !(window.indexedDB || window.webkitIndexedDB) ){
           me.setContentProperty('viewport', 'initial-scale', ratio);
         }
       }
