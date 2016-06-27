@@ -22,6 +22,7 @@ var FormHandler = require('util/FormHandler');
 
 var randomList = require('util/RandomList');
 var Num = require('util/Number');
+var GUID = require('util/GUID');
 var DateHandler = require('util/DateHandler');
 
 var Core = {
@@ -43,6 +44,7 @@ var Core = {
   Router: Router,
 
   Num: Num,
+  GUID: GUID,
   randomList: randomList,
   DateHandler: DateHandler,
 
