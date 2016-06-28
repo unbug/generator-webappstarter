@@ -1,32 +1,16 @@
-var RequestHelper = require('app/model/RequestHelper');
+var StoreHelper = require('app/model/StoreHelper');
 var Actions = require('app/resources/Actions');
 var Basic = require('app/model/Model');
 
-var USER,
-  Mdl = Core.Class.Model,
+var Mdl = Core.Class.Model,
   lcStorage = Core.localStorage;
 
 function User() {
 
 }
 
-User.prototype.user = new Mdl({
-  request: function (data,callback) {
-    RequestHelper.request(Actions.user,data,callback,this);
-  }
-});
+User.prototype.user = StoreHelper.requestStore(Actions.user);
 
-User.prototype.userInfo = new Mdl({
-  request: function (data,callback) {
-    RequestHelper.JSONP({
-      action: Actions.user+'&callback=afterRequestUserInfo'
-    });
-  }
-});
-window.afterRequestUserInfo = function(data){
-  USER.userInfo.set(data);
-}
+User.prototype.userInfo = StoreHelper.JSONPStore(Actions.user);
 
-USER = new User;
-
-module.exports = USER;
+module.exports = new User();
