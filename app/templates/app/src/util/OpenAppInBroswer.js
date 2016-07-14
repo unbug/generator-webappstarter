@@ -28,7 +28,7 @@ function wxOpen() {
 function iOSOpen() {
   //先跳转后下载
   //参看 http://www.iunbug.com/archives/2012/09/18/401.html
-  redirectToPage(config.schema);
+  config.schema && redirectToPage(config.schema);
   setTimeout(function () {
     redirectToPage(config.iOS);
   }, 50);
@@ -36,7 +36,7 @@ function iOSOpen() {
 
 function androidOpen() {
   //打开同时下载
-  Navigator.protocol(decodeURIComponent(config.schema), true);
+  config.schema && Navigator.protocol(decodeURIComponent(config.schema), true);
   download();
 }
 
