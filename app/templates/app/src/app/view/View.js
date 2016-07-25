@@ -11,7 +11,7 @@ function View() {
   }
 
   var VIEW = this,
-    els,
+    els, shareStore = {},
     params = Core.localParam(),
     isApp = Core.NativeBridge.isApp();
   //click事件
@@ -185,9 +185,10 @@ function View() {
     var view = this.getView(viewCls);
     !view.hasClass('show') && view.addClass('show');
     //auto scroll to history position,and restore title
-    if (autoRevert == undefined || autoRevert) {
+    if (autoRevert === undefined || autoRevert) {
       Core.Event.trigger('appModifyTitle', Core.Router.getHistoryTitle());
       setTimeout(Core.Router.scrollToHistoryPosition, 100);
+      restoreShare();
     }
     return this;
   }
@@ -218,6 +219,7 @@ function View() {
 
 
     Core.NativeBridge.set_data_for_share(option);
+    shareStore[Core.Router.getCurrentHashStr()] = option;
 
     updateWechatShareMeta(option.title, option.summary, option.thumburl || option.imageurl);
     updateYiXinShareMeta(option.summary, option.thumburl || option.imageurl);
@@ -243,6 +245,12 @@ function View() {
       content: content || document.title,
       img: img || Actions.dejaShareLogo
     });
+  }
+
+  function restoreShare() {
+    if(shareStore[Core.Router.getCurrentHashStr()]){
+      VIEW.renderShare(shareStore[Core.Router.getCurrentHashStr()]);
+    }
   }
 
   this.lazyLoadImg = function (el) {
