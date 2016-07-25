@@ -39,11 +39,12 @@ function Router(Pubsub, HashHandler) {
     lastActionKey,
     leavePrefix = '__',
     _isFroward = true,
-    actionsHistory = [INIT_HASH_STR],
     isReady = false,
     initCallback,
     readyCallbacks = [],
     changedCallbacks = [],
+    actionsHistory = [INIT_HASH_STR],
+    queryHistory = {},
     historyPositions = {},
     historyTitles = {},
     anchorEl;
@@ -67,6 +68,15 @@ function Router(Pubsub, HashHandler) {
       }
     }
     return fn(search, new RegExp("([^?=&]+)(=([^&]*))?", "g")) || {};
+  }
+
+  function saveQuery(key, query) {
+    queryHistory[key] = queryHistory[key] || [];
+    queryHistory[key].push(query);
+  }
+
+  function getLastQuery(key) {
+    return queryHistory[key]?(queryHistory[key][queryHistory[key].length-1]||{}):{};
   }
 
   function formatHash(hash) {
@@ -114,12 +124,15 @@ function Router(Pubsub, HashHandler) {
               lastActionKey = key;
               restoreHistoryTitle();
 
+              var query = getQuery($2);
               Pubsub.publish(key, {
                 action: key,
                 param: $2,
                 hash: hash,
-                query: getQuery($2)
+                preQuery: getLastQuery(key),
+                query: query
               });
+              saveQuery(key, query);
             }
           });
         }
@@ -130,12 +143,15 @@ function Router(Pubsub, HashHandler) {
       currentQureyStr = hash.curHash;
       restoreHistoryTitle();
 
+      var query = getQuery(hash.curHash);
       Pubsub.publish(UN_SUB_NAME, {
         action: hash.curHash,
         param: hash.curHash,
         hash: hash,
-        query: getQuery(hash.curHash)
+        preQuery: getLastQuery(UN_SUB_NAME),
+        query: query
       });
+      saveQuery(UN_SUB_NAME, query);
     }
   }
 
@@ -183,11 +199,13 @@ function Router(Pubsub, HashHandler) {
    * @returns {Pubsub}
    */
   function run(action) {
+
     action ?
       Pubsub.publish(action, {
         action: action,
         param: currentQureyStr,
         hash: currentHash,
+        preQuery: getLastQuery(action),
         query: getQuery()
       })
       : locationHashChanged();
@@ -291,7 +309,7 @@ function Router(Pubsub, HashHandler) {
    * @param {String}|{Number} action
    */
   function back(action) {
-    var ac = getLastAction() || action || -1;
+    var ac = popLastAction() || action || -1;
     //如果浏览器有历史则走历史
     if (window.history.length > 1) {
       ac = -1;
@@ -308,6 +326,11 @@ function Router(Pubsub, HashHandler) {
   }
 
   function getLastAction() {
+    var last = [].concat.call(actionsHistory);
+    last.pop();
+    return last.pop();
+  }
+  function popLastAction() {
     //pop两次是因为最后一次是当前的
     actionsHistory.pop();
     return actionsHistory.pop();
@@ -389,9 +412,7 @@ function Router(Pubsub, HashHandler) {
    * @returns {boolean}
    */
   function lastMatch(action) {
-    var last = [].concat.call(actionsHistory);
-    last.pop();
-    return actionMatch(action, last.pop() || UN_SUB_NAME);
+    return actionMatch(action, getLastAction() || UN_SUB_NAME);
   }
 
   function setHistoryPosition(id, position) {
@@ -430,6 +451,10 @@ function Router(Pubsub, HashHandler) {
     }
   }
 
+  function getCurrentHashStr() {
+    return currentHashStr;
+  }
+
   Pubsub.initHash = INIT_HASH_STR;
   Pubsub.init = init;
   Pubsub.run = run;
@@ -446,6 +471,7 @@ function Router(Pubsub, HashHandler) {
   Pubsub.getHistoryPosition = getHistoryPosition;
   Pubsub.scrollToHistoryPosition = scrollToHistoryPosition;
   Pubsub.getHistoryTitle = getHistoryTitle;
+  Pubsub.getCurrentHashStr = getCurrentHashStr;
   Pubsub.getUnsubscribedAction = function () {
     return UN_SUB_NAME;
   };
