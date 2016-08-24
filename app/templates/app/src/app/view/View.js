@@ -266,6 +266,26 @@ function View() {
     }, 0);
   }
 
+  this.renderI18n = function(el){
+    el.find('*[data-i18n]').each(function () {
+      var currEl = $(this),
+        name = currEl.attr('data-i18n');
+
+      if (name) {
+        var attrs = name.split('.'),
+          text = window[attrs.shift()];
+        attrs.forEach(function (key) {
+          if(key.length && text!==undefined){
+            text = text[key];
+          }
+        });
+        if(text!==undefined){
+          currEl.html(text);
+        }
+      }
+    });
+  }
+
   init();
 }//end View
 module.exports = new View;

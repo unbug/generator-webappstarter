@@ -1,6 +1,7 @@
 //require('util/AppCache');
 require('lib/zepto');
 require('lib/Core');
+require('app/resources/i18n');
 
 var BasicController = require('app/controller/Controller');
 var HomeController = require('app/controller/HomeController');
