@@ -101,7 +101,9 @@ var Navigator = (function () {
       }, 30000);
       _frame.onload = _frame.onreadystatechange = function () {
         timer && clearTimeout(timer);
-        _frame && removeFrame(_frame);
+        setTimeout(function () {
+          _frame && removeFrame(_frame);
+        }, 3500);
       }
     } else {
       frame = frame || getFrame();

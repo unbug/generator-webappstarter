@@ -59,7 +59,7 @@ function androidOpen() {
  *   schema,// URL schema for open your app
  * }
  */
-function openAppInBroswer(conf) {
+function openAppInBrowser(conf) {
   config = conf || config;
 
   if (isWeixin) {
@@ -72,4 +72,4 @@ function openAppInBroswer(conf) {
 }
 
 
-module.exports = openAppInBroswer;
+module.exports = openAppInBrowser;
