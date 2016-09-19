@@ -28,8 +28,8 @@ function Msgbox(option) {
   bEl.signin.hide();
 
   bEl.box.on('click', function (e) {
-    if (/msgbox-bd/i.test(e.target.className)) {
-      onBD();
+    if (onBD && /msgbox-bd/i.test(e.target.className)) {
+      onBD(e);
       onBD = emptyFn;
     }
   });
@@ -52,7 +52,8 @@ function Msgbox(option) {
      *     yesText,
      *     noText,
      *     yesCallback,
-     *     noCallback
+     *     noCallback,
+     *     bodyCallback
      * }
    */
   this.showDialog = function (option) {
@@ -60,6 +61,8 @@ function Msgbox(option) {
     readyToHide = false;
     bEl.dialog.yesCallback = option.yesCallback;
     bEl.dialog.noCallback = option.noCallback;
+    onBD = option.bodyCallback;
+
     bEl.dialog.ybt[option.yesText ? 'show' : 'hide']().html(option.yesText);
     bEl.dialog.nbt[option.noText ? 'show' : 'hide']().html(option.noText);
     bEl.dialog.title[option.title ? 'show' : 'hide']().html(option.title || '');
@@ -145,7 +148,8 @@ function Msgbox(option) {
       title: option.title || 'Sorry~',
       msg: option.msg || 'Unable to connect to the Internet',
       yesText: option.yesText || 'OK',
-      yesCallback: option.yesCallback
+      yesCallback: option.yesCallback,
+      bodyCallback: option.bodyCallback
     }
     _this.showDialog(_option);
   }
@@ -158,7 +162,8 @@ function Msgbox(option) {
   this.showError = function (option) {
     option = option || {};
     var _option = {
-      msg: option.msg || ''
+      msg: option.msg || '',
+      bodyCallback: option.bodyCallback
     }
     _this.showDialog(_option);
     setTimeout(function () {
@@ -176,7 +181,8 @@ function Msgbox(option) {
       msg: 'Please download the latest app!',
       noText: 'Cancel',
       yesText: 'OK',
-      yesCallback: option.yesCallback
+      yesCallback: option.yesCallback,
+      bodyCallback: option.bodyCallback
     }
     _this.showDialog(_option);
   }
@@ -203,9 +209,9 @@ function Msgbox(option) {
 
     bEl.signin.noCallback = option.noCallback;
     bEl.signin.yesCallback = option.yesCallback;
+    onBD = option.bodyCallback;
 
     bEl.signin.msg.html(option.msg || 'Please sign in');
-
 
     bEl.signin.show();
     this.show();
